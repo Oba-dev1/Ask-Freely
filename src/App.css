@@ -1,0 +1,167 @@
+.app {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header Styles */
+.header {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 3em;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.subtitle {
+  font-size: 1.2em;
+  opacity: 0.95;
+  margin-bottom: 5px;
+}
+
+.tagline {
+  font-size: 1.4em;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* Home Page Styles */
+.home-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+.home-card h2 {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.home-text {
+  font-size: 1.1em;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.home-buttons {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.home-btn {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 25px 30px;
+  border-radius: 15px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 3px solid transparent;
+}
+
+.home-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.participant-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.participant-btn:hover {
+  border-color: #667eea;
+}
+
+.host-btn {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.host-btn:hover {
+  border-color: #f093fb;
+}
+
+.btn-icon {
+  font-size: 3em;
+}
+
+.btn-text {
+  text-align: left;
+  flex: 1;
+}
+
+.btn-text h3 {
+  font-size: 1.5em;
+  margin-bottom: 5px;
+}
+
+.btn-text p {
+  font-size: 1em;
+  opacity: 0.9;
+}
+
+/* Back Button */
+.back-button {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 1.1em;
+  font-weight: 600;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: white;
+  color: #667eea;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2em;
+  }
+
+  .home-card {
+    padding: 25px;
+  }
+
+  .home-btn {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .btn-text {
+    text-align: center;
+  }
+}
