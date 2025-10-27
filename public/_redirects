@@ -1,0 +1,5 @@
+# Redirect custom URLs to React routes
+/response           /host           200
+
+# This rule should be last - it's for React Router to work
+/*                  /index.html     200
