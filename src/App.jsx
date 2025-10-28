@@ -67,7 +67,7 @@ function ParticipantHome() {
 
         <div className="home-buttons">
           <Link to="/question" className="home-btn participant-btn">
-            <div className="btn-icon">👥</div>
+            <div className="btn-icon">🙋‍♂</div>
             <div className="btn-text">
               <h3>I'm a Participant</h3>
               <p>Submit your questions</p>
