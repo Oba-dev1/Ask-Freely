@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ref, onValue, update, remove } from 'firebase/database';
 import { database } from '../Firebase/config';
 import QuestionItem from './QuestionItem';
+import { exportToCSV, exportToJSON, exportToText, generateAnalytics } from '../utils/exportutils';
 import './HostDashboard.css';
 
 function HostDashboard() {
@@ -10,6 +11,8 @@ function HostDashboard() {
   const [filter, setFilter] = useState('all');
   const [isConnected, setIsConnected] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
+  const [showExportMenu, setShowExportMenu] = useState(false);  // ← This line MUST be here
+  const [analytics, setAnalytics] = useState(null);
 
   useEffect(() => {
     const questionsRef = ref(database, 'questions');
@@ -24,8 +27,11 @@ function HostDashboard() {
             ...data[key]
           }));
           setQuestions(questionsArray);
+          // Generate analytics
+          setAnalytics(generateAnalytics(questionsArray));
         } else {
           setQuestions([]);
+          setAnalytics(null);
         }
         setIsConnected(true);
         setLastUpdate(new Date());
@@ -38,6 +44,7 @@ function HostDashboard() {
 
     return () => unsubscribe();
   }, []);
+
 
   const toggleAnswered = async (id, currentStatus) => {
     try {
@@ -61,7 +68,7 @@ function HostDashboard() {
     }
   };
 
-  const getFilteredQuestions = () => {
+const getFilteredQuestions = () => {
     let filtered = questions;
     
     if (filter === 'answered') {
@@ -71,6 +78,25 @@ function HostDashboard() {
     }
     
     return filtered.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  };
+
+  const handleExport = (format) => {
+    const allQuestions = questions.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    
+    switch(format) {
+      case 'csv':
+        exportToCSV(allQuestions);
+        break;
+      case 'json':
+        exportToJSON(allQuestions);
+        break;
+      case 'txt':
+        exportToText(allQuestions);
+        break;
+      default:
+        break;
+    }
+    setShowExportMenu(false);
   };
 
   const filteredQuestions = getFilteredQuestions();
@@ -87,10 +113,57 @@ function HostDashboard() {
       <div className="dashboard-card">
         <div className="dashboard-header">
           <h2>Submitted Questions</h2>
-          <div className="stats">
-            <span>{questions.length}</span> questions
+          <div className="header-actions">
+            <div className="stats">
+              <span>{questions.length}</span> questions
+            </div>
+            <div className="export-dropdown">
+              <button 
+                className="export-btn"
+                onClick={() => setShowExportMenu(!showExportMenu)}
+              >
+                📥 Export
+              </button>
+              {showExportMenu && (
+                <div className="export-menu">
+                  <button onClick={() => handleExport('csv')}>
+                    📊 Export as CSV
+                  </button>
+                  <button onClick={() => handleExport('json')}>
+                    💾 Export as JSON
+                  </button>
+                  <button onClick={() => handleExport('txt')}>
+                    📄 Export as Text
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
+
+        {analytics && (
+          <div className="analytics-card">
+            <h3>Session Analytics</h3>
+            <div className="analytics-grid">
+              <div className="stat-item">
+                <span className="stat-label">Answered</span>
+                <span className="stat-value">{analytics.summary.answered} ({analytics.summary.percentAnswered}%)</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Unanswered</span>
+                <span className="stat-value">{analytics.summary.unanswered}</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Anonymous</span>
+                <span className="stat-value">{analytics.summary.anonymous} ({analytics.summary.percentAnonymous}%)</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Duration</span>
+                <span className="stat-value">{analytics.timeline.duration}</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="filter-controls">
           <button

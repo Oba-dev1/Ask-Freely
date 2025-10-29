@@ -22,16 +22,16 @@ function App() {
 function HostHome() {
   return (
     <div className="container home-container">
-      <header className="header">
-        <h1>Beyond the Vibes</h1>
-        <p className="subtitle">Singles Programme • October 28, 2025</p>
-        <p className="tagline">Q&A System ✨</p>
-      </header>
+        <header className="header">
+          <h1>Ask Freely</h1>
+          <p className="subtitle">Singles Programme • October 28, 2025</p>
+          <p className="tagline">Question & Answer System ✨</p>
+        </header>
 
       <div className="home-card">
         <h2>Welcome!</h2>
         <p className="home-text">
-          This is the Q&A platform for our Beyond the Vibes Singles Programme.
+          This is the Question & Answer System platform for our Beyond the Vibes Singles Programme.
           Choose your role below to get started.
         </p>
 
@@ -53,7 +53,7 @@ function ParticipantHome() {
   return (
     <div className="container home-container">
       <header className="header">
-        <h1>Beyond the Vibes</h1>
+        <h1>Ask Freely</h1>
         <p className="subtitle">Singles Programme • October 28, 2025</p>
         <p className="tagline">Q&A System ✨</p>
       </header>
@@ -61,8 +61,8 @@ function ParticipantHome() {
       <div className="home-card">
         <h2>Welcome!</h2>
         <p className="home-text">
-          This is the Q&A platform for our Beyond the Vibes Singles Programme.
-          Choose your role below to get started.
+          This is the Question & Answer platform we'll be using for our Beyond the Vibes Singles Programme.
+          Click on the box below to get started.
         </p>
 
         <div className="home-buttons">
