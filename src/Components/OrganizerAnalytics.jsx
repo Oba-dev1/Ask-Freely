@@ -1,7 +1,7 @@
 // src/Components/OrganizerAnalytics.jsx
 import React, { useEffect, useState } from "react";
 import { ref, onValue } from "firebase/database";
-import { database } from "../firebase/config";
+import { database } from "../Firebase/config";
 import { useAuth } from "../context/AuthContext";
 import "./Organizer.css";
 

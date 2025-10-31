@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ref, onValue } from 'firebase/database';
-import { database } from '../firebase/config';
+import { database } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
 import './Organizer.css';
 

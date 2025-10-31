@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ref, push, set, get } from "firebase/database";
-import { database } from '../firebase/config';
+import { database } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
 import './CreateEvent.css';
 

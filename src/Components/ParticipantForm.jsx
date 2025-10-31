@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ref, push, serverTimestamp, get } from "firebase/database";
-import { database } from "../firebase/config";
+import { database } from "../Firebase/config";
 import "./ParticipantForm.css";
 
 function ParticipantForm() {

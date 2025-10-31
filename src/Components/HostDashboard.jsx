@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ref, onValue, update, remove } from 'firebase/database';
-import { database } from '../firebase/config'; // keep this casing consistent with your project
+import { database } from '../Firebase/config'; // keep this casing consistent with your project
 import QuestionItem from './QuestionItem';
 import { exportToCSV, exportToJSON, exportToText, generateAnalytics } from '../utils/exportutils'; // adjust if your file is exportUtils
 import './HostDashboard.css';
