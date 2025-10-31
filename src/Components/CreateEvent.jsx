@@ -1,8 +1,8 @@
-// src/Components/CreateEvent.jsx
+// src/Components/CreateEvent.jsx 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ref, push, set } from 'firebase/database';
-import { database } from '../Firebase/config';
+import { ref, push, set, get } from "firebase/database";
+import { database } from '../firebase/config';
 import { useAuth } from '../context/AuthContext';
 import './CreateEvent.css';
 
@@ -24,16 +24,12 @@ function CreateEvent() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // NOTE: make sure your AuthContext actually provides these two
   const { currentUser, userProfile } = useAuth();
   const navigate = useNavigate();
 
   const handleEventChange = (e) => {
     const { name, value } = e.target;
-    setEventData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setEventData(prev => ({ ...prev, [name]: value }));
 
     // Auto-generate slug from title
     if (name === 'title') {
@@ -66,7 +62,6 @@ function CreateEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!eventData.title || !eventData.date) {
       return setError('Please fill in all required fields');
     }
@@ -78,7 +73,6 @@ function CreateEvent() {
       setLoading(true);
       setError('');
 
-      // Safe organizer values (no null reads)
       const organizerId = currentUser.uid;
       const organizerName =
         userProfile?.organizationName?.trim() ||
@@ -92,44 +86,70 @@ function CreateEvent() {
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/(^-|-$)/g, '') || `event-${Date.now()}`;
 
-      // Create event in database
+      // 1) Ensure slug is unique
+      const slugRef = ref(database, `slugs/${slug}`);
+      const existing = await get(slugRef);
+      if (existing.exists()) {
+        setLoading(false);
+        return setError('That event URL slug is already taken. Try another.');
+      }
+
+      // 2) Create new eventId
       const eventsRef = ref(database, 'events');
       const newEventRef = push(eventsRef);
+      const eventId = newEventRef.key;
 
-const eventPayload = {
-  title: eventData.title,
-  description: eventData.description,
-  date: eventData.date,
-  time: eventData.time,
-  slug,
-  organizerId, 
-  status: "active",
-  createdAt: new Date().toISOString(),
-  questionCount: 0,
-  strategicQuestions: strategicQuestions.map(q => ({
-    text: q.text,
-    priority: q.priority,
-    category: q.category,
-    notes: q.notes,
-    source: "organizer",
-    author: organizerName,
-    timestamp: new Date().toISOString(),
-    answered: false
-  }))
-};
+      // 3) Build payload
+      const eventPayload = {
+        title: eventData.title,
+        description: eventData.description,
+        date: eventData.date,
+        time: eventData.time,
+        slug,
+        organizerId,
+        organizerName,
+        status: "active",
+        createdAt: new Date().toISOString(),
+        questionCount: 0,
+        strategicQuestions: strategicQuestions.map(q => ({
+          text: q.text,
+          priority: q.priority,
+          category: q.category,
+          notes: q.notes,
+          source: "organizer",
+          author: organizerName,
+          timestamp: new Date().toISOString(),
+          answered: false
+        }))
+      };
 
-await set(ref(database, `events/${newEventRef.key}`), eventPayload);
+      // 4) Write event
+      await set(ref(database, `events/${eventId}`), eventPayload);
 
-      // Add strategic questions to the event's questions collection
+      // 5) Write slug → eventId mapping
+      await set(slugRef, eventId);
+
+      // 6) (Optional) Write reverse mapping eventId → slug
+      await set(ref(database, `eventSlugs/${eventId}`), slug);
+
+      await set(ref(database, `slugs/${slug}`), eventId);   // slug -> eventId
+      await set(ref(database, `eventSlugs/${eventId}`), slug); // optional reverse
+
+      // 7) (Optional) Store under organizer for quick listing
+      await set(ref(database, `organizers/${organizerId}/events/${eventId}`), {
+        ...eventPayload,
+        eventId
+      });
+
+      // 8) Seed strategic questions into the event’s questions collection
       if (strategicQuestions.length > 0) {
-        const questionsRef = ref(database, `questions/${newEventRef.key}`);
-        // Write sequentially (could batch if you switch to Firestore)
+        const questionsRef = ref(database, `questions/${eventId}`);
         for (const q of strategicQuestions) {
           const questionRef = push(questionsRef);
           await set(questionRef, {
             question: q.text,
             source: 'organizer',
-            author: organizerName, // SAFE
+            author: organizerName,
             priority: q.priority,
             category: q.category,
             notes: q.notes,
@@ -140,7 +160,9 @@ await set(ref(database, `events/${newEventRef.key}`), eventPayload);
         }
       }
 
-      navigate(`/organizer/event/${newEventRef.key}`);
+      // Navigate to your organizer management page (you already have this route)
+      navigate(`/organizer/event/${eventId}`);
+      // Or jump straight to MC: navigate(`/host/${eventId}`);
     } catch (err) {
       console.error(err);
       setError('Failed to create event: ' + (err?.message || 'Please try again.'));
