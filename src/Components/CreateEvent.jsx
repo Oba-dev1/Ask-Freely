@@ -1,3 +1,4 @@
+// src/Components/CreateEvent.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ref, push, set } from 'firebase/database';
@@ -22,7 +23,8 @@ function CreateEvent() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
+  // NOTE: make sure your AuthContext actually provides these two
   const { currentUser, userProfile } = useAuth();
   const navigate = useNavigate();
 
@@ -39,33 +41,21 @@ function CreateEvent() {
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '');
-      setEventData(prev => ({
-        ...prev,
-        slug
-      }));
+      setEventData(prev => ({ ...prev, slug }));
     }
   };
 
   const handleQuestionChange = (e) => {
     const { name, value } = e.target;
-    setCurrentQuestion(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setCurrentQuestion(prev => ({ ...prev, [name]: value }));
   };
 
   const addStrategicQuestion = () => {
     if (!currentQuestion.text.trim()) {
       return setError('Question text is required');
     }
-
     setStrategicQuestions(prev => [...prev, { ...currentQuestion, id: Date.now() }]);
-    setCurrentQuestion({
-      text: '',
-      priority: 'medium',
-      category: '',
-      notes: ''
-    });
+    setCurrentQuestion({ text: '', priority: 'medium', category: '', notes: '' });
     setError('');
   };
 
@@ -76,32 +66,52 @@ function CreateEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Basic validation
     if (!eventData.title || !eventData.date) {
       return setError('Please fill in all required fields');
+    }
+    if (!currentUser?.uid) {
+      return setError('You must be logged in to create an event.');
     }
 
     try {
       setLoading(true);
       setError('');
 
+      // Safe organizer values (no null reads)
+      const organizerId = currentUser.uid;
+      const organizerName =
+        userProfile?.organizationName?.trim() ||
+        currentUser.email ||
+        'Organizer';
+
+      // Ensure slug exists (fallback from title)
+      const slug =
+        (eventData.slug || eventData.title)
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '') || `event-${Date.now()}`;
+
       // Create event in database
       const eventsRef = ref(database, 'events');
       const newEventRef = push(eventsRef);
-      
+
       const eventPayload = {
         ...eventData,
-        organizerId: currentUser.uid,
-        organizerName: userProfile.organizationName,
+        slug,
+        organizerId,
+        organizerName, // SAFE
         status: 'active',
         createdAt: new Date().toISOString(),
         questionCount: 0,
+        // Persist a sanitized copy of strategic questions with organizer metadata
         strategicQuestions: strategicQuestions.map(q => ({
           text: q.text,
           priority: q.priority,
           category: q.category,
           notes: q.notes,
           source: 'organizer',
-          author: userProfile.organizationName,
+          author: organizerName, // SAFE
           timestamp: new Date().toISOString(),
           answered: false
         }))
@@ -112,15 +122,16 @@ function CreateEvent() {
       // Add strategic questions to the event's questions collection
       if (strategicQuestions.length > 0) {
         const questionsRef = ref(database, `questions/${newEventRef.key}`);
-        for (const question of strategicQuestions) {
+        // Write sequentially (could batch if you switch to Firestore)
+        for (const q of strategicQuestions) {
           const questionRef = push(questionsRef);
           await set(questionRef, {
-            question: question.text,
+            question: q.text,
             source: 'organizer',
-            author: userProfile.organizationName,
-            priority: question.priority,
-            category: question.category,
-            notes: question.notes,
+            author: organizerName, // SAFE
+            priority: q.priority,
+            category: q.category,
+            notes: q.notes,
             answered: false,
             timestamp: new Date().toISOString(),
             createdAt: Date.now()
@@ -129,9 +140,9 @@ function CreateEvent() {
       }
 
       navigate(`/organizer/event/${newEventRef.key}`);
-    } catch (error) {
-      setError('Failed to create event: ' + error.message);
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to create event: ' + (err?.message || 'Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -157,7 +168,7 @@ function CreateEvent() {
           {/* Event Details Section */}
           <div className="form-section">
             <h2>Event Details</h2>
-            
+
             <div className="form-group">
               <label htmlFor="title">Event Title *</label>
               <input
@@ -282,8 +293,8 @@ function CreateEvent() {
                 />
               </div>
 
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={addStrategicQuestion}
                 className="btn btn-secondary"
               >
@@ -326,8 +337,8 @@ function CreateEvent() {
             >
               Cancel
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn btn-primary"
               disabled={loading}
             >
