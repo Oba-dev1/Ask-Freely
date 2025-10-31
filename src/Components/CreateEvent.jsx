@@ -96,28 +96,29 @@ function CreateEvent() {
       const eventsRef = ref(database, 'events');
       const newEventRef = push(eventsRef);
 
-      const eventPayload = {
-        ...eventData,
-        slug,
-        organizerId,
-        organizerName, // SAFE
-        status: 'active',
-        createdAt: new Date().toISOString(),
-        questionCount: 0,
-        // Persist a sanitized copy of strategic questions with organizer metadata
-        strategicQuestions: strategicQuestions.map(q => ({
-          text: q.text,
-          priority: q.priority,
-          category: q.category,
-          notes: q.notes,
-          source: 'organizer',
-          author: organizerName, // SAFE
-          timestamp: new Date().toISOString(),
-          answered: false
-        }))
-      };
+const eventPayload = {
+  title: eventData.title,
+  description: eventData.description,
+  date: eventData.date,
+  time: eventData.time,
+  slug,
+  organizerId, 
+  status: "active",
+  createdAt: new Date().toISOString(),
+  questionCount: 0,
+  strategicQuestions: strategicQuestions.map(q => ({
+    text: q.text,
+    priority: q.priority,
+    category: q.category,
+    notes: q.notes,
+    source: "organizer",
+    author: organizerName,
+    timestamp: new Date().toISOString(),
+    answered: false
+  }))
+};
 
-      await set(newEventRef, eventPayload);
+await set(ref(database, `events/${newEventRef.key}`), eventPayload);
 
       // Add strategic questions to the event's questions collection
       if (strategicQuestions.length > 0) {
