@@ -32,7 +32,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  /* background: url('/auth-visual.jpg') center/cover no-repeat; optional image */
+  /* background: url('/auth-visual.jpg') center/cover no-repeat;  <-- keep commented unless file exists */
   opacity: 0.08;
   pointer-events: none;
 }
@@ -52,14 +52,8 @@
   font-weight: 700;
   letter-spacing: 0.2px;
 }
-
-.logo-icon {
-  font-size: 1.25rem;
-}
-
-.logo-text {
-  font-size: 1.15rem;
-}
+.logo-icon { font-size: 1.25rem; }
+.logo-text { font-size: 1.15rem; }
 
 .brand-tagline {
   color: rgba(255,255,255,0.7);
@@ -107,11 +101,7 @@
   text-align: center;
   margin-bottom: 2rem;
 }
-
-.auth-logo {
-  width: 70px;
-  margin-bottom: 0.75rem;
-}
+.auth-logo { width: 70px; margin-bottom: 0.75rem; }
 
 .subtitle {
   color: rgba(255, 255, 255, 0.7);
@@ -119,9 +109,7 @@
 }
 
 /* --- Form Elements --- */
-.form-group {
-  margin-bottom: 1.25rem;
-}
+.form-group { margin-bottom: 1.25rem; }
 
 .form-group label {
   display: block;
@@ -138,6 +126,7 @@
   background: rgba(255,255,255,0.08);
   color: #fff;
   transition: all 0.2s ease;
+  font-size: 1rem;
 }
 
 .form-group input:focus {
@@ -155,25 +144,27 @@
 }
 
 /* --- Password Toggle --- */
-.password-wrapper {
+.password-wrapper { position: relative; }
+.password-input-wrap {
   position: relative;
+  display: flex;
+  align-items: center;
 }
+.password-input-wrap input { padding-right: 2.5rem; } /* room for toggle */
 
 .toggle-password {
   position: absolute;
-  right: 12px;
-  top: 10px;
-  background: none;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.95rem;
+  background: transparent;
   border: none;
-  color: #a5b4fc;
-  font-size: 0.85rem;
+  color: rgba(255,255,255,0.75);
   cursor: pointer;
   transition: color 0.2s ease;
 }
-
-.toggle-password:hover {
-  color: #c7d2fe;
-}
+.toggle-password:hover { color: #fff; }
 
 /* --- Buttons --- */
 .btn.btn-primary {
@@ -187,18 +178,11 @@
   font-size: 1rem;
   cursor: pointer;
   margin-top: 1rem;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 22px rgba(102,126,234,0.35);
 }
-
-.btn.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-.btn.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+.btn.btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+.btn.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* --- Error Banner --- */
 .error-banner {
@@ -223,11 +207,7 @@
   font-weight: 600;
   transition: color 0.3s ease;
 }
-
-.auth-links a:hover {
-  color: #c7d2fe;
-  text-decoration: underline;
-}
+.auth-links a:hover { color: #c7d2fe; text-decoration: underline; }
 
 .auth-links p {
   margin-top: 1rem;
@@ -236,47 +216,23 @@
 
 /* --- Spinner --- */
 .spinner {
-  width: 18px;
-  height: 18px;
+  width: 18px; height: 18px;
   border: 3px solid #fff;
   border-top-color: transparent;
   border-radius: 50%;
   display: inline-block;
   animation: spin 1s linear infinite;
 }
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+@keyframes spin { from { transform: rotate(0) } to { transform: rotate(360deg) } }
 
 /* --- Animations --- */
-.fade-in {
-  animation: fadeIn 0.6s ease-in;
-}
-
+.fade-in { animation: fadeIn 0.6s ease-in; }
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Responsive Adjustments --- */
-@media (max-width: 1024px) {
-  .auth-layout {
-    grid-template-columns: 1fr;
-  }
-  .auth-visual {
-    display: none;
-  }
-  .auth-panel {
-    padding: 3rem 1.5rem;
-  }
-  .auth-card {
-    padding: 2.5rem 2rem;
-  }
-}
-
-/* Social button + divider */
+/* --- Social button + divider --- */
 .btn.btn-google {
   width: 100%;
   margin-bottom: 1rem;
@@ -291,9 +247,7 @@
   justify-content: center;
   cursor: pointer;
 }
-.btn.btn-google:hover {
-  background: rgba(255,255,255,0.12);
-}
+.btn.btn-google:hover { background: rgba(255,255,255,0.12); }
 .g-icon { font-size: 1rem; }
 
 .auth-divider {
@@ -313,30 +267,7 @@
 }
 .auth-divider span { opacity: 0.8; }
 
-/* Password field */
-.password-field { position: relative; }
-.password-input-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.password-input-wrap input {
-  padding-right: 2.5rem; /* room for toggle */
-}
-.toggle-password {
-  position: absolute;
-  right: 0.6rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.95rem;
-  background: transparent;
-  border: none;
-  color: rgba(255,255,255,0.75);
-  cursor: pointer;
-}
-.toggle-password:hover { color: #fff; }
-
-/* Field error */
+/* --- Field error --- */
 .input-error {
   display: block;
   margin-top: 0.4rem;
@@ -346,3 +277,66 @@
 
 /* Optional: logo spacing on auth pages */
 .auth-logo { margin-bottom: 0.5rem; }
+
+/* ===========================
+   Responsive Enhancements
+   =========================== */
+
+/* Tablet and down */
+@media (max-width: 1024px) {
+  .auth-layout { grid-template-columns: 1fr; }
+  .auth-visual { display: none; }
+  .auth-panel { padding: 3rem 1.5rem; }
+  .auth-card { padding: 2.5rem 2rem; }
+}
+
+/* Phone-friendly upgrades */
+@media (max-width: 768px) {
+  .auth-panel { padding: 5rem 1.5rem 3rem; }
+  .auth-container { padding: 2.25rem 0; }
+  .auth-card { padding: 2rem 1.5rem; border-radius: 16px; }
+  .auth-header h1 { font-size: 2rem; }
+  .form-group input { font-size: 16px; min-height: 48px; } /* prevent iOS zoom */
+  .btn.btn-primary { min-height: 48px; }
+  .error-banner { font-size: 0.98rem; padding: 14px 16px; border-radius: 12px; }
+}
+
+/* Small phones: make everything bigger & more tappable */
+@media (max-width: 480px) {
+  .auth-panel { padding: 5.5rem 1.25rem 2.25rem; }
+  .auth-card { padding: 1.75rem 1.25rem; border-radius: 14px; }
+
+  .auth-header h1 { font-size: 1.9rem; line-height: 1.2; }
+  .subtitle { font-size: 1.05rem; }
+
+  .form-group label { font-size: 1rem; }
+  .form-group input {
+    font-size: 16px;           /* iOS zoom fix */
+    padding: 14px 16px;
+    min-height: 48px;
+    border-radius: 12px;
+  }
+
+  .btn.btn-primary {
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 14px 18px;
+    min-height: 48px;
+    border-radius: 12px;
+  }
+}
+
+/* Respect users that prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* Safe-area padding for iOS notch on very small screens */
+@supports (padding: max(0px)) {
+  .auth-panel {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-top: max(4rem, env(safe-area-inset-top));
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  }
+}
