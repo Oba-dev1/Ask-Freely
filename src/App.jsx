@@ -17,6 +17,7 @@ import CreateEvent from "./Components/CreateEvent";
 import EventManagement from "./Components/EventManagement";
 import "./App.css";
 import "./LandingPage.css"
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 function App() {
   return (
@@ -76,7 +77,7 @@ function LandingPage() {
       <nav className="navbar">
         <div className="nav-container">
           <div className="logo">
-            <span className="logo-icon">💬</span>
+            <span className="logo-icon"><i className="fas fa-comments"></i></span>
             <span className="logo-text">Echo</span>
           </div>
           <div className="nav-links">
@@ -118,7 +119,7 @@ function LandingPage() {
               className="btn-hero-primary"
             >
               Start Free Today
-              <span className="btn-arrow">→</span>
+              <span className="btn-arrow"><i className="fas fa-arrow-right"></i></span>
             </button>
             <button
               onClick={() => navigate("/participate")}
@@ -159,7 +160,7 @@ function LandingPage() {
 
           <div className="features-grid">
             <div className="feature-card">
-              <div className="feature-icon">🎯</div>
+              <div className="feature-icon"><i className="fas fa-bullseye"></i></div>
               <h3>Strategic Questions</h3>
               <p>
                 Pre-load questions to guide discussions and ensure key topics
@@ -168,7 +169,7 @@ function LandingPage() {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon">👥</div>
+              <div className="feature-icon"><i className="fas fa-users"></i></div>
               <h3>Anonymous Submissions</h3>
               <p>
                 Let participants ask freely without fear. Build psychological
@@ -177,7 +178,7 @@ function LandingPage() {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon">⚡</div>
+              <div className="feature-icon"><i class="fa-solid fa-bolt"></i></div>
               <h3>Real-Time Updates</h3>
               <p>
                 Questions appear instantly. No refresh needed. Keep the flow
@@ -186,7 +187,7 @@ function LandingPage() {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon">📊</div>
+              <div className="feature-icon"><i className="fas fa-chart-bar"></i></div>
               <h3>Smart Analytics</h3>
               <p>
                 Track engagement, measure participation, and export insights.
@@ -194,7 +195,7 @@ function LandingPage() {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon">🎤</div>
+              <div className="feature-icon"><i className="fas fa-microphone"></i></div>
               <h3>MC Dashboard</h3>
               <p>
                 Beautiful interface for hosts to manage questions with source
@@ -203,7 +204,7 @@ function LandingPage() {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon">📱</div>
+              <div className="feature-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
               <h3>Mobile Friendly</h3>
               <p>
                 Works perfectly on any device. Participants can submit from
@@ -260,7 +261,7 @@ function LandingPage() {
           </p>
           <button onClick={() => navigate("/signup")} className="btn-cta">
             Get Started Free
-            <span className="btn-arrow">→</span>
+            <span className="btn-arrow"><i className="fas fa-arrow-right"></i></span>
           </button>
           <p className="cta-note">
             No credit card required • Free forever plan available
@@ -273,7 +274,7 @@ function LandingPage() {
         <div className="footer-container">
           <div className="footer-brand">
             <div className="logo">
-              <span className="logo-icon">💬</span>
+              <span className="logo-icon"><i className="fas fa-comments"></i></span>
               <span className="logo-text">Ask Freely</span>
             </div>
             <p>Empowering conversations, one question at a time.</p>

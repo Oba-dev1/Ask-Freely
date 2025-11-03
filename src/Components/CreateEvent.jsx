@@ -1,7 +1,8 @@
+// src/Components/CreateEvent.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ref, push, set } from 'firebase/database';
-import { database } from '../Firebase/config';
+import { ref, push, set, get } from 'firebase/database';
+import { database } from '../Firebase/config'; // ← ensure lowercase folder name
 import { useAuth } from '../context/AuthContext';
 import './CreateEvent.css';
 
@@ -22,7 +23,7 @@ function CreateEvent() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   const { currentUser, userProfile } = useAuth();
   const navigate = useNavigate();
 
@@ -39,19 +40,13 @@ function CreateEvent() {
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '');
-      setEventData(prev => ({
-        ...prev,
-        slug
-      }));
+      setEventData(prev => ({ ...prev, slug }));
     }
   };
 
   const handleQuestionChange = (e) => {
     const { name, value } = e.target;
-    setCurrentQuestion(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setCurrentQuestion(prev => ({ ...prev, [name]: value }));
   };
 
   const addStrategicQuestion = () => {
@@ -60,12 +55,7 @@ function CreateEvent() {
     }
 
     setStrategicQuestions(prev => [...prev, { ...currentQuestion, id: Date.now() }]);
-    setCurrentQuestion({
-      text: '',
-      priority: 'medium',
-      category: '',
-      notes: ''
-    });
+    setCurrentQuestion({ text: '', priority: 'medium', category: '', notes: '' });
     setError('');
   };
 
@@ -76,6 +66,9 @@ function CreateEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!currentUser?.uid) {
+      return setError('You must be logged in to create an event.');
+    }
     if (!eventData.title || !eventData.date) {
       return setError('Please fill in all required fields');
     }
@@ -84,15 +77,40 @@ function CreateEvent() {
       setLoading(true);
       setError('');
 
-      // Create event in database
+      // Organizer name fallback safety
+      const organizerName =
+        (userProfile?.organizationName || '').trim() ||
+        currentUser.email ||
+        'Organizer';
+
+      // Create a clean slug (from input or title), ensure not empty
+      let slug =
+        (eventData.slug || eventData.title)
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '') || `event-${Date.now()}`;
+
+      // Ensure slug uniqueness: if exists, append a short suffix
+      const slugRef = ref(database, `slugs/${slug}`);
+      const slugSnap = await get(slugRef);
+      if (slugSnap.exists()) {
+        slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
+      }
+
+      // Create event
       const eventsRef = ref(database, 'events');
       const newEventRef = push(eventsRef);
-      
+
       const eventPayload = {
-        ...eventData,
+        title: eventData.title,
+        description: eventData.description || '',
+        date: eventData.date,
+        time: eventData.time || '',
+        slug,
         organizerId: currentUser.uid,
-        organizerName: userProfile.organizationName,
+        organizerName,
         status: 'active',
+        acceptingQuestions: true, // ← default to accepting questions
         createdAt: new Date().toISOString(),
         questionCount: 0,
         strategicQuestions: strategicQuestions.map(q => ({
@@ -101,7 +119,7 @@ function CreateEvent() {
           category: q.category,
           notes: q.notes,
           source: 'organizer',
-          author: userProfile.organizationName,
+          author: organizerName,
           timestamp: new Date().toISOString(),
           answered: false
         }))
@@ -109,18 +127,21 @@ function CreateEvent() {
 
       await set(newEventRef, eventPayload);
 
-      // Add strategic questions to the event's questions collection
+      // Create slug mapping for participant links: /p/:slug or /event/:slug
+      await set(ref(database, `slugs/${slug}`), newEventRef.key);
+
+      // Seed strategic questions into this event's questions/{eventId}
       if (strategicQuestions.length > 0) {
         const questionsRef = ref(database, `questions/${newEventRef.key}`);
-        for (const question of strategicQuestions) {
-          const questionRef = push(questionsRef);
-          await set(questionRef, {
-            question: question.text,
+        for (const q of strategicQuestions) {
+          const qRef = push(questionsRef);
+          await set(qRef, {
+            question: q.text,
             source: 'organizer',
-            author: userProfile.organizationName,
-            priority: question.priority,
-            category: question.category,
-            notes: question.notes,
+            author: organizerName,
+            priority: q.priority,
+            category: q.category,
+            notes: q.notes,
             answered: false,
             timestamp: new Date().toISOString(),
             createdAt: Date.now()
@@ -129,9 +150,9 @@ function CreateEvent() {
       }
 
       navigate(`/organizer/event/${newEventRef.key}`);
-    } catch (error) {
-      setError('Failed to create event: ' + error.message);
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to create event: ' + (err?.message || 'Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -142,7 +163,7 @@ function CreateEvent() {
       <nav className="navbar">
         <div className="nav-container">
           <Link to="/" className="logo">
-            <span className="logo-icon">💬</span>
+            <span className="logo-icon"><i className="fas fa-comments"></i></span>
             <span className="logo-text">Ask Freely</span>
           </Link>
         </div>
@@ -157,17 +178,17 @@ function CreateEvent() {
 
         <header className="page-header">
           <h1>Create New Event</h1>
-          <p className="page-subtitle">Set up your Q&A session</p>
+          <p className="page-subtitle">Set up your Q&amp;A session</p>
         </header>
 
         <div className="create-event-card">
           {error && <div className="error-banner">{error}</div>}
 
           <form onSubmit={handleSubmit}>
-            {/* Event Details Section */}
+            {/* Event Details */}
             <div className="form-section">
               <h2>Event Details</h2>
-              
+
               <div className="form-group">
                 <label htmlFor="title">Event Title *</label>
                 <input
@@ -228,11 +249,12 @@ function CreateEvent() {
                   onChange={handleEventChange}
                   placeholder="auto-generated-from-title"
                 />
-                <small>Participant link will be: askfreely.app/event/{eventData.slug || 'your-slug'}</small>
+                {/* Use the same route you support in App.jsx. If you use /p/:slug: */}
+                <small>Participant link will be: {window.location.origin}/p/{eventData.slug || 'your-slug'}</small>
               </div>
             </div>
 
-            {/* Strategic Questions Section */}
+            {/* Strategic Questions */}
             <div className="form-section">
               <h2>Strategic Questions (Optional)</h2>
               <p className="section-description">
@@ -292,16 +314,15 @@ function CreateEvent() {
                   />
                 </div>
 
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={addStrategicQuestion}
                   className="btn btn-secondary"
                 >
-                  ➕ Add Question
+                  <i className="fas fa-plus-circle"></i> Add Question
                 </button>
               </div>
 
-              {/* Questions List */}
               {strategicQuestions.length > 0 && (
                 <div className="questions-preview">
                   <h3>Added Questions ({strategicQuestions.length})</h3>
@@ -327,7 +348,7 @@ function CreateEvent() {
               )}
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <div className="form-actions">
               <button
                 type="button"
@@ -336,8 +357,8 @@ function CreateEvent() {
               >
                 Cancel
               </button>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="btn btn-primary"
                 disabled={loading}
               >

@@ -1,7 +1,8 @@
+// src/Components/OrganizerDashboard.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ref, onValue } from 'firebase/database';
-import { database } from '../Firebase/config';
+import { database } from '../Firebase/config'; // ← lowercase folder
 import { useAuth } from '../context/AuthContext';
 import './Organizer.css';
 
@@ -12,58 +13,31 @@ function OrganizerDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('OrganizerDashboard mounted, currentUser:', currentUser, 'authLoading:', authLoading);
-    
-    // Wait for auth to finish loading
-    if (authLoading) {
-      console.log('Auth still loading, waiting...');
-      return;
-    }
-    
+    // Wait until auth finishes
+    if (authLoading) return;
+
     if (!currentUser) {
-      console.log('No user after auth loaded, redirecting to login...');
       navigate('/login');
       return;
     }
 
-    console.log('User authenticated, loading events...');
-
-    // Load user's events
-    const eventsRef = ref(database, `events`);
+    // Load all events, filter by organizerId === currentUser.uid
+    const eventsRef = ref(database, 'events');
     const unsubscribe = onValue(eventsRef, (snapshot) => {
       const data = snapshot.val();
-      console.log('Events data loaded:', data);
-      
       if (data) {
-        // Filter events created by this user
         const userEvents = Object.keys(data)
-          .filter(key => {
-            console.log('Checking event:', key, 'organizerId:', data[key].organizerId, 'currentUserId:', currentUser.uid);
-            return data[key].organizerId === currentUser.uid;
-          })
-          .map(key => ({
-            id: key,
-            ...data[key]
-          }));
-        console.log('User events:', userEvents);
+          .filter((key) => data[key]?.organizerId === currentUser.uid)
+          .map((key) => ({ id: key, ...data[key] }));
         setEvents(userEvents);
       } else {
-        console.log('No events found');
         setEvents([]);
       }
       setLoading(false);
-    });
+    }, () => setLoading(false));
 
     return () => unsubscribe();
-  }, [currentUser, authLoading, navigate]);
-
-  if (authLoading || loading) {
-    return (
-      <div className="container">
-        <div className="loading-state">Loading...</div>
-      </div>
-    );
-  }
+  }, [authLoading, currentUser, navigate]);
 
   const handleLogout = async () => {
     try {
@@ -74,58 +48,94 @@ function OrganizerDashboard() {
     }
   };
 
-  const handleCreateEvent = () => {
-    navigate('/organizer/create-event');
-  };
+  const handleCreateEvent = () => navigate('/organizer/create-event');
+  const handleViewEvent = (eventId) => navigate(`/organizer/event/${eventId}`);
 
-  const handleViewEvent = (eventId) => {
-    navigate(`/organizer/event/${eventId}`);
-  };
+  if (authLoading || loading) {
+    return (
+      <div className="page-wrapper">
+        <nav className="navbar">
+          <div className="nav-container">
+            <Link to="/" className="logo">
+              <span className="logo-icon"><i className="fas fa-comments"></i></span>
+              <span className="logo-text">Ask Freely</span>
+            </Link>
+          </div>
+        </nav>
+        <div className="loading-state">Loading your dashboard...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="container">
-      <div className="dashboard-nav">
-        <div className="nav-left">
-          <h2>Welcome, {userProfile?.organizationName || 'Organizer'}!</h2>
-        </div>
-        <div className="nav-right">
-          <button onClick={handleLogout} className="logout-btn">
+    <div className="page-wrapper">
+      <nav className="navbar">
+        <div className="nav-container">
+          <Link to="/" className="logo">
+            <span className="logo-icon"><i className="fas fa-comments"></i></span>
+            <span className="logo-text">Ask Freely</span>
+          </Link>
+          <button onClick={handleLogout} className="nav-link">
             Logout
           </button>
         </div>
-      </div>
+      </nav>
 
-      <header className="header">
-        <h1>My Events</h1>
-        <p className="subtitle">Manage your Q&A sessions</p>
-      </header>
+      <div className="organizer-container">
+        <div className="welcome-banner">
+          <div className="welcome-content">
+            <h2>Welcome back, {userProfile?.organizationName || 'Organizer'}!</h2>
+            <p>Manage your Q&amp;A sessions and track engagement</p>
+          </div>
+          <button onClick={handleLogout} className="logout-btn">Logout</button>
+        </div>
 
-      <div className="dashboard-content">
         <div className="action-section">
-          <button onClick={handleCreateEvent} className="btn btn-primary btn-large">
-            ➕ Create New Event
+          <div className="section-title-with-count">
+            <h2>My Events</h2>
+            <span className="event-count">
+              {events.length} {events.length === 1 ? 'Event' : 'Events'}
+            </span>
+          </div>
+          <button onClick={handleCreateEvent} className="btn-create-event">
+            Create New Event
           </button>
         </div>
 
         <div className="events-grid">
           {events.length === 0 ? (
             <div className="empty-state-card">
+              <div className="empty-state-icon">📅</div>
               <h3>No events yet</h3>
-              <p>Create your first event to start collecting questions from your audience.</p>
-              <button onClick={handleCreateEvent} className="btn btn-secondary">
-                Get Started
+              <p>Create your first event to start collecting questions from your audience and manage Q&amp;A sessions like a pro.</p>
+              <button onClick={handleCreateEvent} className="btn-get-started">
+                Create Your First Event
               </button>
             </div>
           ) : (
-            events.map(event => (
+            events.map((event) => (
               <div key={event.id} className="event-card">
                 <div className="event-header">
-                  <h3>{event.title}</h3>
+                  <div className="event-title-section">
+                    <h3>{event.title}</h3>
+                    <div className="event-meta">
+                      <span>
+                        {event.date
+                          ? new Date(event.date).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                            })
+                          : 'Date TBA'}
+                      </span>
+                      {event.time && <span>{event.time}</span>}
+                    </div>
+                  </div>
                   <span className={`event-status ${event.status}`}>
-                    {event.status === 'active' ? '🟢 Active' : '⚪ Draft'}
+                    {event.status === 'active' ? 'Active' : 'Draft'}
                   </span>
                 </div>
-                <p className="event-date">{new Date(event.date).toLocaleDateString()}</p>
+
                 <div className="event-stats">
                   <div className="stat">
                     <span className="stat-value">{event.questionCount || 0}</span>
@@ -136,10 +146,11 @@ function OrganizerDashboard() {
                     <span className="stat-label">Strategic</span>
                   </div>
                 </div>
+
                 <div className="event-actions">
-                  <button 
+                  <button
                     onClick={() => handleViewEvent(event.id)}
-                    className="btn btn-secondary"
+                    className="btn-manage-event"
                   >
                     Manage Event
                   </button>
