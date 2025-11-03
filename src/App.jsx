@@ -16,6 +16,7 @@ import OrganizerAnalytics from "./Components/OrganizerAnalytics";
 import CreateEvent from "./Components/CreateEvent";
 import EventManagement from "./Components/EventManagement";
 import "./App.css";
+import "./LandingPage.css"
 
 function App() {
   return (
@@ -76,7 +77,7 @@ function LandingPage() {
         <div className="nav-container">
           <div className="logo">
             <span className="logo-icon">💬</span>
-            <span className="logo-text">Ask Freely</span>
+            <span className="logo-text">Echo</span>
           </div>
           <div className="nav-links">
             <button onClick={() => navigate("/login")} className="nav-link">
