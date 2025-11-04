@@ -282,11 +282,11 @@ function EventManagement() {
               </div>
               <div className="stat-badge organizer">
                 <span className="stat-number">{organizerCount}</span>
-                <span className="stat-text">Strategic</span>
+                <span className="stat-text"><i className="fas fa-star" /> Strategic</span>
               </div>
               <div className="stat-badge audience">
                 <span className="stat-number">{audienceCount}</span>
-                <span className="stat-text">Audience</span>
+                <span className="stat-text"><i className="fas fa-users" /> Audience</span>
               </div>
             </div>
           </div>

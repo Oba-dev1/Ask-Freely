@@ -1,106 +1,164 @@
 // src/Components/HostDashboard.jsx
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ref, onValue, update, remove } from 'firebase/database';
-import { database } from '../Firebase/config'; // keep this casing consistent with your project
+import { database } from '../Firebase/config'; // keep your actual casing
 import QuestionItem from './QuestionItem';
-import { exportToCSV, exportToJSON, exportToText, generateAnalytics } from '../utils/exportutils'; // adjust if your file is exportUtils
+import {
+  exportToCSV,
+  exportToJSON,
+  exportToText,
+  generateAnalytics,
+} from '../utils/exportutils'; // <-- ensure this matches your file name
 import './HostDashboard.css';
 
-function HostDashboard() {
+const EMPTY_ANALYTICS = {
+  summary: {
+    total: 0,
+    answered: 0,
+    unanswered: 0,
+    anonymous: 0,
+    percentAnswered: 0,
+    percentAnonymous: 0,
+  },
+  timeline: {
+    firstQuestion: 'N/A',
+    lastQuestion: 'N/A',
+    duration: 'N/A',
+  },
+  topAuthors: [],
+};
+
+function fmtPct(n) {
+  if (n == null || isNaN(n)) return '0%';
+  return `${Math.round(n)}%`;
+}
+
+function compactTimeLabel(first, last) {
+  // Expect ISO strings or 'N/A'
+  if (!first || !last || first === 'N/A' || last === 'N/A') return null;
+  try {
+    const t1 = new Date(first);
+    const t2 = new Date(last);
+    const toHHMM = (d) =>
+      d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return `Started ${toHHMM(t1)} • Last ${toHHMM(t2)}`;
+  } catch {
+    return null;
+  }
+}
+
+export default function HostDashboard() {
   const { eventId } = useParams();
+
   const [questions, setQuestions] = useState([]);
   const [filter, setFilter] = useState('all');
   const [isConnected, setIsConnected] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [showExportMenu, setShowExportMenu] = useState(false);
-  const [analytics, setAnalytics] = useState(null);
+  const [analytics, setAnalytics] = useState(EMPTY_ANALYTICS);
+
+  const questionsPath = useMemo(
+    () => (eventId ? `questions/${eventId}` : 'questions'),
+    [eventId]
+  );
 
   useEffect(() => {
-    // Support both: /host (legacy) and /host/:eventId (new)
-    const questionsPath = eventId ? `questions/${eventId}` : 'questions';
     const questionsRef = ref(database, questionsPath);
-
     const unsubscribe = onValue(
       questionsRef,
-      (snapshot) => {
-        const data = snapshot.val();
+      (snap) => {
+        const data = snap.val();
         if (data) {
-          const questionsArray = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
-          setQuestions(questionsArray);
-          setAnalytics(generateAnalytics(questionsArray));
+          const list = Object.keys(data).map((id) => ({ id, ...data[id] }));
+          setQuestions(list);
+          setAnalytics(generateAnalytics(list) || EMPTY_ANALYTICS);
         } else {
           setQuestions([]);
-          setAnalytics(null);
+          setAnalytics(EMPTY_ANALYTICS);
         }
         setIsConnected(true);
         setLastUpdate(new Date());
       },
-      (error) => {
-        console.error('Error loading questions:', error);
+      (err) => {
+        console.error('Error loading questions:', err);
         setIsConnected(false);
       }
     );
-
     return () => unsubscribe();
-  }, [eventId]);
+  }, [questionsPath]);
 
-  const toggleAnswered = async (id, currentStatus) => {
-    try {
-      const questionsPath = eventId ? `questions/${eventId}/${id}` : `questions/${id}`;
-      const questionRef = ref(database, questionsPath);
-      await update(questionRef, { answered: !currentStatus });
-    } catch (error) {
-      console.error('Error updating question:', error);
-      alert('Failed to update question. Please try again.');
-    }
-  };
-
-  const deleteQuestion = async (id) => {
-    if (window.confirm('Are you sure you want to delete this question?')) {
+  const toggleAnswered = useCallback(
+    async (id, currentStatus) => {
       try {
-        const questionsPath = eventId ? `questions/${eventId}/${id}` : `questions/${id}`;
-        const questionRef = ref(database, questionsPath);
-        await remove(questionRef);
-      } catch (error) {
-        console.error('Error deleting question:', error);
+        const qRef = ref(
+          database,
+          eventId ? `questions/${eventId}/${id}` : `questions/${id}`
+        );
+        await update(qRef, { answered: !currentStatus });
+      } catch (err) {
+        console.error('Error updating question:', err);
+        alert('Failed to update question. Please try again.');
+      }
+    },
+    [eventId]
+  );
+
+  const deleteQuestion = useCallback(
+    async (id) => {
+      if (!window.confirm('Are you sure you want to delete this question?')) return;
+      try {
+        const qRef = ref(
+          database,
+          eventId ? `questions/${eventId}/${id}` : `questions/${id}`
+        );
+        await remove(qRef);
+      } catch (err) {
+        console.error('Error deleting question:', err);
         alert('Failed to delete question. Please try again.');
       }
-    }
-  };
+    },
+    [eventId]
+  );
 
-  // Immutable, memoized filtering + sorting
   const filteredQuestions = useMemo(() => {
-    let base = questions;
-    if (filter === 'answered') base = questions.filter((q) => q.answered);
-    else if (filter === 'unanswered') base = questions.filter((q) => !q.answered);
-    else if (filter === 'organizer') base = questions.filter((q) => q.source === 'organizer');
-    else if (filter === 'audience') base = questions.filter((q) => q.source === 'audience');
-
-    return [...base].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-  }, [questions, filter]);
-
-  const handleExport = (format) => {
-    const allQuestions = [...questions].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-
-    switch (format) {
-      case 'csv':
-        exportToCSV(allQuestions);
+    let list = questions;
+    switch (filter) {
+      case 'answered':
+        list = questions.filter((q) => q.answered);
         break;
-      case 'json':
-        exportToJSON(allQuestions);
+      case 'unanswered':
+        list = questions.filter((q) => !q.answered);
         break;
-      case 'txt':
-        exportToText(allQuestions);
+      case 'organizer':
+        list = questions.filter((q) => q.source === 'organizer');
+        break;
+      case 'audience':
+        list = questions.filter((q) => q.source === 'audience');
         break;
       default:
-        break;
+        list = questions;
     }
-    setShowExportMenu(false);
-  };
+    return [...list].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  }, [questions, filter]);
+
+  const handleExport = useCallback(
+    (format) => {
+      const all = [...questions].sort(
+        (a, b) => (b.createdAt || 0) - (a.createdAt || 0)
+      );
+      if (format === 'csv') exportToCSV(all);
+      else if (format === 'json') exportToJSON(all);
+      else if (format === 'txt') exportToText(all);
+      setShowExportMenu(false);
+    },
+    [questions]
+  );
+
+  const durationNote = compactTimeLabel(
+    analytics.timeline?.firstQuestion,
+    analytics.timeline?.lastQuestion
+  );
 
   return (
     <div className="page-wrapper">
@@ -115,10 +173,11 @@ function HostDashboard() {
 
       <div className="container host-container">
         <header className="page-header">
-          <h1>Host Dashboard</h1>
-          <p className="page-subtitle">
-            {eventId ? `Event: ${eventId}` : 'Manage questions in real-time'}
-          </p>
+          <h1>
+            Host Dashboard{' '}
+            {eventId ? <span className="pill">Event: {eventId}</span> : null}
+          </h1>
+          <p className="page-subtitle">Manage questions in real-time</p>
         </header>
 
         <div className="dashboard-card">
@@ -130,22 +189,25 @@ function HostDashboard() {
               </div>
               <div className="export-dropdown">
                 <button
-                  type="button"
                   className="export-btn"
                   onClick={() => setShowExportMenu((v) => !v)}
                 >
-                  📥 Export
+                  <i className="fas fa-download" aria-hidden="true" />
+                  Export
                 </button>
                 {showExportMenu && (
                   <div className="export-menu">
-                    <button type="button" onClick={() => handleExport('csv')}>
-                      📊 Export as CSV
+                    <button onClick={() => handleExport('csv')}>
+                      <i className="fas fa-file-csv" aria-hidden="true" />
+                      Export as CSV
                     </button>
-                    <button type="button" onClick={() => handleExport('json')}>
-                      💾 Export as JSON
+                    <button onClick={() => handleExport('json')}>
+                      <i className="fas fa-code" aria-hidden="true" />
+                      Export as JSON
                     </button>
-                    <button type="button" onClick={() => handleExport('txt')}>
-                      📄 Export as Text
+                    <button onClick={() => handleExport('txt')}>
+                      <i className="fas fa-file-lines" aria-hidden="true" />
+                      Export as Text
                     </button>
                   </div>
                 )}
@@ -153,65 +215,104 @@ function HostDashboard() {
             </div>
           </div>
 
-          {analytics && (
+          {/* Analytics — Cards */}
+          <section className="analytics-section">
+            {/* Answered */}
             <div className="analytics-card">
-              <h3>📈 Session Analytics</h3>
-              <div className="analytics-grid">
-                <div className="stat-item">
-                  <span className="stat-label">Answered</span>
-                  <span className="stat-value">
-                    {analytics.summary.answered} ({analytics.summary.percentAnswered}%)
-                  </span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-label">Unanswered</span>
-                  <span className="stat-value">{analytics.summary.unanswered}</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-label">Anonymous</span>
-                  <span className="stat-value">
-                    {analytics.summary.anonymous} ({analytics.summary.percentAnonymous}%)
-                  </span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-label">Duration</span>
-                  <span className="stat-value">{analytics.timeline.duration}</span>
+              <div className="analytics-card-header">
+                <span className="analytics-card-title">Answered</span>
+                <div className="analytics-icon success">
+                  <i className="fas fa-check-circle" aria-hidden="true"></i>
                 </div>
               </div>
+              <div className="analytics-value">
+                {analytics.summary?.answered ?? 0}
+              </div>
+              <div className="analytics-detail">
+                <span className="analytics-percentage">
+                  {fmtPct(analytics.summary?.percentAnswered)}
+                </span>{' '}
+                of total
+              </div>
             </div>
-          )}
 
+            {/* Unanswered */}
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <span className="analytics-card-title">Unanswered</span>
+                <div className="analytics-icon warning">
+                  <i className="fas fa-question-circle" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div className="analytics-value">
+                {analytics.summary?.unanswered ?? 0}
+              </div>
+              <div className="analytics-detail">Remaining in queue</div>
+            </div>
+
+            {/* Anonymous */}
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <span className="analytics-card-title">Anonymous</span>
+                <div className="analytics-icon info">
+                  <i className="fas fa-user-secret" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div className="analytics-value">
+                {analytics.summary?.anonymous ?? 0}
+              </div>
+              <div className="analytics-detail">
+                <span className="analytics-percentage">
+                  {fmtPct(analytics.summary?.percentAnonymous)}
+                </span>{' '}
+                of submissions
+              </div>
+            </div>
+
+            {/* Session Duration */}
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <span className="analytics-card-title">Session Duration</span>
+                <div className="analytics-icon primary">
+                  <i className="fas fa-clock" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div className="analytics-value" style={{ fontSize: '2rem' }}>
+                {analytics.timeline?.duration || 'N/A'}
+              </div>
+              {durationNote && (
+                <div className="analytics-detail">{durationNote}</div>
+              )}
+            </div>
+          </section>
+
+          {/* Filters */}
           <div className="filter-controls">
             <button
-              type="button"
               className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
               onClick={() => setFilter('all')}
             >
               All
             </button>
             <button
-              type="button"
               className={`filter-btn ${filter === 'organizer' ? 'active' : ''}`}
               onClick={() => setFilter('organizer')}
             >
-              ⭐ Strategic
+              <i className="fas fa-star" /> Strategic
             </button>
             <button
-              type="button"
               className={`filter-btn ${filter === 'audience' ? 'active' : ''}`}
               onClick={() => setFilter('audience')}
             >
-              👥 Audience
+              <i className="fas fa-users" /> Audience
             </button>
             <button
-              type="button"
               className={`filter-btn ${filter === 'answered' ? 'active' : ''}`}
               onClick={() => setFilter('answered')}
             >
               Answered
             </button>
             <button
-              type="button"
               className={`filter-btn ${filter === 'unanswered' ? 'active' : ''}`}
               onClick={() => setFilter('unanswered')}
             >
@@ -219,25 +320,36 @@ function HostDashboard() {
             </button>
           </div>
 
+          {/* Status */}
           <div className="status-section">
             <div className="connection-status">
-              <span className={`status-indicator ${isConnected ? 'connected' : 'disconnected'}`}>
-                {isConnected ? '🟢 Connected' : '🔴 Disconnected'}
+              <span
+                className={`status-indicator ${
+                  isConnected ? 'connected' : 'disconnected'
+                }`}
+              >
+                <span className="status-dot" />
+                {isConnected ? 'Connected' : 'Disconnected'}
               </span>
             </div>
             <span className="last-updated">
-              Last updated: {lastUpdate ? lastUpdate.toLocaleTimeString() : '—'}
+              <i className="far fa-clock" /> Last updated:{' '}
+              {lastUpdate.toLocaleTimeString()}
             </span>
           </div>
 
+          {/* Questions */}
           <div className="questions-list">
             {filteredQuestions.length === 0 ? (
-              <p className="empty-state">No questions to display.</p>
+              <div className="empty-state">
+                <i className="far fa-inbox" />
+                <p>No questions to display.</p>
+              </div>
             ) : (
-              filteredQuestions.map((question) => (
+              filteredQuestions.map((q) => (
                 <QuestionItem
-                  key={question.id}
-                  question={question}
+                  key={q.id}
+                  question={q}
                   onToggleAnswered={toggleAnswered}
                   onDelete={deleteQuestion}
                 />
@@ -249,5 +361,3 @@ function HostDashboard() {
     </div>
   );
 }
-
-export default HostDashboard;
