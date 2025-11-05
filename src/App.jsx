@@ -178,7 +178,7 @@ function LandingPage() {
             </div>
 
             <div className="feature-card">
-              <div className="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+              <div className="feature-icon"><i className="fa-solid fa-bolt"></i></div>
               <h3>Real-Time Updates</h3>
               <p>
                 Questions appear instantly. No refresh needed. Keep the flow

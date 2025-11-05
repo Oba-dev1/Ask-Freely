@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ref, push, set, get } from 'firebase/database';
-import { database } from '../Firebase/config'; // ← ensure lowercase folder name
+import { database } from '../Firebase/config'; // keep folder casing consistent with your project
 import { useAuth } from '../context/AuthContext';
 import './CreateEvent.css';
 
@@ -53,7 +53,6 @@ function CreateEvent() {
     if (!currentQuestion.text.trim()) {
       return setError('Question text is required');
     }
-
     setStrategicQuestions(prev => [...prev, { ...currentQuestion, id: Date.now() }]);
     setCurrentQuestion({ text: '', priority: 'medium', category: '', notes: '' });
     setError('');
@@ -63,39 +62,48 @@ function CreateEvent() {
     setStrategicQuestions(prev => prev.filter(q => q.id !== id));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  /**
+   * Create event helper
+   * mode: 'draft' | 'publish'
+   *  - draft  => status: 'draft',  acceptingQuestions: false
+   *  - publish => status: 'active', acceptingQuestions: true
+   */
+  const createEvent = async (mode) => {
     if (!currentUser?.uid) {
-      return setError('You must be logged in to create an event.');
+      setError('You must be logged in to create an event.');
+      return;
     }
     if (!eventData.title || !eventData.date) {
-      return setError('Please fill in all required fields');
+      setError('Please fill in all required fields');
+      return;
     }
 
     try {
       setLoading(true);
       setError('');
 
-      // Organizer name fallback safety
       const organizerName =
         (userProfile?.organizationName || '').trim() ||
         currentUser.email ||
         'Organizer';
 
-      // Create a clean slug (from input or title), ensure not empty
+      // Clean slug (from input or title), ensure not empty
       let slug =
         (eventData.slug || eventData.title)
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/(^-|-$)/g, '') || `event-${Date.now()}`;
 
-      // Ensure slug uniqueness: if exists, append a short suffix
+      // Ensure slug uniqueness — if exists, append a short suffix
       const slugRef = ref(database, `slugs/${slug}`);
       const slugSnap = await get(slugRef);
       if (slugSnap.exists()) {
         slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
       }
+
+      // Decide status + acceptingQuestions based on mode
+      const status = mode === 'publish' ? 'active' : 'draft';
+      const acceptingQuestions = mode === 'publish';
 
       // Create event
       const eventsRef = ref(database, 'events');
@@ -109,8 +117,8 @@ function CreateEvent() {
         slug,
         organizerId: currentUser.uid,
         organizerName,
-        status: 'active',
-        acceptingQuestions: true, // ← default to accepting questions
+        status,                 // 'active' | 'draft'
+        acceptingQuestions,     // true if publish, false if draft
         createdAt: new Date().toISOString(),
         questionCount: 0,
         strategicQuestions: strategicQuestions.map(q => ({
@@ -127,10 +135,13 @@ function CreateEvent() {
 
       await set(newEventRef, eventPayload);
 
-      // Create slug mapping for participant links: /p/:slug or /event/:slug
+      // Write slug maps for participant link resolution
+      // slugs/{slug} -> eventId
       await set(ref(database, `slugs/${slug}`), newEventRef.key);
+      // eventSlugs/{eventId} -> slug
+      await set(ref(database, `eventSlugs/${newEventRef.key}`), slug);
 
-      // Seed strategic questions into this event's questions/{eventId}
+      // Seed strategic questions into questions/{eventId}
       if (strategicQuestions.length > 0) {
         const questionsRef = ref(database, `questions/${newEventRef.key}`);
         for (const q of strategicQuestions) {
@@ -156,6 +167,12 @@ function CreateEvent() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Default submit keeps previous behavior (Publish)
+    await createEvent('publish');
   };
 
   return (
@@ -249,8 +266,9 @@ function CreateEvent() {
                   onChange={handleEventChange}
                   placeholder="auto-generated-from-title"
                 />
-                {/* Use the same route you support in App.jsx. If you use /p/:slug: */}
-                <small>Participant link will be: {window.location.origin}/p/{eventData.slug || 'your-slug'}</small>
+                <small>
+                  Participant link will be: {window.location.origin}/p/{eventData.slug || 'your-slug'}
+                </small>
               </div>
             </div>
 
@@ -348,22 +366,37 @@ function CreateEvent() {
               )}
             </div>
 
-            {/* Submit */}
+            {/* Actions: Save Draft / Publish */}
             <div className="form-actions">
               <button
                 type="button"
                 onClick={() => navigate('/organizer/dashboard')}
                 className="btn btn-cancel"
+                disabled={loading}
               >
                 Cancel
               </button>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={loading}
-              >
-                {loading ? 'Creating Event...' : 'Create Event'}
-              </button>
+
+              <div className="split-actions">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  disabled={loading}
+                  onClick={() => createEvent('draft')}
+                  title="Save without publishing. Participants can't submit yet."
+                >
+                  {loading ? 'Saving…' : 'Save as Draft'}
+                </button>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading}
+                  title="Publish now and start accepting questions."
+                >
+                  {loading ? 'Publishing…' : 'Publish'}
+                </button>
+              </div>
             </div>
           </form>
         </div>

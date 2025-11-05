@@ -285,7 +285,7 @@ export default function ParticipantForm() {
         )}
 
         <p className="intro-text">
-          Got questions for this session? Submit them here and the panel will address them during the event. 🔥
+          Got questions for this session? Submit them here and the panel will address them during the event. 
         </p>
 
         <form onSubmit={handleSubmit} aria-busy={isSubmitting}>
