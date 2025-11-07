@@ -6,3 +6,94 @@
 .app {
   min-height: 100vh;
 }
+
+
+  /* Warm Light (default) */
+  /* :root {
+  --bg-canvas: #FAFAF7;
+  --bg-card: #FFFFFF;
+  --text: #1E2429;
+  --text-muted: #5A646D;
+  --border: #E7E7E2;
+  --primary: #5B68E3;
+  --primary-2: #764BA2; /* keep your brand duo */
+  /* --accent: #F6C04D;
+  --focus: #5B68E3;
+  --shadow: 0 8px 30px rgba(30, 36, 41, 0.08); */
+/* } */ 
+
+/* Neutral Light */
+/* :root[data-theme="light-neutral"] {
+  --bg-canvas: #F7F8FA;
+  --bg-card: #FFFFFF;
+  --text: #1D2330;
+  --text-muted: #616C7C;
+  --border: #E6E9EF;
+  --primary: #5563E4;
+  --primary-2: #7B66D7;
+  --accent: #5CC8A1;
+  --focus: #5563E4;
+  --shadow: 0 8px 30px rgba(29, 35, 48, 0.08);
+} */
+
+/* Cozy Dark */
+:root[data-theme="dark-cozy"] {
+  --bg-canvas: #16181D;
+  --bg-card: #1E2128;
+  --text: #F6F7F9;
+  --text-muted: #AEB6C2;
+  --border: #2A2E37;
+  --primary: #6A78F0;
+  --primary-2: #8A6AEF;
+  --accent: #F2B84B;
+  --focus: #6A78F0;
+  --shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+}
+
+/* Respect system preference when theme not explicitly set */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg-canvas: #16181D;
+    --bg-card: #1E2128;
+    --text: #F6F7F9;
+    --text-muted: #AEB6C2;
+    --border: #2A2E37;
+    --primary: #6A78F0;
+    --primary-2: #8A6AEF;
+    --accent: #F2B84B;
+    --focus: #6A78F0;
+    --shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* Apply everywhere */
+body {
+  background: var(--bg-canvas);
+  color: var(--text);
+}
+
+/* Example tokens used by your components */
+.page-wrapper, .container {
+  color: var(--text);
+  --glass-bg: var(--bg-card);
+  --glass-border: var(--border);
+  --glass-hover: rgba(0,0,0,0.03);
+}
+
+.card, .controls-card, .links-card, .questions-dashboard, .auth-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.subtitle, .section-subtitle, .link-url--muted, .last-updated, .brand-tagline {
+  color: var(--text-muted);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: #fff;
+}
+
+.link-label i,
+.analytics-icon.primary { color: var(--primary); }

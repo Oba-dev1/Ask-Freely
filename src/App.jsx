@@ -197,8 +197,8 @@ function LandingPage() {
 
           {/* Photo mosaic strip (no device mockups) */}
           <div className="hero-mosaic">
-            <div className="tile tall"><img src="/images/community-1.jpg" alt="Community moment" /></div>
-            <div className="tile"><img src="/images/community-2.jpg" alt="Volunteers" /></div>
+            <div className="tile tall"><img src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1762520570/pexels-pamanjoe-14669354_ntetl8.jpg" alt="Community moment" /></div>
+            <div className="tile"><img src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1720021892/group-young-african-friends-with-facemasks-using-their-phones-park_uuoeu2.jpg" alt="Volunteers" /></div>
             <div className="tile"><img src="/images/community-3.jpg" alt="Audience" /></div>
             <div className="tile wide"><img src="/images/community-4.jpg" alt="Panel" /></div>
           </div>
