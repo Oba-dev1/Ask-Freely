@@ -28,32 +28,28 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 function LandingPage() {
   const navigate = useNavigate();
 
-  // --- Live stats from Firebase ---
+  // --- Live stats ---
   const [eventsCount, setEventsCount] = useState(0);
   const [questionsCount, setQuestionsCount] = useState(0);
   const [participantsCount, setParticipantsCount] = useState(0);
 
-  // simple count-up animation
-  function useCountUp(target, duration = 650) {
+  // --- Activity ticker (recent events) ---
+  const [recentEvents, setRecentEvents] = useState([]);
+
+  // Count-up animation
+  function useCountUp(target, duration = 700) {
     const [val, setVal] = useState(0);
     const fromRef = useRef(0);
     const startRef = useRef(0);
     const targetRef = useRef(target);
-    useEffect(() => {
-      targetRef.current = target;
-    }, [target]);
+    useEffect(() => { targetRef.current = target; }, [target]);
     useEffect(() => {
       let raf;
       const step = (ts) => {
-        if (!startRef.current) {
-          startRef.current = ts;
-          fromRef.current = val;
-        }
+        if (!startRef.current) { startRef.current = ts; fromRef.current = val; }
         const p = Math.min((ts - startRef.current) / duration, 1);
         const eased = 1 - Math.pow(1 - p, 3);
-        const next = Math.round(
-          fromRef.current + (targetRef.current - fromRef.current) * eased
-        );
+        const next = Math.round(fromRef.current + (targetRef.current - fromRef.current) * eased);
         setVal(next);
         if (p < 1) raf = requestAnimationFrame(step);
         else startRef.current = 0;
@@ -64,18 +60,35 @@ function LandingPage() {
     }, [target]);
     return val;
   }
-
   const liveEvents = useCountUp(eventsCount);
   const liveQuestions = useCountUp(questionsCount);
   const liveParticipants = useCountUp(participantsCount);
 
+  // Firebase subscriptions
   useEffect(() => {
+    // Events count + recent list
     const evRef = ref(database, "events");
     const unSubEvents = onValue(evRef, (snap) => {
       const data = snap.val() || {};
-      setEventsCount(Object.keys(data).length);
+      const keys = Object.keys(data);
+      setEventsCount(keys.length);
+
+      // Build a small recents list
+      const items = keys
+        .map((id) => ({ id, ...data[id] }))
+        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+        .slice(0, 8)
+        .map((e) => ({
+          id: e.id,
+          title: e.title || "Untitled Event",
+          org: e.organizationName || e.organizerName || "Community",
+          when: e.date || e.createdAt || null,
+          status: e.status || "active",
+        }));
+      setRecentEvents(items);
     });
 
+    // Questions + participants (unique authors)
     const qRef = ref(database, "questions");
     const unSubQuestions = onValue(qRef, (snap) => {
       const data = snap.val() || {};
@@ -96,296 +109,285 @@ function LandingPage() {
       setParticipantsCount(authors.size);
     });
 
-    return () => {
-      unSubEvents();
-      unSubQuestions();
-    };
+    return () => { unSubEvents(); unSubQuestions(); };
   }, []);
 
   const fmt = useMemo(
     () => (n) =>
-      n >= 1_000_000
-        ? `${(n / 1_000_000).toFixed(1)}M`
-        : n >= 1_000
-        ? `${(n / 1_000).toFixed(1)}k`
-        : `${n}`,
+      n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M` :
+      n >= 1_000 ? `${(n / 1_000).toFixed(1)}k` : `${n}`,
     []
   );
 
   return (
-    <div className="landing-page">
-      {/* Nav */}
-      <nav className="navbar lp">
-        <div className="nav-container">
-          <div className="logo">
-            <span className="logo-icon">
-              <i className="fas fa-comments" />
-            </span>
-            <span className="logo-text">Ask Freely</span>
-          </div>
-          <div className="nav-links">
-            <button onClick={() => navigate("/login")} className="nav-link">
-              Sign In
-            </button>
-            <button
-              onClick={() => navigate("/signup")}
-              className="btn-primary-nav"
-            >
-              Get Started Free
-            </button>
-          </div>
-        </div>
-      </nav>
+    <div className="lp-wrapper">
+      {/* Top bar (simple, not “SaaS-y”) */}
+      <header className="lp-topbar">
+  <div className="lp-container topbar-row">
+    <button className="brand" onClick={() => navigate("/")}>
+      <i className="fas fa-comments" aria-hidden="true" />
+      <span>Ask Freely</span>
+    </button>
 
-      {/* Hero */}
-      <section className="hero-section refined">
-        <div className="hero-container">
-          <div className="hero-left">
-            <div className="eyebrow">
-              <span className="dot" />
-              Built for community-first conversations
+    {/* <nav className="main-nav" aria-label="Primary">
+      <a href="#community">Community</a>
+      <a href="#features">Features</a>
+      <a href="#support">Support</a>
+      <a href="#pricing">Pricing</a>
+    </nav> */}
+
+    <div className="actions">
+      <button className="ghost" onClick={() => navigate("/login")}>Sign in</button>
+      <button className="solid" onClick={() => navigate("/signup")}>
+        Join the community
+      </button>
+    </div>
+
+    {/* Mobile menu button (optional) */}
+    <button className="nav-toggle" aria-label="Open menu">
+      <i className="fas fa-bars" aria-hidden="true" />
+    </button>
+  </div>
+</header>
+
+      {/* Hero: community-first */}
+      <section className="lp-hero">
+        <div className="lp-container hero-grid">
+          <div className="hero-copy">
+            <div className="hero-chip">
+              <span className="dot" /> Powered by real people & real questions
             </div>
-            <h1 className="hero-title">
-              Run <span className="gradient-text">braver Q&A</span> at every
-              event
+            <h1>
+              A community space<br />
+              for honest Q&amp;A.
             </h1>
-            <p className="hero-subtitle">
-              Live question collection, smooth moderation, and analytics that
-              celebrate your community’s voice. Perfect for churches,
-              conferences, town halls, and teams.
+            <p className="lede">
+              Ask Freely helps gatherings—churches, neighborhoods, students, teams—
+              collect questions safely, vote on what matters, and respond with care.
             </p>
-            <div className="hero-cta">
-              <button
-                onClick={() => navigate("/signup")}
-                className="btn-hero-primary"
-              >
-                Start Free
-                <span className="btn-arrow">
-                  <i className="fas fa-arrow-right" />
-                </span>
+
+            <div className="hero-actions">
+              <button className="solid" onClick={() => navigate("/signup")}>
+                Create an event
+                <i className="fas fa-arrow-right" aria-hidden="true" />
               </button>
-              <button
-                onClick={() => navigate("/participate")}
-                className="btn-hero-secondary"
-              >
-                Try the Demo
+              <button className="ghost" onClick={() => navigate("/participate")}>
+                Try the participant view
               </button>
             </div>
 
-            <div className="hero-stats live">
-              <div className="stat">
-                <i className="fa-solid fa-square-poll-horizontal stat-ico" />
-                <div className="stat-number" aria-live="polite">
-                  {fmt(liveQuestions)}
-                </div>
-                <div className="stat-label">Questions Managed</div>
+            <div className="live-stats">
+              <div className="live-item">
+                <i className="fa-solid fa-square-poll-horizontal" />
+                <div className="n">{fmt(liveQuestions)}</div>
+                <div className="l">Questions asked</div>
               </div>
-              <div className="stat">
-                <i className="fa-solid fa-calendar-check stat-ico" />
-                <div className="stat-number" aria-live="polite">
-                  {fmt(liveEvents)}
-                </div>
-                <div className="stat-label">Events Hosted</div>
+              <div className="live-item">
+                <i className="fa-solid fa-calendar-check" />
+                <div className="n">{fmt(liveEvents)}</div>
+                <div className="l">Events created</div>
               </div>
-              <div className="stat">
-                <i className="fa-solid fa-user-group stat-ico" />
-                <div className="stat-number" aria-live="polite">
-                  {fmt(liveParticipants)}
-                </div>
-                <div className="stat-label">Unique Participants</div>
-              </div>
-            </div>
-
-            <div className="trust-row">
-              <span className="trust-text">Trusted by growing communities</span>
-              <div className="logo-strip">
-                {/* Swap these placeholders with real logos */}
-                <img src="/images/logo-1.svg" alt="Org 1" />
-                <img src="/images/logo-2.svg" alt="Org 2" />
-                <img src="/images/logo-3.svg" alt="Org 3" />
-                <img src="/images/logo-4.svg" alt="Org 4" />
+              <div className="live-item">
+                <i className="fa-solid fa-user-group" />
+                <div className="n">{fmt(liveParticipants)}</div>
+                <div className="l">Voices represented</div>
               </div>
             </div>
           </div>
 
-          <div className="hero-right">
-            {/* Replace with your screenshots/hero images */}
-            <div className="phone-mock">
-              <img src="/images/phone-participant.png" alt="Participant view" />
-            </div>
-            <div className="panel-mock">
-              <img src="/images/host-dashboard.png" alt="MC/Host dashboard" />
+          {/* Photo mosaic strip (no device mockups) */}
+          <div className="hero-mosaic">
+            <div className="tile tall"><img src="/images/community-1.jpg" alt="Community moment" /></div>
+            <div className="tile"><img src="/images/community-2.jpg" alt="Volunteers" /></div>
+            <div className="tile"><img src="/images/community-3.jpg" alt="Audience" /></div>
+            <div className="tile wide"><img src="/images/community-4.jpg" alt="Panel" /></div>
+          </div>
+        </div>
+      </section>
+
+      {/* What’s happening (ticker) */}
+      <section className="lp-ticker">
+        <div className="lp-container">
+          <span className="tick-label"><i className="fa-solid fa-bolt" /> What’s happening</span>
+          <div className="tick-track">
+            <div className="tick-items">
+              {recentEvents.length === 0 ? (
+                <div className="tick-item">Your community is next. Create an event →</div>
+              ) : (
+                recentEvents.map((e) => (
+                  <div className="tick-item" key={e.id}>
+                    <i className={`fa-solid ${e.status === "active" ? "fa-circle-play" : "fa-clock"}`} />
+                    <span className="t">{e.title}</span>
+                    <span className="m">• {e.org}</span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Use-cases (like Pigeonhole’s clarity) */}
-      <section className="usecases-section">
-        <div className="usecases-container">
-          <h2 className="section-title">Built for the moments that matter</h2>
-          <p className="section-subtitle">Ask Freely adapts to your format.</p>
-
-          <div className="usecases-grid">
-            <div className="use-card">
-              <i className="fa-solid fa-church use-ico" />
-              <h3>Church Q&amp;A</h3>
-              <p>Safe, anonymous, and spirit-led conversations.</p>
-            </div>
-            <div className="use-card">
-              <i className="fa-solid fa-people-roof use-ico" />
-              <h3>Community Forums</h3>
-              <p>Surface real concerns and create buy-in.</p>
-            </div>
-            <div className="use-card">
-              <i className="fa-solid fa-briefcase use-ico" />
-              <h3>All-hands &amp; Town Halls</h3>
-              <p>Transparent dialogue that builds trust.</p>
-            </div>
-            <div className="use-card">
-              <i className="fa-solid fa-graduation-cap use-ico" />
-              <h3>Campus Events</h3>
-              <p>Amplify student voices with ease.</p>
-            </div>
+      {/* Values / Manifesto */}
+      <section className="lp-values">
+        <div className="lp-container values-grid">
+          <div className="val">
+            <i className="fa-solid fa-hand-holding-heart" />
+            <h3>Belonging first</h3>
+            <p>Anonymous by choice, kind by default. We design for safety so harder questions can surface.</p>
+          </div>
+          <div className="val">
+            <i className="fa-solid fa-people-arrows" />
+            <h3>Shared agency</h3>
+            <p>Let the room vote on what matters. Hosts get clarity without losing compassion.</p>
+          </div>
+          <div className="val">
+            <i className="fa-solid fa-palette" />
+            <h3>Make it yours</h3>
+            <p>Customization for your context—branding, tone, and links that feel like home.</p>
           </div>
         </div>
       </section>
 
-      {/* Features (including Customization) */}
-      <section className="features-section refined" id="features">
-        <div className="features-container">
-          <div className="section-header">
-            <h2 className="section-title">
-              Everything you need for seamless Q&amp;A
-            </h2>
-            <p className="section-subtitle">
-              Crafted for organizers, MCs, and participants.
-            </p>
-          </div>
+      {/* Stories block (testimonials / quotes) */}
+      <section className="lp-stories">
+        <div className="lp-container stories-wrap">
+          <article className="story">
+            <blockquote>
+              “Ask Freely turned our Q&amp;A from a tense segment into the highlight. People felt heard.”
+            </blockquote>
+            <div className="byline">
+              <img src="/images/avatar-1.jpg" alt="Ada - Youth leader" />
+              <div>
+                <strong>Ada</strong>
+                <span>Youth Leader, Wuye</span>
+              </div>
+            </div>
+          </article>
 
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon">
-                <i className="fas fa-bullseye" />
+          <article className="story">
+            <blockquote>
+              “We used it at our campus forum—the tough questions finally came out. Best turnout yet.”
+            </blockquote>
+            <div className="byline">
+              <img src="/images/avatar-2.jpg" alt="Seyi - Campus Coordinator" />
+              <div>
+                <strong>Seyi</strong>
+                <span>Campus Coordinator</span>
               </div>
-              <h3>Strategic Questions</h3>
-              <p>Guide conversations with pre-loaded prompts and categories.</p>
             </div>
-            <div className="feature-card">
-              <div className="feature-icon">
-                <i className="fas fa-user-secret" />
+          </article>
+
+          <article className="story">
+            <blockquote>
+              “The MC dashboard is clean, and the community vibe is real. It respects our culture.”
+            </blockquote>
+            <div className="byline">
+              <img src="/images/avatar-3.jpg" alt="Chidi - Community Organizer" />
+              <div>
+                <strong>Chidi</strong>
+                <span>Community Organizer</span>
               </div>
-              <h3>Anonymous Submissions</h3>
-              <p>Psychological safety encourages honest, braver questions.</p>
             </div>
-            <div className="feature-card">
-              <div className="feature-icon">
-                <i className="fa-solid fa-bolt" />
-              </div>
-              <h3>Real-Time Updates</h3>
-              <p>Questions stream in live—no refresh, no friction.</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">
-                <i className="fas fa-chart-bar" />
-              </div>
-              <h3>Smart Analytics</h3>
-              <p>Track participation, export insights, celebrate engagement.</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">
-                <i className="fas fa-microphone" />
-              </div>
-              <h3>MC Dashboard</h3>
-              <p>Clear filters and focus modes for confident moderation.</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">
-                <i className="fa-solid fa-sliders" />
-              </div>
-              <h3>Customization</h3>
-              <p>
-                Branding, themes, and share links that feel like <em>your</em>{" "}
-                community.
-              </p>
-            </div>
+          </article>
+        </div>
+      </section>
+
+      {/* Gentle feature row (no corporate shine) */}
+      <section className="lp-why">
+        <div className="lp-container why-grid">
+          <div className="why-card">
+            <i className="fa-solid fa-bullseye" />
+            <h4>Strategic prompts</h4>
+            <p>Seed the conversation with questions that matter to your people.</p>
+          </div>
+          <div className="why-card">
+            <i className="fa-solid fa-user-shield" />
+            <h4>Privacy that protects</h4>
+            <p>Keep identities safe. Moderate with empathy and clear boundaries.</p>
+          </div>
+          <div className="why-card">
+            <i className="fa-solid fa-chart-line" />
+            <h4>Community insights</h4>
+            <p>See themes, participation trends, and share learnings with your team.</p>
+          </div>
+          <div className="why-card">
+            <i className="fa-solid fa-sliders" />
+            <h4>Customization</h4>
+            <p>Match your brand and language. Make the space unmistakably yours.</p>
           </div>
         </div>
       </section>
 
-      {/* Community mosaic */}
-      <section className="mosaic-section">
-        <div className="mosaic">
-          <img src="/images/mosaic-1.jpg" alt="Audience asking questions" />
-          <img src="/images/mosaic-2.jpg" alt="MC guiding session" />
-          <img src="/images/mosaic-3.jpg" alt="Volunteer team" />
-          <img src="/images/mosaic-4.jpg" alt="Community breakout" />
-          <img src="/images/mosaic-5.jpg" alt="Church Q&A" />
-          <img src="/images/mosaic-6.jpg" alt="Conference panel" />
-        </div>
-        <p className="mosaic-caption">
-          Built with communities. Powered by your stories.
-        </p>
-      </section>
-
-      {/* CTA */}
-      <section className="cta-section refined">
-        <div className="cta-container">
-          <h2 className="cta-title">Ready to make every voice heard?</h2>
-          <p className="cta-subtitle">
-            Join communities creating braver conversations.
-          </p>
-          <button onClick={() => navigate("/signup")} className="btn-cta">
-            Get Started Free
-            <span className="btn-arrow">
-              <i className="fas fa-arrow-right" />
-            </span>
-          </button>
-          <p className="cta-note">
-            No credit card required • Free forever plan
-          </p>
+      {/* Call to action */}
+      <section className="lp-cta">
+        <div className="lp-container cta-box">
+          <h2>Ready to hold braver conversations?</h2>
+          <p>Start with a free event. Invite your people. Listen together.</p>
+          <div className="cta-actions">
+            <button className="solid" onClick={() => navigate("/signup")}>
+              Create a free event
+              <i className="fas fa-arrow-right" aria-hidden="true" />
+            </button>
+            <button className="ghost" onClick={() => navigate("/participate")}>
+              See a demo
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="footer">
-        <div className="footer-container">
-          <div className="footer-brand">
-            <div className="logo">
-              <span className="logo-icon">
-                <i className="fas fa-comments" />
-              </span>
-              <span className="logo-text">Ask Freely</span>
-            </div>
-            <p>Empowering conversations, one question at a time.</p>
-          </div>
+      {/* Footer (lightweight) */}
+      <footer className="lp-footer">
+  <div className="lp-container foot-grid">
+    <div className="foot-brand">
+      <button className="brand" onClick={() => navigate("/")}>
+        <i className="fas fa-comments" aria-hidden="true" />
+        <span>Ask Freely</span>
+      </button>
+      <p className="foot-tagline">
+        Built with communities. Powered by your stories.
+      </p>
 
-          <div className="footer-links">
-            <div className="footer-column">
-              <h4>Product</h4>
-              <a href="#features">Features</a>
-              <a href="#pricing">Pricing</a>
-              <a href="#demo">Demo</a>
-            </div>
-            <div className="footer-column">
-              <h4>Company</h4>
-              <a href="#about">About</a>
-              <a href="#contact">Contact</a>
-              <a href="#careers">Careers</a>
-            </div>
-            <div className="footer-column">
-              <h4>Support</h4>
-              <a href="#help">Help Center</a>
-              <a href="#docs">Documentation</a>
-              <a href="#status">Status</a>
-            </div>
-          </div>
-        </div>
+      <div className="socials" aria-label="Social links">
+        {/* <a href="#" aria-label="Twitter"><i className="fab fa-x-twitter" /></a>
+        <a href="#" aria-label="Instagram"><i className="fab fa-instagram" /></a>
+        <a href="#" aria-label="YouTube"><i className="fab fa-youtube" /></a> */}
+      </div>
+    </div>
 
-        <div className="footer-bottom">
-          <p>© 2025 Ask Freely. All rights reserved.</p>
-        </div>
-      </footer>
+    <div className="foot-cols">
+      <div className="foot-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#demo">Demo</a>
+      </div>
+      <div className="foot-col">
+        <h4>Community</h4>
+        <a href="#community">Stories</a>
+        <a href="#events">Events</a>
+        <a href="#guide">Community Guide</a>
+      </div>
+      <div className="foot-col">
+        <h4>Support</h4>
+        <a href="#help">Help Center</a>
+        <a href="#docs">Documentation</a>
+        <a href="#status">Status</a>
+      </div>
+    </div>
+  </div>
+
+  <div className="lp-container foot-bottom">
+    <p>© {new Date().getFullYear()} Ask Freely</p>
+    <div className="foot-legal">
+      {/* <a href="#privacy">Privacy</a>
+      <span>•</span>
+      <a href="#terms">Terms</a>
+      <span>•</span>
+      <a href="#contact">Contact</a> */}
+    </div>
+  </div>
+</footer>
+
     </div>
   );
 }
