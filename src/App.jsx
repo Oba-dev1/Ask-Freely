@@ -370,8 +370,8 @@ function StoriesSection() {
 function WhySection() {
   return (
     <section id="why" className="lp-why">
-      <h3 className="section-heading">Why people use Ask Freely</h3>
-      <div className="lp-container why-grid">       
+      <div className="lp-container why-grid">      
+         <h3 className="section-heading">Why people use Ask Freely</h3> 
         <div className="why-card">
           <div className="why-icon">
             <i className="fa-solid fa-bullseye" />

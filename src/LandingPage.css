@@ -458,17 +458,18 @@
   z-index: 1;
 }
 
-/* Heading separate from grid */
-.lp-why .section-heading {
-  margin-bottom: 28px;
-}
-
-/* Why grid - compact 4-column on desktop */
+/* Why grid - includes heading in grid layout */
 .why-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 18px;
   align-items: stretch;
+}
+
+/* Heading spans full width */
+.why-grid .section-heading {
+  grid-column: 1 / -1;
+  margin-bottom: 10px;
 }
 
 /* Feature card - minimal, icon-forward design */
@@ -612,7 +613,7 @@
 .foot-brand {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: start;
   gap: 1rem;
 }
 
@@ -712,7 +713,7 @@
 /* Bottom bar */
 .foot-bottom {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   border-top: 1px solid rgba(255,255,255,.06);
   padding-top: 20px;
