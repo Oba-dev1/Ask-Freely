@@ -246,10 +246,10 @@ function HeroSection() {
             />
           </div>
           <div className="tile">
-            <img src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764868707/close-up-students-learning-class_syynwk.jpg" alt="Audience" />
+            <img src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764865359/group-business-women-participating-panel-discussion_m9n8ea.jpg" alt="Audience" />
           </div>
           <div className="tile wide">
-            <img src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764865359/group-business-women-participating-panel-discussion_m9n8ea.jpg" alt="Panel" />
+            <img src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764865450/male-business-executive-giving-speech_h4qxrj.jpg" alt="Panel" />
           </div>
         </aside>
       </div>
