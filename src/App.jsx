@@ -158,6 +158,14 @@ function Story({ quote, avatar, name, role }) {
 function TopBar() {
   const navigate = useNavigate();
 
+  const handleNavClick = (e, targetId) => {
+    e.preventDefault();
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <header className="lp-topbar" role="banner">
       <div className="lp-container topbar-row">
@@ -167,10 +175,10 @@ function TopBar() {
         </button>
 
         <nav className="main-nav" aria-label="Primary navigation">
-          <a href="#community">Community</a>
-          <a href="#features">Features</a>
-          <a href="#stories">Stories</a>
-          <a href="#why">Why</a>
+          <a href="#values" onClick={(e) => handleNavClick(e, 'values')}>Community</a>
+          <a href="#why" onClick={(e) => handleNavClick(e, 'why')}>Features</a>
+          <a href="#stories" onClick={(e) => handleNavClick(e, 'stories')}>Stories</a>
+          <a href="#why" onClick={(e) => handleNavClick(e, 'why')}>Why</a>
         </nav>
 
         <div className="actions">
@@ -235,13 +243,13 @@ function HeroSection({ liveStats }) {
         <aside className="hero-mosaic" aria-hidden="true">
           <div className="tile tall">
             <img
-              src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1762520570/pexels-pamanjoe-14669354_ntetl8.jpg"
+              src=""
               alt="Community moment"
             />
           </div>
           <div className="tile">
             <img
-              src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1720021892/group-young-african-friends-with-facemasks-using-their-phones-park_uuoeu2.jpg"
+              src=""
               alt="Volunteers"
             />
           </div>
