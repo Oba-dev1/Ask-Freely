@@ -207,6 +207,55 @@ function TopBar() {
 
 function HeroSection() {
   const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = React.useState(0);
+
+  const slides = [
+    {
+      src: "https://res.cloudinary.com/dws3lnn4d/image/upload/v1764869145/group-international-business-people-raising-their-hands_hgysjg.jpg",
+      alt: "Community moment"
+    },
+    {
+      src: "https://res.cloudinary.com/dws3lnn4d/image/upload/v1764869722/happy-beautiful-black-african-american-girl-with-hat-gown-graduates-ceremony-graduated_vzc7qh.jpg",
+      alt: "Volunteers"
+    },
+    {
+      src: "https://res.cloudinary.com/dws3lnn4d/image/upload/v1764865359/group-business-women-participating-panel-discussion_m9n8ea.jpg",
+      alt: "Audience"
+    },
+    {
+      src: "https://res.cloudinary.com/dws3lnn4d/image/upload/v1764865450/male-business-executive-giving-speech_h4qxrj.jpg",
+      alt: "Panel"
+    }
+  ];
+
+  // Auto-advance carousel - alternating direction
+  const [direction, setDirection] = React.useState(1); // 1 for forward, -1 for backward
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => {
+        const next = prev + direction;
+
+        // Change direction at boundaries
+        if (next >= slides.length) {
+          setDirection(-1);
+          return prev - 1;
+        }
+        if (next < 0) {
+          setDirection(1);
+          return prev + 1;
+        }
+
+        return next;
+      });
+    }, 6000); // Change slide every 6 seconds (slower)
+
+    return () => clearInterval(interval);
+  }, [direction, slides.length]);
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
 
   return (
     <section id="hero" className="lp-hero" aria-labelledby="hero-heading">
@@ -232,24 +281,29 @@ function HeroSection() {
           </div>
         </div>
 
-        <aside className="hero-mosaic" aria-hidden="true">
-          <div className="tile tall">
-            <img
-              src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764869145/group-international-business-people-raising-their-hands_hgysjg.jpg"
-              alt="Community moment"
-            />
+        <aside className="hero-carousel" aria-hidden="true">
+          <div className="carousel-container">
+            <div
+              className="carousel-track"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {slides.map((slide, index) => (
+                <div key={index} className="carousel-slide">
+                  <img src={slide.src} alt={slide.alt} />
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="tile">
-            <img
-              src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764869722/happy-beautiful-black-african-american-girl-with-hat-gown-graduates-ceremony-graduated_vzc7qh.jpg"
-              alt="Volunteers"
-            />
-          </div>
-          <div className="tile">
-            <img src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764865359/group-business-women-participating-panel-discussion_m9n8ea.jpg" alt="Audience" />
-          </div>
-          <div className="tile wide">
-            <img src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764865450/male-business-executive-giving-speech_h4qxrj.jpg" alt="Panel" />
+
+          <div className="carousel-dots">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                className={`carousel-dot ${index === currentSlide ? 'active' : ''}`}
+                onClick={() => goToSlide(index)}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </aside>
       </div>

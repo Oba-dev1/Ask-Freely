@@ -267,46 +267,71 @@
   font-weight: 600;
 }
 
-/* ---------- MOSAIC ---------- */
-.hero-mosaic {
-  display: grid;
-  gap: 16px;
-  /* grid-template-columns: repeat(4, 1fr); */
-  grid-auto-rows: 280px;
-  align-items: stretch;
+/* ---------- CAROUSEL ---------- */
+.hero-carousel {
   width: 100%;
   max-width: 100%;
+  position: relative;
 }
 
-.hero-mosaic .tile {
-  border-radius: 16px;
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0,0,0,.1);
   border: 1px solid rgba(0,0,0,.08);
-  background: rgba(0,0,0,.02);
-  display: block;
-  transition: all .3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,.06);
 }
 
-.hero-mosaic .tile:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(79,70,229,.12);
-  border-color: rgba(79,70,229,.15);
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.hero-mosaic .tile img {
+.carousel-slide {
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.carousel-slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.hero-mosaic .tile.tall {
-  grid-row: span 2;
+/* Dots indicator */
+.carousel-dots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.hero-mosaic .tile.wide {
-  grid-column: span 2;
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(79,70,229,0.2);
+  border: none;
+  cursor: pointer;
+  transition: all .3s ease;
+  padding: 0;
+}
+
+.carousel-dot:hover {
+  background: rgba(79,70,229,0.4);
+  transform: scale(1.2);
+}
+
+.carousel-dot.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  width: 32px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(79,70,229,0.3);
 }
 
 /* ---------- TICKER ---------- */
@@ -1147,9 +1172,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 /* ---------- responsive ---------- */
 @media (max-width: 1080px) {
-  .hero-mosaic {
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 240px;
+  .carousel-container {
+    height: 400px;
   }
 
   .values-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1233,10 +1257,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     font-size: 1.05rem;
   }
 
-  .hero-mosaic {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 200px;
-    gap: 12px;
+  .carousel-container {
+    height: 350px;
   }
 
   /* Live stats - 2 column on mobile */
@@ -1288,15 +1310,23 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 
 @media (max-width: 520px) {
-  .hero-mosaic {
-    grid-template-columns: 1fr;
-    grid-auto-rows: 220px;
+  .carousel-container {
+    height: 300px;
+    border-radius: 16px;
   }
 
-  .hero-mosaic .tile.tall,
-  .hero-mosaic .tile.wide {
-    grid-row: span 1;
-    grid-column: span 1;
+  .carousel-dots {
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .carousel-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .carousel-dot.active {
+    width: 28px;
   }
 
   .hero-copy h1 {
