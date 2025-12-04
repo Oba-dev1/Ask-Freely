@@ -36,33 +36,33 @@
   --shadow: 0 8px 30px rgba(29, 35, 48, 0.08);
 } */
 
-/* Cozy Dark */
+/* Cozy Dark - Updated with vibrant community colors */
 :root[data-theme="dark-cozy"] {
-  --bg-canvas: #16181D;
+  --bg-canvas: #0a0e1a;
   --bg-card: #1E2128;
   --text: #F6F7F9;
   --text-muted: #AEB6C2;
   --border: #2A2E37;
-  --primary: #6A78F0;
-  --primary-2: #8A6AEF;
-  --accent: #F2B84B;
-  --focus: #6A78F0;
-  --shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+  --primary: #4F46E5;
+  --primary-2: #7C3AED;
+  --accent: #10B981;
+  --focus: #4F46E5;
+  --shadow: 0 10px 34px rgba(79, 70, 229, 0.2);
 }
 
 /* Respect system preference when theme not explicitly set */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --bg-canvas: #16181D;
+    --bg-canvas: #0a0e1a;
     --bg-card: #1E2128;
     --text: #F6F7F9;
     --text-muted: #AEB6C2;
     --border: #2A2E37;
-    --primary: #6A78F0;
-    --primary-2: #8A6AEF;
-    --accent: #F2B84B;
-    --focus: #6A78F0;
-    --shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+    --primary: #4F46E5;
+    --primary-2: #7C3AED;
+    --accent: #10B981;
+    --focus: #4F46E5;
+    --shadow: 0 10px 34px rgba(79, 70, 229, 0.2);
   }
 }
 

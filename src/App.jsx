@@ -157,6 +157,7 @@ function Story({ quote, avatar, name, role }) {
 
 function TopBar() {
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const handleNavClick = (e, targetId) => {
     e.preventDefault();
@@ -164,6 +165,7 @@ function TopBar() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    setMobileMenuOpen(false); // Close menu after navigation
   };
 
   return (
@@ -174,8 +176,18 @@ function TopBar() {
           <span>Ask Freely</span>
         </button>
 
-        <nav className="main-nav" aria-label="Primary navigation">
+        <button
+          className="nav-toggle"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle navigation menu"
+          aria-expanded={mobileMenuOpen}
+        >
+          <i className={mobileMenuOpen ? "fas fa-times" : "fas fa-bars"} />
+        </button>
+
+        <nav className={`main-nav ${mobileMenuOpen ? 'mobile-open' : ''}`} aria-label="Primary navigation">
           <a href="#values" onClick={(e) => handleNavClick(e, 'values')}>Community</a>
+          <a href="#how-it-works" onClick={(e) => handleNavClick(e, 'how-it-works')}>How It Works</a>
           <a href="#why" onClick={(e) => handleNavClick(e, 'why')}>Features</a>
           <a href="#stories" onClick={(e) => handleNavClick(e, 'stories')}>Stories</a>
         </nav>
@@ -193,9 +205,8 @@ function TopBar() {
   );
 }
 
-function HeroSection({ liveStats }) {
+function HeroSection() {
   const navigate = useNavigate();
-  const { liveEvents, liveQuestions, liveParticipants } = liveStats;
 
   return (
     <section id="hero" className="lp-hero" aria-labelledby="hero-heading">
@@ -219,24 +230,6 @@ function HeroSection({ liveStats }) {
               Try the participant view
             </button>
           </div>
-
-          <div className="live-stats" aria-hidden="false">
-            <StatItem
-              icon="fa-solid fa-circle-question"
-              num={formatNumber(liveQuestions)}
-              label="Questions asked"
-            />
-            <StatItem
-              icon="fa-solid fa-calendar-days"
-              num={formatNumber(liveEvents)}
-              label="Events created"
-            />
-            <StatItem
-              icon="fa-solid fa-user-group"
-              num={formatNumber(liveParticipants)}
-              label="Voices represented"
-            />
-          </div>
         </div>
 
         <aside className="hero-mosaic" aria-hidden="true">
@@ -259,6 +252,34 @@ function HeroSection({ liveStats }) {
             <img src="/images/community-4.jpg" alt="Panel" />
           </div>
         </aside>
+      </div>
+    </section>
+  );
+}
+
+function LiveStatsSection({ liveStats }) {
+  const { liveEvents, liveQuestions, liveParticipants } = liveStats;
+
+  return (
+    <section className="lp-live-stats" aria-label="Live statistics">
+      <div className="lp-container">
+        <div className="stats-row">
+          <StatItem
+            icon="fa-solid fa-circle-question"
+            num={formatNumber(liveQuestions)}
+            label="Questions asked"
+          />
+          <StatItem
+            icon="fa-solid fa-calendar-days"
+            num={formatNumber(liveEvents)}
+            label="Events created"
+          />
+          <StatItem
+            icon="fa-solid fa-user-group"
+            num={formatNumber(liveParticipants)}
+            label="Voices represented"
+          />
+        </div>
       </div>
     </section>
   );
@@ -368,6 +389,60 @@ function StoriesSection() {
             name="Chidi"
             role="Community Organizer"
           />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HowItWorksSection() {
+  return (
+    <section id="how-it-works" className="lp-how-it-works">
+      <div className="lp-container">
+        <h3 className="section-heading">How it works</h3>
+        <p className="how-subtitle">Three simple steps to better conversations</p>
+
+        <div className="how-timeline">
+          <div className="timeline-line"></div>
+
+          <div className="how-step" data-step="1">
+            <div className="step-marker">
+              <div className="step-number">1</div>
+            </div>
+            <div className="step-content">
+              <div className="step-icon">
+                <i className="fa-solid fa-calendar-plus" />
+              </div>
+              <h4>Create your event</h4>
+              <p>Set up your Q&A session in seconds. Customize branding, add prompts, and get a shareable link.</p>
+            </div>
+          </div>
+
+          <div className="how-step" data-step="2">
+            <div className="step-marker">
+              <div className="step-number">2</div>
+            </div>
+            <div className="step-content">
+              <div className="step-icon">
+                <i className="fa-solid fa-comments" />
+              </div>
+              <h4>Invite your people</h4>
+              <p>Share the link. Participants submit and upvote questions anonymously—no sign-up needed.</p>
+            </div>
+          </div>
+
+          <div className="how-step" data-step="3">
+            <div className="step-marker">
+              <div className="step-number">3</div>
+            </div>
+            <div className="step-content">
+              <div className="step-icon">
+                <i className="fa-solid fa-microphone"/>
+              </div>
+              <h4>Host with confidence</h4>
+              <p>See top questions live, respond thoughtfully, and export insights for your team afterward.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -498,9 +573,11 @@ function LandingPage() {
   return (
     <div className="lp-wrapper">
       <TopBar />
-      <HeroSection liveStats={liveStats} />
+      <HeroSection />
+      <LiveStatsSection liveStats={liveStats} />
       <ActivityTicker recentEvents={recentEvents} />
       <ValuesSection />
+      <HowItWorksSection />
       <WhySection />
       <StoriesSection />
       <CTASection />
