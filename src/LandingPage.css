@@ -331,7 +331,7 @@
   border-radius: 3px;
   vertical-align: middle;
 }
-/* .tick-track { overflow: hidden; border-top:1px solid rgba(0,0,0,.08); border-bottom:1px solid rgba(0,0,0,.08); } */
+.tick-track { overflow: hidden; border-top:1px solid rgba(0,0,0,.08); border-bottom:1px solid rgba(0,0,0,.08); }
 .tick-items { display:flex; gap: 18px; padding: 10px 0; animation: scroll 28s linear infinite; }
 .tick-item { white-space: nowrap; opacity:.9; color: var(--ink-light); }
 .tick-item i { margin-right: .4rem; color: var(--primary); }

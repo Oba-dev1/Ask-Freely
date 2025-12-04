@@ -235,21 +235,21 @@ function HeroSection() {
         <aside className="hero-mosaic" aria-hidden="true">
           <div className="tile tall">
             <img
-              src=""
+              src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764869145/group-international-business-people-raising-their-hands_hgysjg.jpg"
               alt="Community moment"
             />
           </div>
           <div className="tile">
             <img
-              src=""
+              src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764869722/happy-beautiful-black-african-american-girl-with-hat-gown-graduates-ceremony-graduated_vzc7qh.jpg"
               alt="Volunteers"
             />
           </div>
           <div className="tile">
-            <img src="/images/community-3.jpg" alt="Audience" />
+            <img src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764868707/close-up-students-learning-class_syynwk.jpg" alt="Audience" />
           </div>
           <div className="tile wide">
-            <img src="/images/community-4.jpg" alt="Panel" />
+            <img src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764865359/group-business-women-participating-panel-discussion_m9n8ea.jpg" alt="Panel" />
           </div>
         </aside>
       </div>
