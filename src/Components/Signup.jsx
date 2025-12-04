@@ -53,15 +53,24 @@ function Signup() {
     <div className="page-wrapper">
       <div className="auth-layout">
         <aside className="auth-visual" aria-hidden="true">
-          <div className="brand">
-            <div className="logo auth-logo">
-              <span className="logo-icon"><i className="fas fa-comments"></i></span>
-              <span className="logo-text">Ask Freely</span>
+          <div className="auth-image-container">
+            <img
+              src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1764865450/male-business-executive-giving-speech_h4qxrj.jpg"
+              alt="Ask Freely community"
+              className="auth-image"
+            />
+            <div className="auth-image-overlay">
+              <div className="brand">
+                <div className="logo auth-logo">
+                  <span className="logo-icon"><i className="fas fa-comments"></i></span>
+                  <span className="logo-text">Ask Freely</span>
+                </div>
+                <p className="brand-tagline">Real-time Q&amp;A for engaging events</p>
+              </div>
+              <div className="visual-caption">
+                <p>"Start better conversations with your audience."</p>
+              </div>
             </div>
-            <p className="brand-tagline">Real-time Q&amp;A for engaging events</p>
-          </div>
-          <div className="visual-caption">
-            <p>“Start better conversations with your audience.”</p>
           </div>
         </aside>
 
@@ -74,17 +83,6 @@ function Signup() {
               </header>
 
               {error && <div className="error-banner" role="alert">{error}</div>}
-
-              {/* Social (optional; wire up later) */}
-              <button
-                type="button"
-                className="btn btn-google"
-                onClick={() => console.log('TODO: Google sign-up')}
-              >
-                <span className="g-icon">🟢</span> Continue with Google
-              </button>
-
-              <div className="auth-divider"><span>or</span></div>
 
               <form onSubmit={handleSubmit} className="auth-form" noValidate>
                 <div className="form-group">
@@ -195,6 +193,17 @@ function Signup() {
                   {loading ? 'Creating Account...' : 'Sign Up'}
                 </button>
               </form>
+
+              <div className="auth-divider"><span>or</span></div>
+
+              {/* Social (optional; wire up later) */}
+              <button
+                type="button"
+                className="btn btn-google"
+                onClick={() => console.log('TODO: Google sign-up')}
+              >
+                <span className="g-icon"><i class="fa-brands fa-google"></i></span> Continue with Google
+              </button>
 
               <div className="auth-links">
                 <p>Already have an account? <Link to="/login">Sign In</Link></p>

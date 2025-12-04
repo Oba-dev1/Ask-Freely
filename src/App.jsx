@@ -427,19 +427,19 @@ function StoriesSection() {
         <div className="stories-grid">
           <Story
             quote="Ask Freely turned our Q&A from a tense segment into the highlight. People felt heard."
-            avatar="/images/avatar-1.jpg"
+            avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1718105160/pexels-emmy-e-1252107-2381069_ncpcqb.jpg"
             name="Ada"
             role="Youth Leader, Wuye"
           />
           <Story
             quote="We used it at our campus forum—the tough questions finally came out. Best turnout yet."
-            avatar="/images/avatar-2.jpg"
+            avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1706346802/AjoVault%20App/pexels-christina-morillo-1181686_irzuti.jpg"
             name="Seyi"
             role="Campus Coordinator"
           />
           <Story
             quote="The MC dashboard is clean, and the community vibe is real. It respects our culture."
-            avatar="/images/avatar-3.jpg"
+            avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1719833077/IMG_2571_wsh2ef.jpg"
             name="Chidi"
             role="Community Organizer"
           />

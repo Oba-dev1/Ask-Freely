@@ -105,7 +105,7 @@ function OrganizerDashboard() {
         <div className="events-grid">
           {events.length === 0 ? (
             <div className="empty-state-card">
-              <div className="empty-state-icon">📅</div>
+              <div className="empty-state-icon"><i class="fa-solid fa-calendar-days"></i></div>
               <h3>No events yet</h3>
               <p>Create your first event to start collecting questions from your audience and manage Q&amp;A sessions like a pro.</p>
               <button onClick={handleCreateEvent} className="btn-get-started">

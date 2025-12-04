@@ -43,15 +43,24 @@ function Login() {
       <div className="auth-layout">
         {/* Left: Visual / Brand */}
         <aside className="auth-visual" aria-hidden="true">
-          <div className="brand">
-            <div className="logo auth-logo">
-              <span className="logo-icon"><i className="fas fa-comments"></i></span>
-              <span className="logo-text">Ask Freely</span>
+          <div className="auth-image-container">
+            <img
+              src="https://res.cloudinary.com/dws3lnn4d/image/upload/v1762520570/pexels-pamanjoe-14669354_ntetl8.jpg"
+              alt="Ask Freely community"
+              className="auth-image"
+            />
+            <div className="auth-image-overlay">
+              <div className="brand">
+                <div className="logo auth-logo">
+                  <span className="logo-icon"><i className="fas fa-comments"></i></span>
+                  <span className="logo-text">Ask Freely</span>
+                </div>
+                <p className="brand-tagline">Real-time Q&amp;A for engaging events</p>
+              </div>
+              <div className="visual-caption">
+                <p>"Create safe spaces where people can ask real questions."</p>
+              </div>
             </div>
-            <p className="brand-tagline">Real-time Q&amp;A for engaging events</p>
-          </div>
-          <div className="visual-caption">
-            <p>“Create safe spaces where people can ask real questions.”</p>
           </div>
         </aside>
 
@@ -65,17 +74,6 @@ function Login() {
               </header>
 
               {error && <div className="error-banner" role="alert">{error}</div>}
-
-              {/* Social (optional; wire up later) */}
-              <button
-                type="button"
-                className="btn btn-google"
-                onClick={() => console.log('TODO: Google sign-in')}
-              >
-                <span className="g-icon">🟢</span> Continue with Google
-              </button>
-
-              <div className="auth-divider"><span>or</span></div>
 
               <form onSubmit={handleSubmit} className="auth-form" noValidate>
                 <div className="form-group">
@@ -136,6 +134,17 @@ function Login() {
                   {loading ? 'Signing in...' : 'Sign In'}
                 </button>
               </form>
+
+              <div className="auth-divider"><span>or</span></div>
+
+              {/* Social (optional; wire up later) */}
+              <button
+                type="button"
+                className="btn btn-google"
+                onClick={() => console.log('TODO: Google sign-in')}
+              >
+                <span className="g-icon"><i class="fa-brands fa-google"></i></span> Continue with Google
+              </button>
 
               <div className="auth-links">
                 <Link to="/forgot-password">Forgot Password?</Link>
