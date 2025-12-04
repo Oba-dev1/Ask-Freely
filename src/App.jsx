@@ -178,7 +178,6 @@ function TopBar() {
           <a href="#values" onClick={(e) => handleNavClick(e, 'values')}>Community</a>
           <a href="#why" onClick={(e) => handleNavClick(e, 'why')}>Features</a>
           <a href="#stories" onClick={(e) => handleNavClick(e, 'stories')}>Stories</a>
-          <a href="#why" onClick={(e) => handleNavClick(e, 'why')}>Why</a>
         </nav>
 
         <div className="actions">
@@ -378,8 +377,10 @@ function StoriesSection() {
 function WhySection() {
   return (
     <section id="why" className="lp-why">
-      <div className="lp-container why-grid">      
-         <h3 className="section-heading">Why people use Ask Freely</h3> 
+      <div className="lp-container why-grid">
+        <h3 className="section-heading">Why people use Ask Freely</h3>
+      </div>
+      <div className="lp-container why-grid">
         <div className="why-card">
           <div className="why-icon">
             <i className="fa-solid fa-bullseye" />
@@ -500,8 +501,8 @@ function LandingPage() {
       <HeroSection liveStats={liveStats} />
       <ActivityTicker recentEvents={recentEvents} />
       <ValuesSection />
-      <StoriesSection />
       <WhySection />
+      <StoriesSection />
       <CTASection />
       <Footer />
     </div>
