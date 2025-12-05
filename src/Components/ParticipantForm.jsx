@@ -130,7 +130,7 @@ export default function ParticipantForm() {
   const { slug: routeSlug } = useParams(); // supports /p/:slug and /event/:slug
   const slug = routeSlug ? toSlug(routeSlug) : "";
 
-  const {event, questionsRef, loading: resolving, error: resolveError } =
+  const {eventId, event, questionsRef, loading: resolving, error: resolveError } =
     useResolvedEventBySlug(slug);
 
   // Form state
