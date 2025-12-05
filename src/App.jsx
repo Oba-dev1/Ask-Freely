@@ -17,6 +17,7 @@ import Signup from "./Components/Signup";
 import OrganizerDashboard from "./Components/OrganizerDashboard";
 import OrganizerAnalytics from "./Components/OrganizerAnalytics";
 import CreateEvent from "./Components/CreateEvent";
+import EventSetup from "./Components/EventSetup";
 import EventManagement from "./Components/EventManagement";
 
 import "./App.css";
@@ -682,6 +683,7 @@ function App() {
             <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
             <Route path="/organizer/analytics" element={<OrganizerAnalytics />} />
             <Route path="/organizer/create-event" element={<CreateEvent />} />
+            <Route path="/organizer/event/:eventId/setup" element={<EventSetup />} />
             <Route path="/organizer/event/:eventId" element={<EventManagement />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

@@ -160,7 +160,7 @@ function CreateEvent() {
         }
       }
 
-      navigate(`/organizer/event/${newEventRef.key}`);
+      navigate(`/organizer/event/${newEventRef.key}/setup`);
     } catch (err) {
       console.error(err);
       setError('Failed to create event: ' + (err?.message || 'Please try again.'));

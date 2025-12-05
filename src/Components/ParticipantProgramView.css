@@ -1,0 +1,443 @@
+/* ============================================
+   PARTICIPANT PROGRAM VIEW STYLES
+============================================ */
+
+.participant-program {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Header */
+.participant-program-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.participant-program-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #ffffff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.participant-program-header h3 i {
+  color: #667eea;
+  font-size: 1.3rem;
+}
+
+.program-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.program-duration,
+.program-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+}
+
+.program-duration i {
+  color: #667eea;
+  font-size: 0.85rem;
+}
+
+/* Current/Next Item Highlight */
+.current-highlight {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.15));
+  border: 2px solid rgba(102, 126, 234, 0.4);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.current-highlight::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.15), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.current-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20px;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+}
+
+.current-item-content {
+  position: relative;
+  z-index: 1;
+}
+
+.current-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.current-item-icon {
+  font-size: 1.8rem;
+}
+
+.current-item-header h4 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #ffffff;
+  font-weight: 700;
+  flex: 1;
+  min-width: 0;
+}
+
+.current-item-duration {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.875rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.current-item-duration i {
+  font-size: 0.85rem;
+}
+
+.current-item-description {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Program Schedule */
+.program-schedule {
+  margin-top: 2rem;
+}
+
+.schedule-heading {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Schedule Item */
+.schedule-item {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+}
+
+.schedule-item:last-child {
+  border-bottom: none;
+}
+
+.schedule-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+  margin: 0 -0.75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border-radius: 8px;
+}
+
+.schedule-item.active {
+  background: rgba(102, 126, 234, 0.1);
+  margin: 0 -0.75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border-radius: 8px;
+  border-bottom-color: rgba(102, 126, 234, 0.2);
+}
+
+.schedule-item.completed {
+  opacity: 0.6;
+}
+
+/* Marker */
+.schedule-item-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0.25rem;
+}
+
+.marker-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.schedule-item.completed .marker-dot {
+  background: rgba(16, 185, 129, 0.3);
+  border: 2px solid rgba(16, 185, 129, 0.6);
+}
+
+.schedule-item.active .marker-dot {
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(102, 126, 234, 0);
+  }
+}
+
+.marker-line {
+  flex: 1;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  margin-top: 0.5rem;
+  min-height: 20px;
+}
+
+/* Item Content */
+.schedule-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.schedule-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.schedule-item-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.schedule-item-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.schedule-item-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.live-indicator {
+  padding: 0.2rem 0.6rem;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulse-live 2s infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.schedule-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.item-type {
+  padding: 0.3rem 0.75rem;
+  background: rgba(102, 126, 234, 0.15);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 12px;
+  color: #a5b4fc;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.item-duration {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.item-duration i {
+  font-size: 0.8rem;
+}
+
+.schedule-item-description {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .participant-program {
+    padding: 1.75rem;
+  }
+
+  .participant-program-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .current-item-header h4 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .participant-program {
+    padding: 1.5rem;
+  }
+
+  .participant-program-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .program-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .current-highlight {
+    padding: 1.25rem;
+  }
+
+  .current-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .current-item-duration {
+    align-self: flex-start;
+  }
+
+  .schedule-item {
+    grid-template-columns: 32px 1fr;
+    gap: 0.75rem;
+  }
+
+  .marker-dot {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+
+  .schedule-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .schedule-item-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .participant-program {
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .participant-program-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .program-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .current-item-icon {
+    font-size: 1.5rem;
+  }
+
+  .current-item-header h4 {
+    font-size: 1.1rem;
+  }
+
+  .schedule-item-icon {
+    font-size: 1.1rem;
+  }
+
+  .schedule-item-name {
+    font-size: 0.95rem;
+  }
+
+  .item-type {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+  }
+}

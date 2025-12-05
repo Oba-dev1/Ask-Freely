@@ -1,0 +1,296 @@
+/* ============================================
+   EVENT BRANDING & CUSTOMIZATION STYLES
+============================================ */
+
+.branding-section {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.branding-header {
+  margin-bottom: 2rem;
+}
+
+.branding-header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.4rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.branding-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Grid Layout */
+.branding-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.branding-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.branding-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.branding-label i {
+  color: #667eea;
+  font-size: 0.9rem;
+}
+
+.branding-hint {
+  margin: 0 0 1rem 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+}
+
+/* Upload Area */
+.upload-area {
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: rgba(255, 255, 255, 0.03);
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-area:hover {
+  border-color: rgba(102, 126, 234, 0.5);
+  background: rgba(102, 126, 234, 0.08);
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.upload-content i {
+  font-size: 2.5rem;
+  color: #667eea;
+  opacity: 0.7;
+}
+
+.upload-content span {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.upload-content small {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+}
+
+/* Media Preview */
+.media-preview {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.logo-preview {
+  max-width: 200px;
+  aspect-ratio: 1/1;
+}
+
+.flyer-preview {
+  max-width: 100%;
+  aspect-ratio: 9/16;
+}
+
+.media-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.remove-media-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 32px;
+  height: 32px;
+  background: rgba(220, 38, 38, 0.9);
+  border: none;
+  border-radius: 50%;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.remove-media-btn:hover {
+  background: rgba(220, 38, 38, 1);
+  transform: scale(1.1);
+}
+
+/* Color Picker */
+.branding-colors {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.color-picker-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.color-input {
+  width: 80px;
+  height: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  transition: border-color 0.2s ease;
+}
+
+.color-input:hover {
+  border-color: rgba(102, 126, 234, 0.5);
+}
+
+.color-text-input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  max-width: 150px;
+}
+
+.color-text-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: rgba(255, 255, 255, 0.11);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+}
+
+/* Text Fields */
+.branding-text-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.branding-text-fields .form-group {
+  margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .branding-grid {
+    gap: 1.5rem;
+  }
+
+  .branding-text-fields {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .branding-section {
+    padding: 1.5rem;
+  }
+
+  .branding-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .branding-text-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-area {
+    padding: 1.5rem;
+    min-height: 180px;
+  }
+
+  .upload-content i {
+    font-size: 2rem;
+  }
+
+  .color-picker-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .color-input {
+    width: 100%;
+    height: 60px;
+  }
+
+  .color-text-input {
+    max-width: 100%;
+  }
+
+  .logo-preview,
+  .flyer-preview {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .branding-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .branding-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .upload-area {
+    padding: 1.25rem;
+    min-height: 160px;
+  }
+
+  .upload-content i {
+    font-size: 1.75rem;
+  }
+
+  .upload-content span {
+    font-size: 0.95rem;
+  }
+}

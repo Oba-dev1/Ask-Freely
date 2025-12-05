@@ -119,7 +119,7 @@ function EventManagement() {
     if (!mcEmail.trim()) return;
     const subject = encodeURIComponent(`MC Access Link for: ${eventTitle}`);
     const body = encodeURIComponent(
-      `Hi,\n\nYou're invited to host this session.\n\nMC/Host link: ${mcLink}\n\nTips:\n• Open the link on a stable connection\n• Use the filters to manage questions\n\nThanks!\n`
+      `Hi,\n\nYou're invited to host this session.\n\nMC/Host link: ${mcLink}\n\nWhat you'll have access to:\n• Event program with timeline and flow\n• Live questions from participants\n• Filters to manage questions\n• Mark items as completed to track progress\n\nTips:\n• Open the link on a stable connection\n• Review the program before the event starts\n• Use the program timeline to stay on track\n\nLooking forward to a great session!\n`
     );
     window.location.href = `mailto:${mcEmail}?subject=${subject}&body=${body}`;
     setShowInviteModal(false);

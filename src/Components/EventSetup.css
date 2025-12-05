@@ -1,0 +1,338 @@
+/* ============================================
+   EVENT SETUP PAGE STYLES
+============================================ */
+
+.setup-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8rem 2rem 4rem;
+}
+
+/* Progress Indicator */
+.setup-header {
+  margin-bottom: 3rem;
+}
+
+.setup-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  gap: 0;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.step-number {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.progress-step.completed .step-number {
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-color: #10b981;
+  color: #ffffff;
+}
+
+.progress-step.active .step-number {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-color: #667eea;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.step-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.progress-step.active .step-label {
+  color: #ffffff;
+}
+
+.progress-line {
+  height: 2px;
+  width: 120px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Title Section */
+.setup-title {
+  text-align: center;
+}
+
+.setup-title h1 {
+  margin: 0 0 0.75rem 0;
+  font-size: 2.25rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.setup-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Setup Card */
+.setup-card {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+/* Tabs */
+.setup-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.setup-tab {
+  flex: 1;
+  padding: 1.25rem 1.5rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-bottom: 3px solid transparent;
+}
+
+.setup-tab:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.setup-tab.active {
+  background: rgba(102, 126, 234, 0.15);
+  color: #ffffff;
+  border-bottom-color: #667eea;
+}
+
+.setup-tab i {
+  font-size: 1.1rem;
+}
+
+/* Tab Content */
+.setup-content {
+  padding: 3rem;
+  min-height: 500px;
+}
+
+.tab-panel {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Branding Actions */
+.branding-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.save-message {
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.save-message.success {
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.save-message.error {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Footer */
+.setup-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 3rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Loading State */
+.loading-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .setup-container {
+    padding: 7rem 1.5rem 3rem;
+  }
+
+  .setup-content {
+    padding: 2.5rem;
+  }
+
+  .setup-footer {
+    padding: 1.5rem 2.5rem;
+  }
+
+  .progress-line {
+    width: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .setup-container {
+    padding: 7rem 1rem 3rem;
+  }
+
+  .setup-progress {
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .progress-step {
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .progress-line {
+    display: none;
+  }
+
+  .step-label {
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  .setup-title h1 {
+    font-size: 1.75rem;
+  }
+
+  .setup-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .setup-tabs {
+    flex-direction: column;
+  }
+
+  .setup-tab {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 3px solid transparent;
+  }
+
+  .setup-tab.active {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    border-left-color: #667eea;
+  }
+
+  .setup-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .setup-footer {
+    flex-direction: column-reverse;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .setup-footer .event-btn {
+    width: 100%;
+  }
+
+  .branding-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .branding-actions .event-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .setup-container {
+    padding: 6rem 0.75rem 2rem;
+  }
+
+  .step-number {
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+  }
+
+  .step-label {
+    font-size: 0.75rem;
+  }
+
+  .setup-title h1 {
+    font-size: 1.5rem;
+  }
+
+  .setup-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .setup-tab {
+    font-size: 0.95rem;
+    padding: 0.875rem;
+  }
+
+  .setup-tab i {
+    font-size: 1rem;
+  }
+}

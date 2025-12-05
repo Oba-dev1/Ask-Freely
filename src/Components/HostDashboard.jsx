@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ref, onValue, update, remove } from 'firebase/database';
 import { database } from '../Firebase/config'; // keep your actual casing
 import QuestionItem from './QuestionItem';
+import MCProgramView from './MCProgramView';
 import {
   exportToCSV,
   exportToJSON,
@@ -51,6 +52,7 @@ function compactTimeLabel(first, last) {
 export default function HostDashboard() {
   const { eventId } = useParams();
 
+  const [event, setEvent] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [filter, setFilter] = useState('all');
   const [isConnected, setIsConnected] = useState(true);
@@ -62,6 +64,21 @@ export default function HostDashboard() {
     () => (eventId ? `questions/${eventId}` : 'questions'),
     [eventId]
   );
+
+  // Load event details
+  useEffect(() => {
+    if (!eventId) return;
+
+    const eventRef = ref(database, `events/${eventId}`);
+    const unsubscribe = onValue(eventRef, (snap) => {
+      const data = snap.val();
+      if (data) {
+        setEvent(data);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [eventId]);
 
   useEffect(() => {
     const questionsRef = ref(database, questionsPath);
@@ -179,6 +196,11 @@ export default function HostDashboard() {
           </h1>
           <p className="page-subtitle">Manage questions in real-time</p>
         </header>
+
+        {/* Program View */}
+        {eventId && event && (
+          <MCProgramView eventId={eventId} eventTitle={event.title || 'Event'} />
+        )}
 
         <div className="dashboard-card">
           <div className="dashboard-header">

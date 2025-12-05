@@ -11,6 +11,7 @@ import {
   equalTo,
 } from "firebase/database";
 import { database } from "../Firebase/config"; // ← ensure lowercase folder
+import ParticipantProgramView from "./ParticipantProgramView";
 import "./ParticipantForm.css";
 
 /**
@@ -270,6 +271,9 @@ export default function ParticipantForm() {
         <p className="subtitle">{subtitle}</p>
         <p className="tagline">{tagline}</p>
       </header>
+
+      {/* Event Program */}
+      {eventId && <ParticipantProgramView eventId={eventId} />}
 
       <div className="form-card">
         {/* Status banners */}
