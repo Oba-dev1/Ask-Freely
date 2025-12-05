@@ -335,7 +335,7 @@ function CreateEvent() {
                 <button
                   type="button"
                   onClick={addStrategicQuestion}
-                  className="btn btn-secondary"
+                  className="event-btn event-btn-add"
                 >
                   <i className="fas fa-plus-circle"></i> Add Question
                 </button>
@@ -371,7 +371,7 @@ function CreateEvent() {
               <button
                 type="button"
                 onClick={() => navigate('/organizer/dashboard')}
-                className="btn btn-cancel"
+                className="event-btn event-btn-cancel"
                 disabled={loading}
               >
                 Cancel
@@ -380,7 +380,7 @@ function CreateEvent() {
               <div className="split-actions">
                 <button
                   type="button"
-                  className="btn btn-secondary"
+                  className="event-btn event-btn-secondary"
                   disabled={loading}
                   onClick={() => createEvent('draft')}
                   title="Save without publishing. Participants can't submit yet."
@@ -390,7 +390,7 @@ function CreateEvent() {
 
                 <button
                   type="submit"
-                  className="btn btn-primary"
+                  className="event-btn event-btn-primary"
                   disabled={loading}
                   title="Publish now and start accepting questions."
                 >

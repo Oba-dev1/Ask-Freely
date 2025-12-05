@@ -315,8 +315,12 @@ function LiveStatsSection({ liveStats }) {
   const { liveEvents, liveQuestions, liveParticipants } = liveStats;
 
   return (
-    <section className="lp-live-stats" aria-label="Live statistics">
+    <section className="lp-live-stats" aria-labelledby="stats-heading">
       <div className="lp-container">
+        <div className="stats-header">
+          <h3 id="stats-heading" className="stats-title">Join thousands already asking freely</h3>
+          <p className="stats-subtitle">Real conversations happening right now across communities</p>
+        </div>
         <div className="stats-row">
           <StatItem
             icon="fa-solid fa-circle-question"
@@ -340,30 +344,45 @@ function LiveStatsSection({ liveStats }) {
 }
 
 function ActivityTicker({ recentEvents }) {
+  const shouldAnimate = recentEvents.length >= 4;
+
   return (
     <section id="happening" className="lp-ticker" aria-labelledby="happening-heading">
-      <div className="lp-container">
-        <h3 id="happening-heading" className="section-heading">
+      <div className="lp-container ticker-wrapper">
+        <h3 id="happening-heading" className="ticker-heading">
           <i className="fa-solid fa-bolt" /> What's happening
         </h3>
         <div className="tick-track" role="list" aria-live="polite">
-          <div className="tick-items">
+          <div className={`tick-items ${shouldAnimate ? 'animate' : 'static'}`}>
             {recentEvents.length === 0 ? (
               <div className="tick-item">
                 Your community is next. Create an event →
               </div>
             ) : (
-              recentEvents.map((e) => (
-                <div className="tick-item" key={e.id}>
-                  <i
-                    className={`tick-status ${
-                      e.status === "active" ? "fa-circle-play" : "fa-clock"
-                    }`}
-                  />
-                  <span className="t">{e.title}</span>
-                  <span className="m">• {e.org}</span>
-                </div>
-              ))
+              <>
+                {recentEvents.map((e) => (
+                  <div className="tick-item" key={e.id}>
+                    <i
+                      className={`tick-status ${
+                        e.status === "active" ? "fa-circle-play" : "fa-clock"
+                      }`}
+                    />
+                    <span className="t">{e.title}</span>
+                    <span className="m">• {e.org}</span>
+                  </div>
+                ))}
+                {shouldAnimate && recentEvents.map((e) => (
+                  <div className="tick-item" key={`${e.id}-duplicate`}>
+                    <i
+                      className={`tick-status ${
+                        e.status === "active" ? "fa-circle-play" : "fa-clock"
+                      }`}
+                    />
+                    <span className="t">{e.title}</span>
+                    <span className="m">• {e.org}</span>
+                  </div>
+                ))}
+              </>
             )}
           </div>
         </div>
@@ -508,38 +527,39 @@ function WhySection() {
     <section id="why" className="lp-why">
       <div className="lp-container why-grid">
         <h3 className="section-heading">Why people use Ask Freely</h3>
-      </div>
-      <div className="lp-container why-grid">
-        <div className="why-card">
-          <div className="why-icon">
-            <i className="fa-solid fa-bullseye" />
-          </div>
-          <h4>Strategic prompts</h4>
-          <p>Seed the conversation with questions that matter to your people.</p>
-        </div>
 
-        <div className="why-card">
-          <div className="why-icon">
-            <i className="fa-solid fa-user-shield" />
+        <div className="why-cards-wrapper">
+          <div className="why-card">
+            <div className="why-icon">
+              <i className="fa-solid fa-bullseye" />
+            </div>
+            <h4>Strategic prompts</h4>
+            <p>Seed the conversation with questions that matter to your people.</p>
           </div>
-          <h4>Privacy that protects</h4>
-          <p>Keep identities safe. Moderate with empathy and clear boundaries.</p>
-        </div>
 
-        <div className="why-card">
-          <div className="why-icon">
-            <i className="fa-solid fa-chart-line" />
+          <div className="why-card">
+            <div className="why-icon">
+              <i className="fa-solid fa-user-shield" />
+            </div>
+            <h4>Privacy that protects</h4>
+            <p>Keep identities safe. Moderate with empathy and clear boundaries.</p>
           </div>
-          <h4>Community insights</h4>
-          <p>See themes, participation trends, and share learnings with your team.</p>
-        </div>
 
-        <div className="why-card">
-          <div className="why-icon">
-            <i className="fa-solid fa-sliders" />
+          <div className="why-card">
+            <div className="why-icon">
+              <i className="fa-solid fa-chart-line" />
+            </div>
+            <h4>Community insights</h4>
+            <p>See themes, participation trends, and share learnings with your team.</p>
           </div>
-          <h4>Customization</h4>
-          <p>Match your brand and language. Make the space unmistakably yours.</p>
+
+          <div className="why-card">
+            <div className="why-icon">
+              <i className="fa-solid fa-sliders" />
+            </div>
+            <h4>Customization</h4>
+            <p>Match your brand and language. Make the space unmistakably yours.</p>
+          </div>
         </div>
       </div>
     </section>

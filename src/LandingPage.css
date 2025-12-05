@@ -210,9 +210,31 @@
 
 /* ---------- LIVE STATS (New horizontal section) ---------- */
 .lp-live-stats {
-  padding: 32px 0;
+  padding: 48px 0;
   background: white;
   border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+.stats-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.stats-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.stats-subtitle {
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
 .stats-row {
@@ -335,7 +357,106 @@
 }
 
 /* ---------- TICKER ---------- */
-.lp-ticker { padding: 10px 0 0; }
+.lp-ticker {
+  padding: 8px 0;
+  background: var(--bg-soft);
+}
+
+.ticker-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  position: relative;
+}
+
+.ticker-heading {
+  margin: 0;
+  font-size: 1.35rem;
+  letter-spacing: 0.2px;
+  font-weight: 800;
+  color: var(--ink);
+  border-right: 1px solid rgba(0,0,0,.10) ;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  background: var(--bg-soft);
+  padding-right: 20px;
+}
+
+.ticker-heading i {
+  color: var(--primary);
+}
+
+/* Gradient fade effect on the right side of heading */
+.ticker-heading::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background: linear-gradient(90deg, var(--bg-soft), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tick-track {
+  flex: 1;
+  overflow: hidden;
+  /* border-top: 1px solid rgba(0,0,0,.08);
+  border-bottom: 1px solid rgba(0,0,0,.08); */
+  position: relative;
+}
+
+.tick-items {
+  display: flex;
+  gap: 32px;
+  padding: 12px 0;
+}
+
+.tick-items.animate {
+  animation: scroll 28s linear infinite;
+}
+
+.tick-items.static {
+  animation: none;
+  justify-content: flex-start;
+}
+
+.tick-item {
+  white-space: nowrap;
+  opacity: .9;
+  color: var(--ink-light);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tick-item i {
+  color: var(--primary);
+  font-size: 0.9rem;
+}
+
+.tick-item .t {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.tick-item .m {
+  color: var(--muted);
+  margin-left: 0.4rem;
+}
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Section heading for other sections */
 .section-heading {
   margin: 0 0 18px 0;
   font-size: 1.35rem;
@@ -346,6 +467,7 @@
   align-items: center;
   gap: 0.6rem;
 }
+
 .section-heading::after {
   content: "";
   display: inline-block;
@@ -356,13 +478,6 @@
   border-radius: 3px;
   vertical-align: middle;
 }
-.tick-track { overflow: hidden; border-top:1px solid rgba(0,0,0,.08); border-bottom:1px solid rgba(0,0,0,.08); }
-.tick-items { display:flex; gap: 18px; padding: 10px 0; animation: scroll 28s linear infinite; }
-.tick-item { white-space: nowrap; opacity:.9; color: var(--ink-light); }
-.tick-item i { margin-right: .4rem; color: var(--primary); }
-.tick-item .t { font-weight:700; color: var(--ink); }
-.tick-item .m { color: var(--muted); margin-left:.4rem; }
-@keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ---------- VALUES ---------- */
 .lp-values {
@@ -381,9 +496,19 @@
   border-radius: 50%;
   pointer-events: none;
 }
+
+/* Center-aligned header layout for Values */
 .lp-values .lp-container:first-child {
-  padding-bottom: 12px;
+  padding-bottom: 20px;
+  text-align: center;
 }
+
+.lp-values .section-heading {
+  display: inline-flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
 .values-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -716,17 +841,38 @@
   z-index: 1;
 }
 
-/* Heading section - separate from grid */
-.lp-stories .section-heading {
-  margin-bottom: 28px;
+/* Right-aligned header with wrapper */
+.stories-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
 }
 
-/* Stories grid - masonry-style with varying heights */
+.lp-stories .section-heading {
+  text-align: right;
+  justify-content: flex-end;
+  margin-bottom: 0;
+}
+
+/* Stories grid - asymmetric masonry layout */
 .stories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   align-items: start;
+}
+
+/* Create asymmetric layout with different heights */
+.stories-grid .story:nth-child(1) {
+  transform: translateY(0);
+}
+
+.stories-grid .story:nth-child(2) {
+  transform: translateY(20px);
+}
+
+.stories-grid .story:nth-child(3) {
+  transform: translateY(10px);
 }
 
 /* Story card - editorial/card hybrid */
@@ -850,18 +996,31 @@
   z-index: 1;
 }
 
-/* Why grid - includes heading in grid layout */
+/* Two-column layout: header on left, cards on right */
 .why-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-  align-items: stretch;
+  grid-template-columns: 300px 1fr;
+  gap: 48px;
+  align-items: start;
 }
 
-/* Heading spans full width */
+/* Header stays on the left */
 .why-grid .section-heading {
-  grid-column: 1 / -1;
-  margin-bottom: 10px;
+  grid-column: 1;
+  grid-row: 1 / -1;
+  position: sticky;
+  top: 100px;
+  margin-bottom: 0;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+/* Cards wrapper on the right */
+.why-cards-wrapper {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
 }
 
 /* Feature card - minimal, icon-forward design */
@@ -1177,8 +1336,30 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   }
 
   .values-grid { grid-template-columns: repeat(2, 1fr); }
-  .why-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Why section - stack on tablet */
+  .why-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .why-grid .section-heading {
+    position: static;
+    font-size: 1.6rem;
+    text-align: left;
+  }
+
+  .why-cards-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .stories-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Remove asymmetric offset on tablet */
+  .stories-grid .story:nth-child(2),
+  .stories-grid .story:nth-child(3) {
+    transform: translateY(0);
+  }
 
   /* How It Works - slightly smaller on tablets */
   .step-content {
@@ -1261,14 +1442,50 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     height: 350px;
   }
 
+  /* Ticker - stack on mobile */
+  .ticker-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .ticker-heading {
+    padding-right: 0;
+  }
+
+  .ticker-heading::after {
+    display: none;
+  }
+
   /* Live stats - 2 column on mobile */
+  .stats-header {
+    margin-bottom: 32px;
+  }
+
+  .stats-title {
+    font-size: 1.6rem;
+  }
+
+  .stats-subtitle {
+    font-size: 1rem;
+  }
+
   .stats-row {
     grid-template-columns: 1fr;
     gap: 16px;
   }
+
   .values-grid { grid-template-columns: 1fr 1fr; }
-  .why-grid { grid-template-columns: 1fr 1fr; }
+
+  .why-cards-wrapper { grid-template-columns: 1fr 1fr; }
+
   .stories-grid { grid-template-columns: 1fr; }
+
+  /* Stories header back to left on mobile */
+  .lp-stories .section-heading {
+    text-align: left;
+    justify-content: flex-start;
+  }
   .foot-grid { grid-template-columns: 1fr; gap: 32px; }
   .foot-cols { grid-template-columns: repeat(2, 1fr); }
 
@@ -1345,7 +1562,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   }
 
   .values-grid { grid-template-columns: 1fr; }
-  .why-grid { grid-template-columns: 1fr; }
+  .why-cards-wrapper { grid-template-columns: 1fr; }
   .stories-grid { grid-template-columns: 1fr; }
   .foot-cols { grid-template-columns: 1fr; }
   .actions .ghost { display: none; }
@@ -1386,7 +1603,158 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   }
 }
 
-@media (max-width: 420px) {
-  .section-heading { font-size: 1.2rem; }
-  .section-heading::after { width: 30px; }
+@media (max-width: 425px) {
+  /* Prevent horizontal overflow */
+  .lp-wrapper {
+    overflow-x: hidden;
+  }
+
+  .lp-container {
+    padding: 0 12px;
+  }
+
+  /* Fix carousel overflow */
+  .hero-carousel {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .carousel-container {
+    height: 280px;
+    border-radius: 12px;
+  }
+
+  /* Reduce decorative blob sizes */
+  .lp-wrapper::before,
+  .lp-wrapper::after,
+  .lp-values::before,
+  .lp-stories::before,
+  .lp-how-it-works::before,
+  .lp-how-it-works::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  .cta-box::before {
+    width: 250px;
+    height: 250px;
+  }
+
+  /* Fix why section grid */
+  .why-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Compact spacing */
+  .lp-hero {
+    padding: 60px 0 40px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+  }
+
+  .hero-copy .lede {
+    font-size: 0.95rem;
+  }
+
+  /* Ticker compact */
+  .lp-ticker {
+    padding: 24px 0;
+  }
+
+  .ticker-heading {
+    font-size: 1.15rem;
+  }
+
+  .tick-items {
+    gap: 24px;
+  }
+
+  /* Fix live stats */
+  .stats-header {
+    margin-bottom: 28px;
+  }
+
+  .stats-title {
+    font-size: 1.5rem;
+  }
+
+  .stats-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .live-item {
+    padding: 0.85rem 1rem;
+  }
+
+  .live-item .n {
+    font-size: 1.5rem;
+  }
+
+  .live-item .l {
+    font-size: 0.8rem;
+  }
+
+  /* Footer adjustments */
+  .lp-footer {
+    padding: 40px 0 20px;
+  }
+
+  .foot-grid {
+    gap: 24px;
+  }
+
+  .foot-cols {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .section-heading {
+    font-size: 1.2rem;
+  }
+
+  .section-heading::after {
+    width: 30px;
+  }
+
+  /* Fix CTA box */
+  .cta-box {
+    padding: 32px 20px;
+  }
+
+  /* Story cards more compact */
+  .story {
+    padding: 1.4rem;
+  }
+
+  /* Why section - center header on mobile */
+  .lp-values .section-heading {
+    text-align: center;
+  }
+
+  /* Why cards more compact */
+  .why-card {
+    padding: 1.4rem 1rem;
+    min-height: 180px;
+  }
+
+  .why-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.3rem;
+  }
+
+  /* Values more compact */
+  .val {
+    padding: 1.2rem;
+    min-height: 130px;
+  }
+
+  .val-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 1.05rem;
+  }
 }
