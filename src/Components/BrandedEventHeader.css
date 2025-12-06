@@ -1,134 +1,115 @@
 /* ============================================
-   BRANDED EVENT HEADER STYLES
+   BRANDED EVENT HEADER STYLES - Eventbrite Style
 ============================================ */
 
 .branded-header {
-  position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  overflow: hidden;
   margin-bottom: 2.5rem;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
 }
 
-/* Background Flyer */
-.branded-header-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+/* Hero Image - Full width, crisp, clean */
+.event-hero-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
 }
 
-.branded-header-bg img {
+.event-hero-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.3;
-  filter: blur(8px);
+  display: block;
 }
 
-.branded-header-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
-  backdrop-filter: blur(20px);
-}
-
-/* Content */
-.branded-header-content {
-  position: relative;
-  z-index: 1;
-  padding: 3rem 2.5rem;
+/* Event Details Card - Clean white card style */
+.event-details-card {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 2.5rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
   gap: 2rem;
+  align-items: flex-start;
 }
 
-/* Logo Section */
-.branded-logo-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+/* Logo - Positioned on the left like Eventbrite */
+.event-logo-wrapper {
+  flex-shrink: 0;
 }
 
-.branded-logo {
-  width: 120px;
-  height: 120px;
+.event-logo {
+  width: 80px;
+  height: 80px;
   object-fit: contain;
-  border-radius: 16px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.1);
-  padding: 1rem;
-  border: 2px solid var(--brand-color, #667eea);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3),
-              0 0 20px var(--brand-color-glow, rgba(102, 126, 234, 0.4));
+  padding: 0.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.org-name {
-  margin: 0;
-  font-size: 1.1rem;
+/* Event Details Content */
+.event-details-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-org-name {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
-  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.7);
   text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
-/* Event Info */
-.branded-event-info {
-  max-width: 700px;
-}
-
-.branded-title {
+.event-title {
   margin: 0 0 1rem 0;
-  font-size: 2.5rem;
+  font-size: 2.25rem;
   font-weight: 800;
   color: #ffffff;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.branded-subtitle {
+.event-datetime {
   margin: 0 0 0.75rem 0;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--brand-color, #667eea);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.branded-tagline {
-  margin: 0;
   font-size: 1.1rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-  font-style: italic;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+  color: var(--brand-color, #a78bfa);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-/* No Branding Fallback */
-.branded-header:not(:has(.branded-logo)):not(:has(.branded-header-bg)) {
+.event-datetime::before {
+  content: "📅";
+  font-size: 1.2rem;
+}
+
+.event-tagline {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+}
+
+/* No image fallback */
+.branded-header:not(:has(.event-hero-image)) .event-details-card {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.1));
   border-color: rgba(102, 126, 234, 0.3);
 }
 
 /* Responsive */
 @media (max-width: 900px) {
-  .branded-header-content {
-    padding: 2.5rem 2rem;
+  .event-details-card {
+    padding: 2rem;
   }
 
-  .branded-title {
-    font-size: 2.2rem;
-  }
-
-  .branded-logo {
-    width: 100px;
-    height: 100px;
+  .event-title {
+    font-size: 2rem;
   }
 }
 
@@ -137,56 +118,61 @@
     margin-bottom: 2rem;
   }
 
-  .branded-header-content {
-    padding: 2rem 1.5rem;
+  .event-hero-image {
+    aspect-ratio: 4 / 3;
+  }
+
+  .event-details-card {
+    padding: 1.75rem 1.5rem;
+    flex-direction: column;
     gap: 1.5rem;
   }
 
-  .branded-title {
-    font-size: 1.9rem;
+  .event-logo {
+    width: 70px;
+    height: 70px;
   }
 
-  .branded-subtitle {
-    font-size: 1.1rem;
+  .event-title {
+    font-size: 1.75rem;
   }
 
-  .branded-tagline {
+  .event-datetime {
     font-size: 1rem;
   }
 
-  .branded-logo {
-    width: 90px;
-    height: 90px;
-  }
-
-  .org-name {
+  .event-tagline {
     font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .branded-header-content {
-    padding: 1.75rem 1.25rem;
+  .event-hero-image {
+    aspect-ratio: 1 / 1;
   }
 
-  .branded-title {
-    font-size: 1.6rem;
+  .event-details-card {
+    padding: 1.5rem 1.25rem;
   }
 
-  .branded-subtitle {
-    font-size: 1rem;
+  .event-logo {
+    width: 60px;
+    height: 60px;
   }
 
-  .branded-tagline {
+  .event-org-name {
+    font-size: 0.85rem;
+  }
+
+  .event-title {
+    font-size: 1.5rem;
+  }
+
+  .event-datetime {
     font-size: 0.95rem;
   }
 
-  .branded-logo {
-    width: 80px;
-    height: 80px;
-  }
-
-  .org-name {
-    font-size: 0.9rem;
+  .event-tagline {
+    font-size: 0.95rem;
   }
 }

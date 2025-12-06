@@ -24,28 +24,27 @@ function BrandedEventHeader({ event }) {
 
   return (
     <div className="branded-header" style={brandStyles}>
-      {/* Background Flyer (if exists) */}
+      {/* Hero Flyer Image - Eventbrite style */}
       {hasFlyer && (
-        <div className="branded-header-bg">
+        <div className="event-hero-image">
           <img src={branding.flyerUrl} alt="Event flyer" />
-          <div className="branded-header-overlay"></div>
         </div>
       )}
 
-      <div className="branded-header-content">
+      {/* Event Details Card */}
+      <div className="event-details-card">
         {/* Logo and Organization */}
         {hasLogo && (
-          <div className="branded-logo-section">
-            <img src={branding.logoUrl} alt={orgName || 'Organization logo'} className="branded-logo" />
-            {orgName && <p className="org-name">{orgName}</p>}
+          <div className="event-logo-wrapper">
+            <img src={branding.logoUrl} alt={orgName || 'Organization logo'} className="event-logo" />
           </div>
         )}
 
-        {/* Event Info */}
-        <div className="branded-event-info">
-          <h1 className="branded-title">{title}</h1>
-          {subtitle && <p className="branded-subtitle">{subtitle}</p>}
-          {tagline && <p className="branded-tagline">{tagline}</p>}
+        <div className="event-details-content">
+          {orgName && <p className="event-org-name">{orgName}</p>}
+          <h1 className="event-title">{title}</h1>
+          {subtitle && <p className="event-datetime">{subtitle}</p>}
+          {tagline && <p className="event-tagline">{tagline}</p>}
         </div>
       </div>
     </div>

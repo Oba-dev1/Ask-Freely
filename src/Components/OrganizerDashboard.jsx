@@ -115,45 +115,61 @@ function OrganizerDashboard() {
           ) : (
             events.map((event) => (
               <div key={event.id} className="event-card">
-                <div className="event-header">
-                  <div className="event-title-section">
-                    <h3>{event.title}</h3>
-                    <div className="event-meta">
-                      <span>
-                        {event.date
-                          ? new Date(event.date).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })
-                          : 'Date TBA'}
+                {/* Event Flyer Image */}
+                {event.branding?.flyerUrl && (
+                  <div className="event-card-image">
+                    <img src={event.branding.flyerUrl} alt={event.title} />
+                    <span className={`event-status-badge ${event.status}`}>
+                      {event.status === 'active' ? 'Active' : 'Draft'}
+                    </span>
+                  </div>
+                )}
+
+                <div className="event-card-content">
+                  <div className="event-header">
+                    <div className="event-title-section">
+                      <div>
+                        <h3>{event.title}</h3>
+                        <div className="event-meta">
+                          <span>
+                            {event.date
+                              ? new Date(event.date).toLocaleDateString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric',
+                                  year: 'numeric',
+                                })
+                              : 'Date TBA'}
+                          </span>
+                          {event.time && <span>• {event.time}</span>}
+                        </div>
+                      </div>
+                    </div>
+                    {!event.branding?.flyerUrl && (
+                      <span className={`event-status ${event.status}`}>
+                        {event.status === 'active' ? 'Active' : 'Draft'}
                       </span>
-                      {event.time && <span>{event.time}</span>}
+                    )}
+                  </div>
+
+                  <div className="event-stats">
+                    <div className="stat">
+                      <span className="stat-value">{event.questionCount || 0}</span>
+                      <span className="stat-label">Questions</span>
+                    </div>
+                    <div className="stat">
+                      <span className="stat-value">{event.strategicQuestions?.length || 0}</span>
+                      <span className="stat-label">Strategic</span>
                     </div>
                   </div>
-                  <span className={`event-status ${event.status}`}>
-                    {event.status === 'active' ? 'Active' : 'Draft'}
-                  </span>
-                </div>
 
-                <div className="event-stats">
-                  <div className="stat">
-                    <span className="stat-value">{event.questionCount || 0}</span>
-                    <span className="stat-label">Questions</span>
+                  <div className="event-actions">
+                    <button
+                      onClick={() => handleViewEvent(event.id)}
+                      className="btn-manage-event"
+                    >
+                      Manage Event
+                    </button>
                   </div>
-                  <div className="stat">
-                    <span className="stat-value">{event.strategicQuestions?.length || 0}</span>
-                    <span className="stat-label">Strategic</span>
-                  </div>
-                </div>
-
-                <div className="event-actions">
-                  <button
-                    onClick={() => handleViewEvent(event.id)}
-                    className="btn-manage-event"
-                  >
-                    Manage Event
-                  </button>
                 </div>
               </div>
             ))
