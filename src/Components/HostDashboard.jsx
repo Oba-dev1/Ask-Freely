@@ -189,6 +189,26 @@ export default function HostDashboard() {
       </nav>
 
       <div className="container host-container">
+        {/* Event Branding Header */}
+        {event && event.branding && (event.branding.logoUrl || event.branding.organizationName) && (
+          <div className="mc-branding-header">
+            {event.branding.logoUrl && (
+              <img src={event.branding.logoUrl} alt="Event logo" className="mc-event-logo" />
+            )}
+            <div className="mc-event-info">
+              {event.branding.organizationName && (
+                <p className="mc-org-name">{event.branding.organizationName}</p>
+              )}
+              <h2 className="mc-event-title">{event.title || 'Event'}</h2>
+              {event.date && (
+                <p className="mc-event-date">
+                  {event.date}{event.time ? ` • ${event.time}` : ''}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
         <header className="page-header">
           <h1>
             Host Dashboard{' '}

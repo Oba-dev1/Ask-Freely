@@ -1,0 +1,297 @@
+/* ============================================
+   BRANDING PREVIEW COMPONENT STYLES
+============================================ */
+
+.branding-preview-section {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.preview-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  color: #ffffff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.preview-title i {
+  color: #667eea;
+  font-size: 1.2rem;
+}
+
+.preview-subtitle {
+  margin: 0 0 1.5rem 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+}
+
+/* Browser Mockup */
+.preview-mockup {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.mockup-browser {
+  background: #1a1a2e;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.browser-bar {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.browser-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.browser-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.browser-dots span:nth-child(1) {
+  background: #ef4444;
+}
+
+.browser-dots span:nth-child(2) {
+  background: #f59e0b;
+}
+
+.browser-dots span:nth-child(3) {
+  background: #10b981;
+}
+
+.browser-url {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.4rem 0.875rem;
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  font-family: 'Courier New', monospace;
+}
+
+.browser-content {
+  padding: 1.5rem;
+  background: #0f0f1e;
+}
+
+/* Preview Header */
+.preview-header {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.preview-logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.preview-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border: 1px solid var(--preview-brand-color, #667eea);
+}
+
+.preview-org-name {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.preview-event-info {
+  flex: 1;
+}
+
+.preview-event-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.preview-event-date {
+  margin: 0 0 0.4rem 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--preview-brand-color, #667eea);
+}
+
+.preview-tagline {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+.preview-flyer-thumb {
+  width: 80px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.preview-flyer-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Form Mockup */
+.preview-form-mockup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mockup-input {
+  height: 35px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+}
+
+.mockup-textarea {
+  height: 80px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+}
+
+.mockup-button {
+  height: 44px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .branding-preview-section {
+    padding: 1.75rem;
+  }
+
+  .preview-mockup {
+    padding: 1rem;
+  }
+
+  .browser-content {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .branding-preview-section {
+    padding: 1.5rem;
+  }
+
+  .preview-title {
+    font-size: 1.2rem;
+  }
+
+  .preview-mockup {
+    padding: 0.75rem;
+  }
+
+  .browser-content {
+    padding: 1rem;
+  }
+
+  .preview-header {
+    padding: 1.25rem;
+  }
+
+  .preview-flyer-thumb {
+    width: 60px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .branding-preview-section {
+    padding: 1.25rem;
+  }
+
+  .preview-title {
+    font-size: 1.1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .preview-mockup {
+    padding: 0.5rem;
+  }
+
+  .browser-bar {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .browser-url {
+    font-size: 0.7rem;
+  }
+
+  .browser-content {
+    padding: 0.875rem;
+  }
+
+  .preview-header {
+    padding: 1rem;
+  }
+
+  .preview-logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .preview-event-title {
+    font-size: 1rem;
+  }
+
+  .preview-flyer-thumb {
+    width: 50px;
+    height: 75px;
+  }
+}

@@ -5,6 +5,7 @@ import { ref, onValue, update } from "firebase/database";
 import { database } from "../Firebase/config";
 import { useAuth } from "../context/AuthContext";
 import QuestionItem from "./QuestionItem";
+import BrandingPreview from "./BrandingPreview";
 import "./EventManagement.css";
 
 function EventManagement() {
@@ -366,6 +367,9 @@ function EventManagement() {
           </div>
         </div>
       </div>
+
+      {/* Branding Preview */}
+      <BrandingPreview event={event} />
 
       {/* Questions */}
       <div className="questions-dashboard">

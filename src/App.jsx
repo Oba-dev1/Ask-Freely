@@ -345,7 +345,23 @@ function LiveStatsSection({ liveStats }) {
 }
 
 function ActivityTicker({ recentEvents }) {
-  const shouldAnimate = recentEvents.length >= 4;
+  const tickerRef = React.useRef(null);
+  const contentRef = React.useRef(null);
+  const [shouldAnimate, setShouldAnimate] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!tickerRef.current || !contentRef.current || recentEvents.length === 0) {
+      setShouldAnimate(false);
+      return;
+    }
+
+    // Measure if content overflows container
+    const containerWidth = tickerRef.current.offsetWidth;
+    const contentWidth = contentRef.current.scrollWidth;
+
+    // Animate if content is wider than container
+    setShouldAnimate(contentWidth > containerWidth);
+  }, [recentEvents]);
 
   return (
     <section id="happening" className="lp-ticker" aria-labelledby="happening-heading">
@@ -353,8 +369,8 @@ function ActivityTicker({ recentEvents }) {
         <h3 id="happening-heading" className="ticker-heading">
           <i className="fa-solid fa-bolt" /> What's happening
         </h3>
-        <div className="tick-track" role="list" aria-live="polite">
-          <div className={`tick-items ${shouldAnimate ? 'animate' : 'static'}`}>
+        <div className="tick-track" role="list" aria-live="polite" ref={tickerRef}>
+          <div className={`tick-items ${shouldAnimate ? 'animate' : 'static'}`} ref={contentRef}>
             {recentEvents.length === 0 ? (
               <div className="tick-item">
                 Your community is next. Create an event →
@@ -363,22 +379,14 @@ function ActivityTicker({ recentEvents }) {
               <>
                 {recentEvents.map((e) => (
                   <div className="tick-item" key={e.id}>
-                    <i
-                      className={`tick-status ${
-                        e.status === "active" ? "fa-circle-play" : "fa-clock"
-                      }`}
-                    />
+                    <i className="fa-solid fa-star tick-status" />
                     <span className="t">{e.title}</span>
                     <span className="m">• {e.org}</span>
                   </div>
                 ))}
                 {shouldAnimate && recentEvents.map((e) => (
                   <div className="tick-item" key={`${e.id}-duplicate`}>
-                    <i
-                      className={`tick-status ${
-                        e.status === "active" ? "fa-circle-play" : "fa-clock"
-                      }`}
-                    />
+                    <i className="fa-solid fa-star tick-status" />
                     <span className="t">{e.title}</span>
                     <span className="m">• {e.org}</span>
                   </div>

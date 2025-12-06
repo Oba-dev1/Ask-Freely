@@ -158,13 +158,14 @@
 }
 
 .participant-page .btn-primary {
-  background: linear-gradient(135deg, var(--accent1) 0%, var(--accent2) 100%);
+  background: var(--brand-color, linear-gradient(135deg, var(--accent1) 0%, var(--accent2) 100%));
   color: #fff;
-  box-shadow: 0 10px 22px rgba(102, 126, 234, 0.35);
+  box-shadow: 0 10px 22px var(--brand-color-light, rgba(102, 126, 234, 0.35));
 }
 .participant-page .btn-primary:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(102, 126, 234, 0.45);
+  background: var(--brand-color-hover, var(--brand-color));
+  box-shadow: 0 14px 28px var(--brand-color-light, rgba(102, 126, 234, 0.45));
 }
 .participant-page .btn-primary:disabled {
   opacity: 0.6;

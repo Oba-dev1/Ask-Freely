@@ -12,6 +12,7 @@ import {
 } from "firebase/database";
 import { database } from "../Firebase/config"; // ← ensure lowercase folder
 import ParticipantProgramView from "./ParticipantProgramView";
+import BrandedEventHeader from "./BrandedEventHeader";
 import "./ParticipantForm.css";
 
 /**
@@ -261,16 +262,29 @@ export default function ParticipantForm() {
     : "Event Q&A";
   const tagline = "Ask Your Questions ✨";
 
+  // Get brand color for dynamic styling
+  const brandColor = event?.branding?.primaryColor || '#667eea';
+  const brandStyles = {
+    '--brand-color': brandColor,
+    '--brand-color-light': `${brandColor}20`,
+    '--brand-color-hover': `${brandColor}dd`
+  };
+
   return (
-    <div className="participant-page">
+    <div className="participant-page" style={brandStyles}>
     <div className="container">
       <Link to="/" className="back-button">← Back to Home</Link>
 
-      <header className="header">
-        <h1>{resolving ? "Loading…" : title}</h1>
-        <p className="subtitle">{subtitle}</p>
-        <p className="tagline">{tagline}</p>
-      </header>
+      {/* Branded Header */}
+      {event ? (
+        <BrandedEventHeader event={event} />
+      ) : (
+        <header className="header">
+          <h1>{resolving ? "Loading…" : title}</h1>
+          <p className="subtitle">{subtitle}</p>
+          <p className="tagline">{tagline}</p>
+        </header>
+      )}
 
       {/* Event Program */}
       {eventId && <ParticipantProgramView eventId={eventId} />}
