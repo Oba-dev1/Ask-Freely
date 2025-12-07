@@ -45,10 +45,18 @@ function ProgramBuilder({ eventId, eventTitle }) {
   const handleAddItem = async () => {
     if (!formData.title.trim()) return;
 
+    if (!eventId) {
+      console.error('No eventId provided');
+      alert('Error: Event ID is missing. Cannot add program item.');
+      return;
+    }
+
     setLoading(true);
     try {
       const programRef = ref(database, `programs/${eventId}`);
       const newItemRef = push(programRef);
+
+      console.log('Adding program item to:', `programs/${eventId}`);
 
       await set(newItemRef, {
         title: formData.title,
@@ -61,6 +69,8 @@ function ProgramBuilder({ eventId, eventTitle }) {
         createdAt: new Date().toISOString()
       });
 
+      console.log('Program item added successfully');
+
       // Reset form
       setFormData({
         title: '',
@@ -72,7 +82,9 @@ function ProgramBuilder({ eventId, eventTitle }) {
       setShowAddForm(false);
     } catch (error) {
       console.error('Error adding program item:', error);
-      alert('Failed to add program item');
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+      alert(`Failed to add program item: ${error.message}`);
     } finally {
       setLoading(false);
     }
