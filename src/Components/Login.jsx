@@ -1,5 +1,5 @@
 // src/Components/Login.jsx
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
@@ -7,6 +7,7 @@ import './Auth.css';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState('');
   const [touched, setTouched] = useState({ email: false, password: false });
@@ -15,6 +16,15 @@ function Login() {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  // Load remembered email on mount
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem('rememberedEmail');
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   const emailValid = useMemo(() => /\S+@\S+\.\S+/.test(email), [email]);
   const passwordValid = useMemo(() => password.length >= 6, [password]);
@@ -28,11 +38,25 @@ function Login() {
     try {
       setError('');
       setLoading(true);
+
+      // Handle remember me
+      if (rememberMe) {
+        localStorage.setItem('rememberedEmail', email);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
+
       await login(email, password);
       navigate('/organizer/dashboard');
     } catch (err) {
       console.error('Login error:', err);
-      setError('Failed to sign in. Please check your credentials.');
+      // More specific error messages
+      const errorMessage = err?.code === 'auth/wrong-password' || err?.code === 'auth/user-not-found'
+        ? 'Invalid email or password. Please try again.'
+        : err?.code === 'auth/too-many-requests'
+        ? 'Too many failed attempts. Please try again later.'
+        : 'Failed to sign in. Please check your credentials.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -126,6 +150,22 @@ function Login() {
                   )}
                 </div>
 
+                {/* Remember Me & Forgot Password Row */}
+                <div className="remember-forgot-row">
+                  <label className="remember-me-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      aria-label="Remember my email"
+                    />
+                    <span>Remember me</span>
+                  </label>
+                  <Link to="/forgot-password" className="forgot-password-link">
+                    Forgot Password?
+                  </Link>
+                </div>
+
                 <button
                   type="submit"
                   className="btn btn-primary"
@@ -147,7 +187,6 @@ function Login() {
               </button>
 
               <div className="auth-links">
-                <Link to="/forgot-password">Forgot Password?</Link>
                 <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
                 <p><Link to="/">← Back to Home</Link></p>
               </div>

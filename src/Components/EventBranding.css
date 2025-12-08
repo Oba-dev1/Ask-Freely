@@ -3,7 +3,7 @@
 ============================================ */
 
 .branding-section {
-  background: rgba(255, 107, 107, 0.02);
+  background: rgba(255, 107, 53, 0.02);
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 14px;
   padding: 2rem;
@@ -52,7 +52,7 @@
 }
 
 .branding-label i {
-  color: #FF6B6B;
+  color: #FF6B35;
   font-size: 0.9rem;
 }
 
@@ -78,8 +78,8 @@
 }
 
 .upload-area:hover {
-  border-color: rgba(255, 107, 107, 0.4);
-  background: rgba(255, 107, 107, 0.03);
+  border-color: rgba(255, 107, 53, 0.4);
+  background: rgba(255, 107, 53, 0.03);
 }
 
 .upload-content {
@@ -91,7 +91,7 @@
 
 .upload-content i {
   font-size: 2.5rem;
-  color: #FF6B6B;
+  color: #FF6B35;
   opacity: 0.7;
 }
 
@@ -159,7 +159,7 @@
 
 /* Color Picker */
 .branding-colors {
-  background: rgba(255, 107, 107, 0.02);
+  background: rgba(255, 107, 53, 0.02);
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   padding: 1.5rem;
@@ -183,7 +183,7 @@
 }
 
 .color-input:hover {
-  border-color: rgba(255, 107, 107, 0.4);
+  border-color: rgba(255, 107, 53, 0.4);
 }
 
 .color-text-input {
@@ -202,9 +202,9 @@
 
 .color-text-input:focus {
   outline: none;
-  border-color: #FF6B6B;
-  background: rgba(255, 107, 107, 0.02);
-  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.08);
+  border-color: #FF6B35;
+  background: rgba(255, 107, 53, 0.02);
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.08);
 }
 
 /* Text Fields */

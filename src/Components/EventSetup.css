@@ -51,10 +51,10 @@
 }
 
 .progress-step.active .step-number {
-  background: #FF6B6B;
-  border-color: #FF6B6B;
+  background: #FF6B35;
+  border-color: #FF6B35;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
 }
 
 .step-label {
@@ -110,7 +110,7 @@
 .setup-tabs {
   display: flex;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  background: rgba(255, 107, 107, 0.02);
+  background: rgba(255, 107, 53, 0.02);
 }
 
 .setup-tab {
@@ -131,14 +131,14 @@
 }
 
 .setup-tab:hover {
-  background: rgba(255, 107, 107, 0.05);
+  background: rgba(255, 107, 53, 0.05);
   color: #404040;
 }
 
 .setup-tab.active {
-  background: rgba(255, 107, 107, 0.08);
+  background: rgba(255, 107, 53, 0.08);
   color: #1a1a1a;
-  border-bottom-color: #FF6B6B;
+  border-bottom-color: #FF6B35;
 }
 
 .setup-tab i {
@@ -201,7 +201,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 2rem 3rem;
-  background: rgba(255, 107, 107, 0.02);
+  background: rgba(255, 107, 53, 0.02);
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -276,7 +276,7 @@
 
   .setup-tab.active {
     border-bottom-color: rgba(0, 0, 0, 0.05);
-    border-left-color: #FF6B6B;
+    border-left-color: #FF6B35;
   }
 
   .setup-content {

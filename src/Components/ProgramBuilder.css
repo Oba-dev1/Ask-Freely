@@ -45,10 +45,10 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: rgba(255, 107, 107, 0.1);
-  border: 1px solid rgba(255, 107, 107, 0.25);
+  background: rgba(255, 107, 53, 0.1);
+  border: 1px solid rgba(255, 107, 53, 0.25);
   border-radius: 20px;
-  color: #FF6B6B;
+  color: #FF6B35;
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -59,8 +59,8 @@
 
 /* Form Card */
 .program-form-card {
-  background: rgba(255, 107, 107, 0.03);
-  border: 1px solid rgba(255, 107, 107, 0.15);
+  background: rgba(255, 107, 53, 0.03);
+  border: 1px solid rgba(255, 107, 53, 0.15);
   border-radius: 14px;
   padding: 1.75rem;
   margin-bottom: 1.5rem;
@@ -104,10 +104,10 @@
 .btn-add-program-item {
   width: 100%;
   padding: 1rem;
-  background: rgba(255, 107, 107, 0.05);
-  border: 2px dashed rgba(255, 107, 107, 0.25);
+  background: rgba(255, 107, 53, 0.05);
+  border: 2px dashed rgba(255, 107, 53, 0.25);
   border-radius: 12px;
-  color: #FF6B6B;
+  color: #FF6B35;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -120,8 +120,8 @@
 }
 
 .btn-add-program-item:hover {
-  background: rgba(255, 107, 107, 0.1);
-  border-color: rgba(255, 107, 107, 0.4);
+  background: rgba(255, 107, 53, 0.1);
+  border-color: rgba(255, 107, 53, 0.4);
   color: #4338ca;
 }
 
@@ -150,15 +150,15 @@
 }
 
 .program-item:hover {
-  background: rgba(255, 107, 107, 0.02);
-  border-color: rgba(255, 107, 107, 0.2);
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.08);
+  background: rgba(255, 107, 53, 0.02);
+  border-color: rgba(255, 107, 53, 0.2);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.08);
 }
 
 .item-order {
   width: 40px;
   height: 40px;
-  background: #FF6B6B;
+  background: #FF6B35;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -206,10 +206,10 @@
 
 .item-type-badge {
   padding: 0.25rem 0.75rem;
-  background: rgba(255, 107, 107, 0.12);
-  border: 1px solid rgba(255, 107, 107, 0.25);
+  background: rgba(255, 107, 53, 0.12);
+  border: 1px solid rgba(255, 107, 53, 0.25);
   border-radius: 12px;
-  color: #FF6B6B;
+  color: #FF6B35;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -286,9 +286,9 @@
 }
 
 .btn-item-action:hover:not(:disabled) {
-  background: rgba(255, 107, 107, 0.1);
-  border-color: rgba(255, 107, 107, 0.3);
-  color: #FF6B6B;
+  background: rgba(255, 107, 53, 0.1);
+  border-color: rgba(255, 107, 53, 0.3);
+  color: #FF6B35;
 }
 
 .btn-item-action:disabled {

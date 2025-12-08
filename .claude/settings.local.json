@@ -3,7 +3,8 @@
     "allow": [
       "Bash(node --version:*)",
       "Bash(git add:*)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []

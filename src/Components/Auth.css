@@ -21,7 +21,7 @@
 /* --- Left Side: Visual / Brand Section --- */
 .auth-visual {
   position: relative;
-  background: #F3F1FE;
+  background: #FAFAFA;
   overflow: hidden;
 }
 
@@ -64,16 +64,16 @@
   gap: 0.75rem;
 }
 
-.logo {
+.auth-visual .logo {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
 }
 
-.logo-icon {
+.auth-visual .logo-icon {
   font-size: 1.8rem;
   background: rgba(255,255,255,0.2);
   width: 48px;
@@ -83,10 +83,12 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(10px);
+  color: #FF6B35 !important;
 }
 
-.logo-text {
+.auth-visual .logo-text {
   font-size: 1.5rem;
+  color: #FFFFFF !important;
 }
 
 .brand-tagline {
@@ -132,7 +134,7 @@
   right: -10%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(255,107,107,0.05), transparent 70%);
+  background: radial-gradient(circle, rgba(255,107,53,0.05), transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -144,7 +146,7 @@
   left: -10%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(78,205,196,0.04), transparent 70%);
+  background: radial-gradient(circle, rgba(255,107,53,0.04), transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -164,8 +166,8 @@
   border-radius: 24px;
   padding: 3rem 2.5rem;
   width: 100%;
-  box-shadow: 0 10px 40px rgba(255,107,107,0.08);
-  border: 1px solid rgba(255,107,107,0.08);
+  box-shadow: 0 10px 40px rgba(255,107,53,0.08);
+  border: 1px solid rgba(0,0,0,0.1);
   position: relative;
 }
 
@@ -177,7 +179,7 @@
   right: 0;
   width: 120px;
   height: 120px;
-  background: rgba(255,107,107,0.04);
+  background: rgba(255,107,53,0.04);
   border-radius: 0 24px 0 100%;
   pointer-events: none;
 }
@@ -189,7 +191,7 @@
   left: 0;
   width: 100px;
   height: 100px;
-  background: rgba(78,205,196,0.03);
+  background: rgba(255,107,53,0.03);
   border-radius: 100% 0 0 24px;
   pointer-events: none;
 }
@@ -205,7 +207,7 @@
 .auth-header h1 {
   font-size: 2.25rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: #000000;
   margin: 0 0 0.5rem 0;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -243,8 +245,8 @@
   width: 100%;
   padding: 0.95rem 1.1rem;
   border-radius: 12px;
-  border: 2px solid rgba(255,107,107,0.15);
-  background: #F8F7FD;
+  border: 2px solid rgba(0,0,0,0.1);
+  background: #FFFFFF;
   color: #1a1a1a;
   transition: all 0.2s ease;
   font-size: 1rem;
@@ -256,15 +258,15 @@
 }
 
 .form-group input:hover {
-  border-color: rgba(255,107,107,0.3);
+  border-color: rgba(255,107,53,0.3);
   background: #FFFFFF;
 }
 
 .form-group input:focus {
-  border-color: #FF6B6B;
+  border-color: #FF6B35;
   outline: none;
   background: #FFFFFF;
-  box-shadow: 0 0 0 4px rgba(255,107,107,0.1);
+  box-shadow: 0 0 0 4px rgba(255,107,53,0.15);
 }
 
 .form-group input:disabled {
@@ -303,8 +305,82 @@
 }
 
 .toggle-password:hover {
-  color: #FF6B6B;
-  background: rgba(255,107,107,0.08);
+  color: #FF6B35;
+  background: rgba(255,107,53,0.08);
+}
+
+/* --- Remember Me & Forgot Password Row --- */
+.remember-forgot-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0 1.5rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.remember-me-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  font-weight: 500;
+  user-select: none;
+}
+
+.remember-me-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #FF6B35;
+  border-radius: 4px;
+}
+
+.remember-me-checkbox:hover {
+  color: #FF6B35;
+}
+
+.forgot-password-link {
+  color: #FF6B35;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.forgot-password-link:hover {
+  color: #E85A2A;
+  text-decoration: underline;
+}
+
+/* --- Password Strength Indicator --- */
+.password-strength-indicator {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.strength-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.strength-bar-fill {
+  height: 100%;
+  transition: all 0.3s ease;
+  border-radius: 3px;
+}
+
+.strength-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  min-width: 60px;
 }
 
 /* --- Buttons --- */
@@ -322,19 +398,19 @@
 
 .btn.btn-primary {
   width: 100%;
-  background: #FF6B6B;
+  background: #FF6B35;
   padding: 1rem 1.5rem;
   border-radius: 12px;
   color: #FFFFFF;
   font-size: 1.05rem;
   margin-top: 0.5rem;
-  box-shadow: 0 4px 14px rgba(255,107,107,0.3);
+  box-shadow: 0 4px 14px rgba(255,107,53,0.3);
 }
 
 .btn.btn-primary:hover {
-  background: #E85555;
+  background: #E85A2A;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255,107,107,0.4);
+  box-shadow: 0 6px 20px rgba(255,107,53,0.4);
 }
 
 .btn.btn-primary:active {
@@ -352,7 +428,7 @@
   width: 100%;
   margin-bottom: 1rem;
   background: #FFFFFF;
-  border: 2px solid rgba(255,107,107,0.15);
+  border: 2px solid rgba(0,0,0,0.1);
   color: #1a1a1a;
   border-radius: 12px;
   padding: 0.9rem 1rem;
@@ -361,8 +437,8 @@
 }
 
 .btn.btn-google:hover {
-  background: #F8F7FD;
-  border-color: rgba(255,107,107,0.3);
+  background: #F5F5F5;
+  border-color: rgba(0,0,0,0.15);
 }
 
 .g-icon {
@@ -385,7 +461,7 @@
   content: "";
   height: 1px;
   flex: 1;
-  background: rgba(255,107,107,0.15);
+  background: rgba(0,0,0,0.1);
 }
 
 .auth-divider span {
@@ -439,14 +515,14 @@
 }
 
 .auth-links a {
-  color: #FF6B6B;
+  color: #FF6B35;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
 .auth-links a:hover {
-  color: #4ECDC4;
+  color: #E85A2A;
   text-decoration: underline;
 }
 
@@ -619,6 +695,6 @@
 .form-group input:focus-visible,
 .toggle-password:focus-visible,
 .auth-links a:focus-visible {
-  outline: 2px solid #FF6B6B;
+  outline: 2px solid #FF6B35;
   outline-offset: 2px;
 }

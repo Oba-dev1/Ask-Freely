@@ -21,7 +21,7 @@
 /* Back button */
 .back-btn-simple {
   background: #FFFFFF;
-  color: #FF6B6B;
+  color: #FF6B35;
   border: 1px solid rgba(0, 0, 0, 0.12);
   padding: 10px 14px;
   border-radius: 10px;
@@ -30,8 +30,8 @@
   transition: all 0.25s ease;
 }
 .back-btn-simple:hover {
-  background: rgba(255, 107, 107, 0.05);
-  border-color: rgba(255, 107, 107, 0.3);
+  background: rgba(255, 107, 53, 0.05);
+  border-color: rgba(255, 107, 53, 0.3);
   transform: translateX(-2px);
 }
 
@@ -175,9 +175,9 @@
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #FF6B6B;
-  background: rgba(255, 107, 107, 0.02);
-  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.08);
+  border-color: #FF6B35;
+  background: rgba(255, 107, 53, 0.02);
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.08);
 }
 
 .form-group small {
@@ -189,8 +189,8 @@
 
 /* ---- Question Builder ---- */
 .question-builder {
-  background: rgba(255, 107, 107, 0.03);
-  border: 1px solid rgba(255, 107, 107, 0.15);
+  background: rgba(255, 107, 53, 0.03);
+  border: 1px solid rgba(255, 107, 53, 0.15);
   padding: 22px;
   border-radius: 14px;
   margin-bottom: 22px;
@@ -198,7 +198,7 @@
 
 /* ---- Questions Preview ---- */
 .questions-preview {
-  background: rgba(255, 107, 107, 0.02);
+  background: rgba(255, 107, 53, 0.02);
   border: 1px solid rgba(0, 0, 0, 0.08);
   padding: 22px;
   border-radius: 14px;
@@ -214,7 +214,7 @@
   padding: 16px;
   border-radius: 12px;
   margin-bottom: 14px;
-  border-left: 4px solid #FF6B6B;
+  border-left: 4px solid #FF6B35;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 .preview-header {
@@ -225,7 +225,7 @@
   flex-wrap: wrap;
 }
 .question-number {
-  background: #FF6B6B;
+  background: #FF6B35;
   color: #fff;
   padding: 4px 10px;
   border-radius: 999px;
@@ -323,7 +323,7 @@
 /* Focus accessibility */
 .event-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15);
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15);
 }
 
 /* Cancel – neutral */
@@ -340,42 +340,42 @@
 
 /* Save as Draft – subtle violet outline */
 .event-btn-secondary {
-  border: 2px solid #FF6B6B;
-  color: #FF6B6B;
+  border: 2px solid #FF6B35;
+  color: #FF6B35;
   background: transparent;
 }
 .event-btn-secondary:hover:not(:disabled) {
-  border-color: #FF6B6B;
-  background: rgba(255, 107, 107, 0.08);
-  color: #FF6B6B;
+  border-color: #FF6B35;
+  background: rgba(255, 107, 53, 0.08);
+  color: #FF6B35;
   transform: translateY(-1px);
 }
 
 /* Add Question button - also uses secondary style */
 .event-btn-add {
-  border: 2px solid #FF6B6B;
-  color: #FF6B6B;
+  border: 2px solid #FF6B35;
+  color: #FF6B35;
   background: transparent;
 }
 .event-btn-add:hover:not(:disabled) {
-  border-color: #FF6B6B;
-  background: rgba(255, 107, 107, 0.08);
-  color: #FF6B6B;
+  border-color: #FF6B35;
+  background: rgba(255, 107, 53, 0.08);
+  color: #FF6B35;
   transform: translateY(-1px);
 }
 
 /* Publish – filled coral */
 .event-btn-primary {
-  border: 2px solid #FF6B6B;
+  border: 2px solid #FF6B35;
   color: #fff;
-  background: #FF6B6B;
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
+  background: #FF6B35;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
 }
 .event-btn-primary:hover:not(:disabled) {
-  background: #E85555;
-  border-color: #E85555;
+  background: #E85A2A;
+  border-color: #E85A2A;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
 }
 
 /* Maintain unified layout on smaller screens */

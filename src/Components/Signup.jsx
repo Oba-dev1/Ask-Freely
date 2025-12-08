@@ -8,8 +8,7 @@ function Signup() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    confirmPassword: '',
-    organizationName: ''
+    confirmPassword: ''
   });
   const [showPw, setShowPw] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
@@ -21,29 +20,56 @@ function Signup() {
 
   const emailValid = useMemo(() => /\S+@\S+\.\S+/.test(formData.email), [formData.email]);
   const passwordValid = useMemo(() => formData.password.length >= 6, [formData.password]);
-  const orgValid = useMemo(() => formData.organizationName.trim().length > 1, [formData.organizationName]);
   const confirmValid = useMemo(() => formData.confirmPassword === formData.password && formData.confirmPassword.length > 0, [formData.confirmPassword, formData.password]);
 
-  const formValid = emailValid && passwordValid && confirmValid && orgValid;
+  const formValid = emailValid && passwordValid && confirmValid;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((p) => ({ ...p, [name]: value }));
   };
 
+  // Password strength calculation
+  const getPasswordStrength = (password) => {
+    if (password.length === 0) return { strength: 0, label: '', color: '' };
+    if (password.length < 6) return { strength: 1, label: 'Weak', color: '#EF4444' };
+
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[@$!%*?&#]/.test(password)) score++;
+
+    if (score <= 1) return { strength: 2, label: 'Fair', color: '#F59E0B' };
+    if (score === 2) return { strength: 3, label: 'Good', color: '#10B981' };
+    return { strength: 4, label: 'Strong', color: '#059669' };
+  };
+
+  const passwordStrength = useMemo(() => getPasswordStrength(formData.password), [formData.password]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setTouched({ email: true, password: true, confirmPassword: true, organizationName: true });
+    setTouched({ email: true, password: true, confirmPassword: true });
     if (!formValid) return;
 
     try {
       setError('');
       setLoading(true);
-      await signup(formData.email, formData.password, formData.organizationName);
-      navigate('/organizer/dashboard');
+      // Signup without organization name - will be collected in profile setup
+      await signup(formData.email, formData.password, '');
+      // Redirect to profile setup instead of dashboard
+      navigate('/profile-setup');
     } catch (err) {
       console.error(err);
-      setError('Failed to create account. ' + (err?.message || 'Please try again.'));
+      // More specific error messages
+      const errorMessage = err?.code === 'auth/email-already-in-use'
+        ? 'This email is already registered. Please sign in instead.'
+        : err?.code === 'auth/weak-password'
+        ? 'Password is too weak. Please use a stronger password.'
+        : err?.code === 'auth/invalid-email'
+        ? 'Invalid email address format.'
+        : 'Failed to create account. ' + (err?.message || 'Please try again.');
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -85,25 +111,6 @@ function Signup() {
               {error && <div className="error-banner" role="alert">{error}</div>}
 
               <form onSubmit={handleSubmit} className="auth-form" noValidate>
-                <div className="form-group">
-                  <label htmlFor="organizationName">Organization Name</label>
-                  <input
-                    type="text"
-                    id="organizationName"
-                    name="organizationName"
-                    value={formData.organizationName}
-                    onChange={handleChange}
-                    onBlur={() => setTouched((t) => ({ ...t, organizationName: true }))}
-                    required
-                    placeholder="Your church, company, or organization"
-                    aria-invalid={touched.organizationName && !orgValid}
-                    aria-describedby={touched.organizationName && !orgValid ? 'org-error' : undefined}
-                  />
-                  {touched.organizationName && !orgValid && (
-                    <small id="org-error" className="input-error">Please enter a valid organization name.</small>
-                  )}
-                </div>
-
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
                   <input
@@ -150,6 +157,22 @@ function Signup() {
                       <i className={`fa-solid ${showPw ? 'fa-eye-slash' : 'fa-eye'}`}></i>
                     </button>
                   </div>
+                  {formData.password.length > 0 && (
+                    <div className="password-strength-indicator">
+                      <div className="strength-bar">
+                        <div
+                          className="strength-bar-fill"
+                          style={{
+                            width: `${(passwordStrength.strength / 4) * 100}%`,
+                            backgroundColor: passwordStrength.color
+                          }}
+                        ></div>
+                      </div>
+                      <span className="strength-label" style={{ color: passwordStrength.color }}>
+                        {passwordStrength.label}
+                      </span>
+                    </div>
+                  )}
                   {touched.password && !passwordValid && (
                     <small id="password-error" className="input-error">Minimum 6 characters.</small>
                   )}

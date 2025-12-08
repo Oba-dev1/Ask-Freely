@@ -21,7 +21,7 @@
 }
 
 .preview-title i {
-  color: #FF6B6B;
+  color: #FF6B35;
   font-size: 1.2rem;
 }
 
@@ -122,7 +122,7 @@
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.1);
   padding: 0.5rem;
-  border: 1px solid var(--preview-brand-color, #FF6B6B);
+  border: 1px solid var(--preview-brand-color, #FF6B35);
 }
 
 .preview-org-name {
@@ -150,7 +150,7 @@
   margin: 0 0 0.4rem 0;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--preview-brand-color, #FF6B6B);
+  color: var(--preview-brand-color, #FF6B35);
 }
 
 .preview-tagline {
@@ -197,7 +197,7 @@
 
 .mockup-button {
   height: 44px;
-  background: #FF6B6B;
+  background: #FF6B35;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -205,7 +205,7 @@
   color: #ffffff;
   font-weight: 600;
   font-size: 0.9rem;
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
 }
 
 /* Responsive */

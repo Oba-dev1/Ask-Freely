@@ -8,11 +8,11 @@
   --muted: #666666;
   --text: #404040;
   --text-strong: #1a1a1a;
-  --accent1: #FF6B6B;
-  --accent2: #4ECDC4;
+  --accent1: #FF6B35;
+  --accent2: #000000;
   --input-bg: #FFFFFF;
   --input-border: rgba(0, 0, 0, 0.15);
-  --input-border-focus: rgba(255, 107, 107, 0.4);
+  --input-border-focus: rgba(255, 107, 53, 0.4);
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 
   background: var(--bg);
@@ -114,7 +114,7 @@
 .participant-page .form-group textarea:focus {
   outline: none;
   border-color: var(--input-border-focus);
-  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
 }
 
 .participant-page .form-group input:disabled,
@@ -159,12 +159,12 @@
 .participant-page .btn-primary {
   background: var(--brand-color, var(--accent1));
   color: #fff;
-  box-shadow: 0 4px 12px var(--brand-color-light, rgba(255, 107, 107, 0.25));
+  box-shadow: 0 4px 12px var(--brand-color-light, rgba(255, 107, 53, 0.25));
 }
 .participant-page .btn-primary:hover:not(:disabled) {
   transform: translateY(-1px);
   background: var(--brand-color-hover, var(--primary-dark));
-  box-shadow: 0 6px 16px var(--brand-color-light, rgba(255, 107, 107, 0.3));
+  box-shadow: 0 6px 16px var(--brand-color-light, rgba(255, 107, 53, 0.3));
 }
 .participant-page .btn-primary:disabled {
   opacity: 0.6;
@@ -192,9 +192,9 @@
   color: #dc2626;
 }
 .participant-page .message.info {
-  background: rgba(255, 107, 107, 0.1);
-  border-color: rgba(255, 107, 107, 0.25);
-  color: #FF6B6B;
+  background: rgba(255, 107, 53, 0.1);
+  border-color: rgba(255, 107, 53, 0.25);
+  color: #FF6B35;
 }
 
 /* Loading text */
