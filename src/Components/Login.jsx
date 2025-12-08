@@ -93,15 +93,16 @@ function Login() {
           <div className="auth-container">
             <div className="auth-card">
               <header className="auth-header">
-                <h1>Organizer Login</h1>
-                <p className="subtitle">Manage your events</p>
+                <span className="logo-icon"><i className="fas fa-comments"></i></span>
+                <h1>Welcome back</h1>
+                <p className="subtitle">Enter your credentials to access your account and manage your events.</p>
               </header>
 
               {error && <div className="error-banner" role="alert">{error}</div>}
 
               <form onSubmit={handleSubmit} className="auth-form" noValidate>
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">Your email</label>
                   <input
                     ref={emailRef}
                     type="email"
@@ -111,7 +112,7 @@ function Login() {
                     onBlur={() => setTouched((t) => ({ ...t, email: true }))}
                     required
                     autoComplete="email"
-                    placeholder="you@organization.com"
+                    placeholder="farazshahid9@gmail.com"
                     aria-invalid={touched.email && !emailValid}
                     aria-describedby={!emailValid && touched.email ? 'email-error' : undefined}
                     autoFocus
@@ -175,7 +176,7 @@ function Login() {
                 </button>
               </form>
 
-              <div className="auth-divider"><span>or</span></div>
+              <div className="auth-divider"><span>Or continue with</span></div>
 
               {/* Social (optional; wire up later) */}
               <button
@@ -183,12 +184,11 @@ function Login() {
                 className="btn btn-google"
                 onClick={() => console.log('TODO: Google sign-in')}
               >
-                <span className="g-icon"><i class="fa-brands fa-google"></i></span> Continue with Google
+                <span className="g-icon"><i className="fa-brands fa-google"></i></span>
               </button>
 
               <div className="auth-links">
-                <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
-                <p><Link to="/">← Back to Home</Link></p>
+                <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
               </div>
             </div>
           </div>

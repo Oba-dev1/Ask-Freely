@@ -9,18 +9,18 @@
 
 
   /* Warm Light (default) */
-  /* :root {
+  :root {
   --bg-canvas: #FAFAF7;
   --bg-card: #FFFFFF;
   --text: #1E2429;
   --text-muted: #5A646D;
   --border: #E7E7E2;
   --primary: #5B68E3;
-  --primary-2: #764BA2; /* keep your brand duo */
-  /* --accent: #F6C04D;
+  --primary-2: #764BA2;
+  --accent: #F6C04D;
   --focus: #5B68E3;
-  --shadow: 0 8px 30px rgba(30, 36, 41, 0.08); */
-/* } */ 
+  --shadow: 0 8px 30px rgba(30, 36, 41, 0.08);
+} 
 
 /* Neutral Light */
 /* :root[data-theme="light-neutral"] {
@@ -37,7 +37,7 @@
 } */
 
 /* Cozy Dark - Updated with vibrant community colors */
-:root[data-theme="dark-cozy"] {
+/* :root[data-theme="dark-cozy"] {
   --bg-canvas: #0a0e1a;
   --bg-card: #1E2128;
   --text: #F6F7F9;
@@ -48,10 +48,10 @@
   --accent: #10B981;
   --focus: #4F46E5;
   --shadow: 0 10px 34px rgba(79, 70, 229, 0.2);
-}
+} */
 
 /* Respect system preference when theme not explicitly set */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
     --bg-canvas: #0a0e1a;
     --bg-card: #1E2128;
@@ -64,7 +64,7 @@
     --focus: #4F46E5;
     --shadow: 0 10px 34px rgba(79, 70, 229, 0.2);
   }
-}
+} */
 
 /* Apply everywhere */
 body {
@@ -80,7 +80,7 @@ body {
   --glass-hover: rgba(0,0,0,0.03);
 }
 
-.card, .controls-card, .links-card, .questions-dashboard, .auth-card {
+.card, .controls-card, .links-card, .questions-dashboard {
   background: var(--bg-card);
   border: 1px solid var(--border);
   box-shadow: var(--shadow);

@@ -104,15 +104,16 @@ function Signup() {
           <div className="auth-container">
             <div className="auth-card">
               <header className="auth-header">
-                <h1>Create Organizer Account</h1>
-                <p className="subtitle">Start managing your events</p>
+                <span className="logo-icon"><i className="fas fa-comments"></i></span>
+                <h1>Create an account</h1>
+                <p className="subtitle">Access your tasks, notes, and projects anytime, anywhere - and keep everything flowing in one place.</p>
               </header>
 
               {error && <div className="error-banner" role="alert">{error}</div>}
 
               <form onSubmit={handleSubmit} className="auth-form" noValidate>
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">Your email</label>
                   <input
                     type="email"
                     id="email"
@@ -122,7 +123,7 @@ function Signup() {
                     onBlur={() => setTouched((t) => ({ ...t, email: true }))}
                     required
                     autoComplete="email"
-                    placeholder="you@organization.com"
+                    placeholder="farazshahid9@gmail.com"
                     aria-invalid={touched.email && !emailValid}
                     aria-describedby={touched.email && !emailValid ? 'email-error' : undefined}
                   />
@@ -213,11 +214,11 @@ function Signup() {
                   className="btn btn-primary"
                   disabled={loading || !formValid}
                 >
-                  {loading ? 'Creating Account...' : 'Sign Up'}
+                  {loading ? 'Creating Account...' : 'Get Started'}
                 </button>
               </form>
 
-              <div className="auth-divider"><span>or</span></div>
+              <div className="auth-divider"><span>Or continue with</span></div>
 
               {/* Social (optional; wire up later) */}
               <button
@@ -225,12 +226,11 @@ function Signup() {
                 className="btn btn-google"
                 onClick={() => console.log('TODO: Google sign-up')}
               >
-                <span className="g-icon"><i class="fa-brands fa-google"></i></span> Continue with Google
+                <span className="g-icon"><i className="fa-brands fa-google"></i></span>
               </button>
 
               <div className="auth-links">
-                <p>Already have an account? <Link to="/login">Sign In</Link></p>
-                <p><Link to="/">← Back to Home</Link></p>
+                <p>Don't have an account? <Link to="/login">Sign up</Link></p>
               </div>
             </div>
           </div>
