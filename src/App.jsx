@@ -10,10 +10,12 @@ import { ref, onValue } from "firebase/database";
 import { database } from "./Firebase/config";
 
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./Components/ProtectedRoute";
 import ParticipantForm from "./Components/ParticipantForm";
 import HostDashboard from "./Components/HostDashboard";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
+import ProfileSetup from "./Components/ProfileSetup";
 import OrganizerDashboard from "./Components/OrganizerDashboard";
 import OrganizerAnalytics from "./Components/OrganizerAnalytics";
 import CreateEvent from "./Components/CreateEvent";
@@ -674,7 +676,7 @@ function LandingPage() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <div className="app">
           <Routes>
             <Route path="/" element={<LandingPage />} />
@@ -688,11 +690,36 @@ function App() {
             <Route path="/response" element={<Navigate to="/host" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
-            <Route path="/organizer/analytics" element={<OrganizerAnalytics />} />
-            <Route path="/organizer/create-event" element={<CreateEvent />} />
-            <Route path="/organizer/event/:eventId/setup" element={<EventSetup />} />
-            <Route path="/organizer/event/:eventId" element={<EventManagement />} />
+            <Route path="/profile-setup" element={
+              <ProtectedRoute requireProfileComplete={false}>
+                <ProfileSetup />
+              </ProtectedRoute>
+            } />
+            <Route path="/organizer/dashboard" element={
+              <ProtectedRoute>
+                <OrganizerDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/organizer/analytics" element={
+              <ProtectedRoute>
+                <OrganizerAnalytics />
+              </ProtectedRoute>
+            } />
+            <Route path="/organizer/create-event" element={
+              <ProtectedRoute>
+                <CreateEvent />
+              </ProtectedRoute>
+            } />
+            <Route path="/organizer/event/:eventId/setup" element={
+              <ProtectedRoute>
+                <EventSetup />
+              </ProtectedRoute>
+            } />
+            <Route path="/organizer/event/:eventId" element={
+              <ProtectedRoute>
+                <EventManagement />
+              </ProtectedRoute>
+            } />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>

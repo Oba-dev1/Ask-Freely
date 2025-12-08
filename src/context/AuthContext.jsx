@@ -33,8 +33,9 @@ export const AuthProvider = ({ children }) => {
     const userRef = ref(database, `users/${user.uid}`);
     await set(userRef, {
       email: user.email,
-      organizationName,
+      organizationName: organizationName || '',
       role: 'organizer',
+      profileCompleted: false,
       createdAt: new Date().toISOString()
     });
 

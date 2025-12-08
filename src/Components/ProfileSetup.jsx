@@ -1,58 +1,17 @@
 // src/Components/ProfileSetup.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ref as dbRef, update } from 'firebase/database';
-import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { database } from '../Firebase/config';
-import { storage } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
 import './ProfileSetup.css';
 
 function ProfileSetup() {
   const [organizationName, setOrganizationName] = useState('');
-  const [logo, setLogo] = useState(null);
-  const [logoPreview, setLogoPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-
-  const handleLogoChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      setError('Please select an image file');
-      return;
-    }
-
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError('Image size must be less than 5MB');
-      return;
-    }
-
-    setLogo(file);
-    setError('');
-
-    // Create preview
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setLogoPreview(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleRemoveLogo = () => {
-    setLogo(null);
-    setLogoPreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
 
   const handleSkip = () => {
     // Allow users to skip and go straight to dashboard
@@ -76,26 +35,11 @@ function ProfileSetup() {
       setLoading(true);
       setError('');
 
-      let logoUrl = '';
-
-      // Upload logo if provided
-      if (logo) {
-        setUploadProgress(10);
-        const logoRef = storageRef(storage, `logos/${currentUser.uid}/${Date.now()}_${logo.name}`);
-
-        setUploadProgress(50);
-        await uploadBytes(logoRef, logo);
-
-        setUploadProgress(75);
-        logoUrl = await getDownloadURL(logoRef);
-        setUploadProgress(100);
-      }
-
-      // Update user profile in database
+      // Update user profile in database (without logo for now)
       const userRef = dbRef(database, `users/${currentUser.uid}`);
       await update(userRef, {
         organizationName: organizationName.trim(),
-        logoUrl: logoUrl || null,
+        logoUrl: null,
         profileCompleted: true,
         profileCompletedAt: new Date().toISOString()
       });
@@ -107,7 +51,6 @@ function ProfileSetup() {
       setError('Failed to save profile. Please try again.');
     } finally {
       setLoading(false);
-      setUploadProgress(0);
     }
   };
 
@@ -163,62 +106,23 @@ function ProfileSetup() {
               </small>
             </div>
 
-            {/* Logo Upload */}
+            {/* Logo Upload - Temporarily Disabled */}
             <div className="form-group">
-              <label htmlFor="logo">
-                Organization Logo <span className="optional">(Optional)</span>
+              <label>
+                Organization Logo <span className="optional">(Coming Soon)</span>
               </label>
-
-              {!logoPreview ? (
-                <div className="logo-upload-area">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    id="logo"
-                    accept="image/*"
-                    onChange={handleLogoChange}
-                    className="file-input"
-                    disabled={loading}
-                  />
-                  <label htmlFor="logo" className="upload-label">
-                    <i className="fas fa-cloud-upload-alt"></i>
-                    <span>Click to upload logo</span>
-                    <small>PNG, JPG or GIF (max 5MB)</small>
-                  </label>
-                </div>
-              ) : (
-                <div className="logo-preview-container">
-                  <div className="logo-preview">
-                    <img src={logoPreview} alt="Logo preview" />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleRemoveLogo}
-                    className="btn-remove-logo"
-                    disabled={loading}
-                  >
-                    <i className="fas fa-times"></i> Remove
-                  </button>
-                </div>
-              )}
-
-              <small className="field-hint">
-                Your logo helps attendees recognize your brand
-              </small>
-            </div>
-
-            {/* Upload Progress */}
-            {uploadProgress > 0 && uploadProgress < 100 && (
-              <div className="upload-progress">
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${uploadProgress}%` }}
-                  ></div>
-                </div>
-                <span className="progress-text">Uploading... {uploadProgress}%</span>
+              <div style={{
+                padding: '1.5rem',
+                background: 'rgba(0,0,0,0.03)',
+                borderRadius: '12px',
+                border: '2px dashed rgba(0,0,0,0.1)',
+                textAlign: 'center',
+                color: '#999'
+              }}>
+                <i className="fas fa-lock" style={{ fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}></i>
+                <p style={{ margin: '0', fontSize: '0.95rem' }}>Logo upload will be available after Firebase Storage upgrade</p>
               </div>
-            )}
+            </div>
 
             {/* Action Buttons */}
             <div className="form-actions">
