@@ -3,8 +3,8 @@
 ============================================ */
 
 .branding-section {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 107, 107, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 14px;
   padding: 2rem;
   margin-bottom: 2rem;
@@ -17,13 +17,13 @@
 .branding-header h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.4rem;
-  color: #ffffff;
+  color: #1a1a1a;
   font-weight: 700;
 }
 
 .branding-subtitle {
   margin: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666666;
   font-size: 0.95rem;
   line-height: 1.5;
 }
@@ -46,31 +46,31 @@
   align-items: center;
   gap: 0.5rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
   font-size: 0.95rem;
   margin-bottom: 0.5rem;
 }
 
 .branding-label i {
-  color: #667eea;
+  color: #FF6B6B;
   font-size: 0.9rem;
 }
 
 .branding-hint {
   margin: 0 0 1rem 0;
-  color: rgba(255, 255, 255, 0.6);
+  color: #666666;
   font-size: 0.85rem;
 }
 
 /* Upload Area */
 .upload-area {
-  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border: 2px dashed rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.25s ease;
-  background: rgba(255, 255, 255, 0.03);
+  background: #FFFFFF;
   min-height: 200px;
   display: flex;
   align-items: center;
@@ -78,8 +78,8 @@
 }
 
 .upload-area:hover {
-  border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(102, 126, 234, 0.08);
+  border-color: rgba(255, 107, 107, 0.4);
+  background: rgba(255, 107, 107, 0.03);
 }
 
 .upload-content {
@@ -91,18 +91,18 @@
 
 .upload-content i {
   font-size: 2.5rem;
-  color: #667eea;
+  color: #FF6B6B;
   opacity: 0.7;
 }
 
 .upload-content span {
-  color: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
   font-weight: 600;
   font-size: 1rem;
 }
 
 .upload-content small {
-  color: rgba(255, 255, 255, 0.6);
+  color: #666666;
   font-size: 0.85rem;
 }
 
@@ -111,8 +111,8 @@
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .logo-preview {
@@ -130,7 +130,7 @@
   height: 100%;
   object-fit: contain;
   display: block;
-  background: rgba(255, 255, 255, 0.05);
+  background: #FFFFFF;
 }
 
 .remove-media-btn {
@@ -159,8 +159,8 @@
 
 /* Color Picker */
 .branding-colors {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 107, 107, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -175,7 +175,7 @@
 .color-input {
   width: 80px;
   height: 50px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   cursor: pointer;
   background: transparent;
@@ -183,16 +183,16 @@
 }
 
 .color-input:hover {
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: rgba(255, 107, 107, 0.4);
 }
 
 .color-text-input {
   flex: 1;
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #FFFFFF;
+  color: #1a1a1a;
   font-size: 1rem;
   font-family: 'Courier New', monospace;
   font-weight: 600;
@@ -202,9 +202,9 @@
 
 .color-text-input:focus {
   outline: none;
-  border-color: #667eea;
-  background: rgba(255, 255, 255, 0.11);
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+  border-color: #FF6B6B;
+  background: rgba(255, 107, 107, 0.02);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.08);
 }
 
 /* Text Fields */

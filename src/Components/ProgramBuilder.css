@@ -3,11 +3,12 @@
 ============================================ */
 
 .program-builder {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   padding: 2.5rem;
   margin-top: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 /* Header */
@@ -23,13 +24,13 @@
 .program-header h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.6rem;
-  color: #ffffff;
+  color: #1a1a1a;
   font-weight: 700;
 }
 
 .program-subtitle {
   margin: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666666;
   font-size: 0.95rem;
 }
 
@@ -44,10 +45,10 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: rgba(102, 126, 234, 0.15);
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.25);
   border-radius: 20px;
-  color: #a5b4fc;
+  color: #FF6B6B;
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -58,8 +59,8 @@
 
 /* Form Card */
 .program-form-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 107, 107, 0.03);
+  border: 1px solid rgba(255, 107, 107, 0.15);
   border-radius: 14px;
   padding: 1.75rem;
   margin-bottom: 1.5rem;
@@ -75,14 +76,14 @@
 .form-header h4 {
   margin: 0;
   font-size: 1.2rem;
-  color: #ffffff;
+  color: #1a1a1a;
   font-weight: 600;
 }
 
 .btn-close-form {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: #666666;
   font-size: 1.5rem;
   cursor: pointer;
   width: 32px;
@@ -95,18 +96,18 @@
 }
 
 .btn-close-form:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: rgba(0, 0, 0, 0.05);
+  color: #1a1a1a;
 }
 
 /* Add Program Item Button */
 .btn-add-program-item {
   width: 100%;
   padding: 1rem;
-  background: rgba(102, 126, 234, 0.1);
-  border: 2px dashed rgba(102, 126, 234, 0.3);
+  background: rgba(255, 107, 107, 0.05);
+  border: 2px dashed rgba(255, 107, 107, 0.25);
   border-radius: 12px;
-  color: #a5b4fc;
+  color: #FF6B6B;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -119,9 +120,9 @@
 }
 
 .btn-add-program-item:hover {
-  background: rgba(102, 126, 234, 0.15);
-  border-color: rgba(102, 126, 234, 0.5);
-  color: #fff;
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.4);
+  color: #4338ca;
 }
 
 .btn-add-program-item i {
@@ -140,22 +141,24 @@
   grid-template-columns: 40px 1fr auto;
   gap: 1rem;
   align-items: start;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   padding: 1.25rem;
   transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .program-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(102, 126, 234, 0.3);
+  background: rgba(255, 107, 107, 0.02);
+  border-color: rgba(255, 107, 107, 0.2);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.08);
 }
 
 .item-order {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #FF6B6B;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -196,17 +199,17 @@
 .item-title-section h4 {
   margin: 0;
   font-size: 1.1rem;
-  color: #ffffff;
+  color: #1a1a1a;
   font-weight: 600;
   word-break: break-word;
 }
 
 .item-type-badge {
   padding: 0.25rem 0.75rem;
-  background: rgba(102, 126, 234, 0.2);
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  background: rgba(255, 107, 107, 0.12);
+  border: 1px solid rgba(255, 107, 107, 0.25);
   border-radius: 12px;
-  color: #a5b4fc;
+  color: #FF6B6B;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -219,7 +222,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666666;
   font-size: 0.9rem;
   font-weight: 500;
   white-space: nowrap;
@@ -232,17 +235,17 @@
 
 .item-description {
   margin: 0 0 0.75rem 0;
-  color: rgba(255, 255, 255, 0.75);
+  color: #404040;
   font-size: 0.95rem;
   line-height: 1.5;
 }
 
 .item-notes {
-  background: rgba(255, 184, 77, 0.15);
-  border: 1px solid rgba(255, 184, 77, 0.28);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
   border-radius: 8px;
   padding: 0.75rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: #92400e;
   font-size: 0.9rem;
   display: flex;
   align-items: start;
@@ -250,13 +253,13 @@
 }
 
 .item-notes i {
-  color: #ffb84d;
+  color: #F59E0B;
   margin-top: 0.15rem;
   flex-shrink: 0;
 }
 
 .item-notes strong {
-  color: #ffffff;
+  color: #78350f;
 }
 
 /* Item Actions */
@@ -270,10 +273,10 @@
 .btn-item-action {
   width: 36px;
   height: 36px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666666;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -283,9 +286,9 @@
 }
 
 .btn-item-action:hover:not(:disabled) {
-  background: rgba(102, 126, 234, 0.2);
-  border-color: rgba(102, 126, 234, 0.4);
-  color: #a5b4fc;
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.3);
+  color: #FF6B6B;
 }
 
 .btn-item-action:disabled {
@@ -294,27 +297,27 @@
 }
 
 .btn-item-action.btn-delete:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.3);
-  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #EF4444;
 }
 
 /* Empty State */
 .empty-program-state {
   text-align: center;
   padding: 3rem 1rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: #666666;
 }
 
 .empty-icon {
   font-size: 4rem;
   margin-bottom: 1rem;
-  opacity: 0.5;
+  opacity: 0.3;
 }
 
 .empty-program-state h4 {
   margin: 0 0 0.5rem 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: #404040;
   font-size: 1.2rem;
   font-weight: 600;
 }

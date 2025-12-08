@@ -42,7 +42,7 @@
   display: block;
 }
 
-/* Overlay with gradient for text readability */
+/* Overlay with semi-transparent background for text readability */
 .auth-image-overlay {
   position: absolute;
   inset: 0;
@@ -53,11 +53,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(
-    135deg,
-    rgba(79,70,229,0.2) 0%,
-    rgba(124,58,237,0.3) 100%
-  );
+  background: rgba(0,0,0,0.4);
 }
 
 .brand {
@@ -136,7 +132,7 @@
   right: -10%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(79,70,229,0.05), transparent 70%);
+  background: radial-gradient(circle, rgba(255,107,107,0.05), transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -148,7 +144,7 @@
   left: -10%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(124,58,237,0.04), transparent 70%);
+  background: radial-gradient(circle, rgba(78,205,196,0.04), transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -168,8 +164,8 @@
   border-radius: 24px;
   padding: 3rem 2.5rem;
   width: 100%;
-  box-shadow: 0 10px 40px rgba(79,70,229,0.08);
-  border: 1px solid rgba(79,70,229,0.08);
+  box-shadow: 0 10px 40px rgba(255,107,107,0.08);
+  border: 1px solid rgba(255,107,107,0.08);
   position: relative;
 }
 
@@ -181,7 +177,7 @@
   right: 0;
   width: 120px;
   height: 120px;
-  background: linear-gradient(135deg, rgba(79,70,229,0.08), transparent);
+  background: rgba(255,107,107,0.04);
   border-radius: 0 24px 0 100%;
   pointer-events: none;
 }
@@ -193,7 +189,7 @@
   left: 0;
   width: 100px;
   height: 100px;
-  background: linear-gradient(135deg, transparent, rgba(124,58,237,0.06));
+  background: rgba(78,205,196,0.03);
   border-radius: 100% 0 0 24px;
   pointer-events: none;
 }
@@ -209,7 +205,7 @@
 .auth-header h1 {
   font-size: 2.25rem;
   font-weight: 800;
-  color: #FFFFFF;
+  color: #1a1a1a;
   margin: 0 0 0.5rem 0;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -247,7 +243,7 @@
   width: 100%;
   padding: 0.95rem 1.1rem;
   border-radius: 12px;
-  border: 2px solid rgba(79,70,229,0.15);
+  border: 2px solid rgba(255,107,107,0.15);
   background: #F8F7FD;
   color: #1a1a1a;
   transition: all 0.2s ease;
@@ -260,15 +256,15 @@
 }
 
 .form-group input:hover {
-  border-color: rgba(79,70,229,0.3);
+  border-color: rgba(255,107,107,0.3);
   background: #FFFFFF;
 }
 
 .form-group input:focus {
-  border-color: #4F46E5;
+  border-color: #FF6B6B;
   outline: none;
   background: #FFFFFF;
-  box-shadow: 0 0 0 4px rgba(79,70,229,0.1);
+  box-shadow: 0 0 0 4px rgba(255,107,107,0.1);
 }
 
 .form-group input:disabled {
@@ -307,8 +303,8 @@
 }
 
 .toggle-password:hover {
-  color: #4F46E5;
-  background: rgba(79,70,229,0.08);
+  color: #FF6B6B;
+  background: rgba(255,107,107,0.08);
 }
 
 /* --- Buttons --- */
@@ -326,18 +322,19 @@
 
 .btn.btn-primary {
   width: 100%;
-  background: linear-gradient(135deg, #4F46E5, #7C3AED);
+  background: #FF6B6B;
   padding: 1rem 1.5rem;
   border-radius: 12px;
   color: #FFFFFF;
   font-size: 1.05rem;
   margin-top: 0.5rem;
-  box-shadow: 0 4px 14px rgba(79,70,229,0.3);
+  box-shadow: 0 4px 14px rgba(255,107,107,0.3);
 }
 
 .btn.btn-primary:hover {
+  background: #E85555;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(79,70,229,0.4);
+  box-shadow: 0 6px 20px rgba(255,107,107,0.4);
 }
 
 .btn.btn-primary:active {
@@ -355,7 +352,7 @@
   width: 100%;
   margin-bottom: 1rem;
   background: #FFFFFF;
-  border: 2px solid rgba(79,70,229,0.15);
+  border: 2px solid rgba(255,107,107,0.15);
   color: #1a1a1a;
   border-radius: 12px;
   padding: 0.9rem 1rem;
@@ -365,7 +362,7 @@
 
 .btn.btn-google:hover {
   background: #F8F7FD;
-  border-color: rgba(79,70,229,0.3);
+  border-color: rgba(255,107,107,0.3);
 }
 
 .g-icon {
@@ -388,7 +385,7 @@
   content: "";
   height: 1px;
   flex: 1;
-  background: rgba(79,70,229,0.15);
+  background: rgba(255,107,107,0.15);
 }
 
 .auth-divider span {
@@ -442,14 +439,14 @@
 }
 
 .auth-links a {
-  color: #4F46E5;
+  color: #FF6B6B;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
 .auth-links a:hover {
-  color: #7C3AED;
+  color: #4ECDC4;
   text-decoration: underline;
 }
 
@@ -622,6 +619,6 @@
 .form-group input:focus-visible,
 .toggle-password:focus-visible,
 .auth-links a:focus-visible {
-  outline: 2px solid #4F46E5;
+  outline: 2px solid #FF6B6B;
   outline-offset: 2px;
 }

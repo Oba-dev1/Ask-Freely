@@ -2,18 +2,18 @@
    Participant Page (scoped)
    ========================= */
 .participant-page {
-  --bg: #0f0f23;
-  --card: rgba(255, 255, 255, 0.06);
-  --card-border: rgba(255, 255, 255, 0.12);
-  --muted: rgba(255, 255, 255, 0.65);
-  --text: rgba(255, 255, 255, 0.92);
-  --text-strong: #ffffff;
-  --accent1: #667eea;
-  --accent2: #764ba2;
-  --input-bg: rgba(255, 255, 255, 0.06);
-  --input-border: rgba(255, 255, 255, 0.16);
-  --input-border-focus: rgba(102, 126, 234, 0.6);
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  --bg: #FFFFFF;
+  --card: #FFFFFF;
+  --card-border: rgba(0, 0, 0, 0.08);
+  --muted: #666666;
+  --text: #404040;
+  --text-strong: #1a1a1a;
+  --accent1: #FF6B6B;
+  --accent2: #4ECDC4;
+  --input-bg: #FFFFFF;
+  --input-border: rgba(0, 0, 0, 0.15);
+  --input-border-focus: rgba(255, 107, 107, 0.4);
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 
   background: var(--bg);
   min-height: 100vh;
@@ -68,7 +68,6 @@
   border-radius: 18px;
   padding: 28px;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(16px);
 }
 
 /* Text lead */
@@ -108,14 +107,14 @@
 
 .participant-page .form-group input::placeholder,
 .participant-page .form-group textarea::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: #999999;
 }
 
 .participant-page .form-group input:focus,
 .participant-page .form-group textarea:focus {
   outline: none;
   border-color: var(--input-border-focus);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
 }
 
 .participant-page .form-group input:disabled,
@@ -158,14 +157,14 @@
 }
 
 .participant-page .btn-primary {
-  background: var(--brand-color, linear-gradient(135deg, var(--accent1) 0%, var(--accent2) 100%));
+  background: var(--brand-color, var(--accent1));
   color: #fff;
-  box-shadow: 0 10px 22px var(--brand-color-light, rgba(102, 126, 234, 0.35));
+  box-shadow: 0 4px 12px var(--brand-color-light, rgba(255, 107, 107, 0.25));
 }
 .participant-page .btn-primary:hover:not(:disabled) {
   transform: translateY(-1px);
-  background: var(--brand-color-hover, var(--brand-color));
-  box-shadow: 0 14px 28px var(--brand-color-light, rgba(102, 126, 234, 0.45));
+  background: var(--brand-color-hover, var(--primary-dark));
+  box-shadow: 0 6px 16px var(--brand-color-light, rgba(255, 107, 107, 0.3));
 }
 .participant-page .btn-primary:disabled {
   opacity: 0.6;
@@ -183,19 +182,19 @@
   border: 1px solid transparent;
 }
 .participant-page .message.success {
-  background: rgba(74, 222, 128, 0.15);
-  border-color: rgba(74, 222, 128, 0.35);
-  color: #4ade80;
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: #059669;
 }
 .participant-page .message.error {
-  background: rgba(244, 67, 54, 0.15);
-  border-color: rgba(244, 67, 54, 0.35);
-  color: #ff8a80;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #dc2626;
 }
 .participant-page .message.info {
-  background: rgba(102, 126, 234, 0.12);
-  border-color: rgba(102, 126, 234, 0.35);
-  color: #aab4ff;
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.25);
+  color: #FF6B6B;
 }
 
 /* Loading text */

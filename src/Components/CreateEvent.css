@@ -1,8 +1,8 @@
 /* ---- Page & Wrapper ---- */
 .page-wrapper {
   min-height: 100vh;
-  background: #0f0f23;
-  color: #fff;
+  background: #FFFFFF;
+  color: #1a1a1a;
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -20,9 +20,9 @@
 
 /* Back button */
 .back-btn-simple {
-  background: rgba(255, 255, 255, 0.06);
-  color: #a5b4fc;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #FFFFFF;
+  color: #FF6B6B;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   padding: 10px 14px;
   border-radius: 10px;
   font-weight: 600;
@@ -30,19 +30,18 @@
   transition: all 0.25s ease;
 }
 .back-btn-simple:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #a5b4fc;
+  background: rgba(255, 107, 107, 0.05);
+  border-color: rgba(255, 107, 107, 0.3);
   transform: translateX(-2px);
 }
 
 /* ---- Card ---- */
 .create-event-card {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   padding: 3rem;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 /* Page header inside card */
@@ -56,14 +55,14 @@
 }
 .page-subtitle {
   margin: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666666;
 }
 
 /* ---- Sections ---- */
 .form-section {
   margin-bottom: 36px;
   padding-bottom: 28px;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
 }
 .form-section:last-of-type {
   border-bottom: none;
@@ -71,13 +70,13 @@
   padding-bottom: 0;
 }
 .form-section h2 {
-  color: #ffffff;
+  color: #1a1a1a;
   font-size: 1.25rem;
   margin: 0 0 10px;
   letter-spacing: 0.2px;
 }
 .section-description {
-  color: rgba(255, 255, 255, 0.72);
+  color: #666666;
   margin-bottom: 20px;
   line-height: 1.6;
 }
@@ -97,7 +96,7 @@
   display: block;
   font-weight: 600;
   margin-bottom: 8px;
-  color: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
   font-size: 0.95rem;
 }
 
@@ -108,9 +107,9 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #FFFFFF;
+  color: #1a1a1a;
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
@@ -123,15 +122,15 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   padding-right: 40px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a5b4fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234F46E5' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;
   background-size: 12px;
 }
 
 .form-group select option {
-  background: #1a1a2e;
-  color: #fff;
+  background: #FFFFFF;
+  color: #1a1a1a;
   padding: 12px;
 }
 
@@ -146,7 +145,7 @@
 /* Custom calendar icon for date input */
 .form-group input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a5b4fc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234F46E5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
   background-size: 16px 16px;
   background-position: center;
   width: 20px;
@@ -158,7 +157,7 @@
 /* Custom clock icon for time input */
 .form-group input[type="time"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a5b4fc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolyline points='12 6 12 12 16 14'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234F46E5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cpolyline points='12 6 12 12 16 14'%3E%3C/polyline%3E%3C/svg%3E");
   background-size: 16px 16px;
   background-position: center;
   width: 20px;
@@ -169,29 +168,29 @@
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: rgba(255, 255, 255, 0.55);
+  color: #999999;
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
-  background: rgba(255, 255, 255, 0.11);
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+  border-color: #FF6B6B;
+  background: rgba(255, 107, 107, 0.02);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.08);
 }
 
 .form-group small {
   display: block;
   margin-top: 6px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #666666;
   font-size: 0.85rem;
 }
 
 /* ---- Question Builder ---- */
 .question-builder {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 107, 107, 0.03);
+  border: 1px solid rgba(255, 107, 107, 0.15);
   padding: 22px;
   border-radius: 14px;
   margin-bottom: 22px;
@@ -199,23 +198,24 @@
 
 /* ---- Questions Preview ---- */
 .questions-preview {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 107, 107, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   padding: 22px;
   border-radius: 14px;
 }
 .questions-preview h3 {
-  color: #ffffff;
+  color: #1a1a1a;
   font-size: 1.05rem;
   margin: 0 0 16px;
 }
 
 .preview-question {
-  background: rgba(255, 255, 255, 0.06);
+  background: #FFFFFF;
   padding: 16px;
   border-radius: 12px;
   margin-bottom: 14px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #FF6B6B;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 .preview-header {
   display: flex;
@@ -225,7 +225,7 @@
   flex-wrap: wrap;
 }
 .question-number {
-  background: #667eea;
+  background: #FF6B6B;
   color: #fff;
   padding: 4px 10px;
   border-radius: 999px;
@@ -241,12 +241,12 @@
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
-.priority-tag.high { background: #ffebee; color: #c62828; }
-.priority-tag.medium { background: #fff3e0; color: #ef6c00; }
-.priority-tag.low { background: #e8f5e9; color: #2e7d32; }
+.priority-tag.high { background: #fee2e2; color: #dc2626; }
+.priority-tag.medium { background: #fef3c7; color: #d97706; }
+.priority-tag.low { background: #d1fae5; color: #059669; }
 .category-tag {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: #dbeafe;
+  color: #1e40af;
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 0.72rem;
@@ -254,8 +254,8 @@
 }
 .remove-btn {
   margin-left: auto;
-  background: #ffebee;
-  color: #c62828;
+  background: #fee2e2;
+  color: #dc2626;
   border: none;
   width: 28px;
   height: 28px;
@@ -266,19 +266,19 @@
   font-weight: 800;
   transition: all 0.2s ease;
 }
-.remove-btn:hover { background: #c62828; color: #fff; }
+.remove-btn:hover { background: #dc2626; color: #fff; }
 
 .preview-text {
-  color: rgba(255, 255, 255, 0.92);
+  color: #1a1a1a;
   line-height: 1.6;
   margin-bottom: 8px;
 }
 .preview-notes {
-  color: rgba(255, 255, 255, 0.78);
+  color: #92400e;
   font-size: 0.9rem;
   font-style: italic;
-  background: rgba(255, 184, 77, 0.15);
-  border: 1px solid rgba(255, 184, 77, 0.28);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
   padding: 8px 10px;
   border-radius: 8px;
 }
@@ -323,59 +323,59 @@
 /* Focus accessibility */
 .event-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.25);
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15);
 }
 
 /* Cancel – neutral */
 .event-btn-cancel {
-  border: 2px solid rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.85);
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  color: #404040;
   background: transparent;
 }
 .event-btn-cancel:hover:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.45);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  border-color: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.03);
+  color: #1a1a1a;
 }
 
 /* Save as Draft – subtle violet outline */
 .event-btn-secondary {
-  border: 2px solid #667eea;
-  color: #a5b4fc;
+  border: 2px solid #FF6B6B;
+  color: #FF6B6B;
   background: transparent;
 }
 .event-btn-secondary:hover:not(:disabled) {
-  border-color: #7c8ef5;
-  background: rgba(102, 126, 234, 0.1);
-  color: #fff;
+  border-color: #FF6B6B;
+  background: rgba(255, 107, 107, 0.08);
+  color: #FF6B6B;
   transform: translateY(-1px);
 }
 
 /* Add Question button - also uses secondary style */
 .event-btn-add {
-  border: 2px solid #667eea;
-  color: #a5b4fc;
+  border: 2px solid #FF6B6B;
+  color: #FF6B6B;
   background: transparent;
 }
 .event-btn-add:hover:not(:disabled) {
-  border-color: #7c8ef5;
-  background: rgba(102, 126, 234, 0.1);
-  color: #fff;
+  border-color: #FF6B6B;
+  background: rgba(255, 107, 107, 0.08);
+  color: #FF6B6B;
   transform: translateY(-1px);
 }
 
-/* Publish – filled violet */
+/* Publish – filled coral */
 .event-btn-primary {
-  border: 2px solid #667eea;
+  border: 2px solid #FF6B6B;
   color: #fff;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  background: #FF6B6B;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
 }
 .event-btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #7c8ef5, #8b5db8);
-  border-color: #7c8ef5;
+  background: #E85555;
+  border-color: #E85555;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
 }
 
 /* Maintain unified layout on smaller screens */
