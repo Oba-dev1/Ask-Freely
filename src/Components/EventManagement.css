@@ -121,12 +121,17 @@
 }
 
 .btn-secondary {
-  background: rgba(255, 107, 53, 0.08);
-  border-color: rgba(255, 107, 53, 0.2);
+  background: #FFFFFF;
+  border: 1.5px solid rgba(255, 107, 53, 0.3);
   color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 .btn-secondary:hover {
-  background: rgba(255, 107, 53, 0.15);
+  background: rgba(255, 107, 53, 0.08);
+  border-color: rgba(255, 107, 53, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(255, 107, 53, 0.15);
 }
 
 .btn-outline {
@@ -143,13 +148,26 @@
 
 /* Copy-style */
 .btn-copy {
-  background: rgba(255, 107, 53, 0.1);
-  border: 1px solid rgba(255, 107, 53, 0.3);
+  background: #FFFFFF;
+  border: 1.5px solid rgba(255, 107, 53, 0.3);
   color: var(--primary);
-  padding: .75rem 1rem;
+  padding: .75rem 1.1rem;
   border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
-.btn-copy:hover { background: rgba(255, 107, 53, 0.18); }
+.btn-copy:hover {
+  background: rgba(255, 107, 53, 0.08);
+  border-color: rgba(255, 107, 53, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(255, 107, 53, 0.15);
+}
+.btn-copy:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
 
 /* ============== CONTROLS + CHIPS ============== */
 .controls-row {
@@ -191,52 +209,84 @@
 
 /* ============== LINKS ============== */
 .link-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 1rem;
-  padding: 1.1rem 1.2rem;
+  gap: 1.5rem;
+  padding: 1.5rem;
   border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: rgba(255, 107, 53, 0.02);
-  transition: .2s ease;
-  margin-bottom: .8rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #FFFFFF;
+  transition: all .2s ease;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 .link-item:hover {
-  border-color: rgba(255, 107, 53, 0.2);
-  background: var(--glass-hover);
+  border-color: rgba(255, 107, 53, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
 }
 
-.link-item.is-disabled { opacity: .65; filter: grayscale(.25); }
+.link-item.is-disabled {
+  opacity: .5;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.02);
+}
 
-.link-info { flex: 1; min-width: 0; }
+.link-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
 
 .link-label {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: .5rem;
-  color: var(--primary);
+  color: #1a1a1a;
   font-weight: 700;
-  margin-bottom: .35rem;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  min-width: 140px;
+}
+
+.link-label i {
+  color: var(--primary);
+  font-size: 1rem;
 }
 
 .link-url {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: .95rem;
+  font-size: .9rem;
   color: #1a1a1a;
-  margin-left: .3rem;
   word-break: break-all;
-  padding: .6rem .75rem;
+  padding: .65rem .9rem;
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 107, 53, 0.04);
+  border: 1px solid rgba(255, 107, 53, 0.15);
+  line-height: 1.4;
+  flex: 1;
+  min-width: 0;
 }
-.link-url--muted { color: var(--muted); }
+
+.link-url--muted {
+  color: var(--muted);
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.08);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
 
 .link-actions {
   display: flex;
   align-items: center;
-  gap: .5rem;
-  flex-wrap: wrap;
+  gap: .6rem;
+  flex-shrink: 0;
+}
+
+.link-actions .btn {
+  min-width: 120px;
 }
 
 /* ============== QUESTIONS DASHBOARD ============== */
@@ -408,8 +458,30 @@
 @media (max-width: 860px) {
   .header h1 { font-size: 1.65rem; }
   .controls-row .btn { width: 100%; }
-  .link-item { flex-direction: column; align-items: stretch; }
-  .link-actions { width: 100%; }
-  .btn-copy, .btn-secondary { width: 100%; }
-  .dashboard-header { flex-direction: column; align-items: flex-start; }
+
+  .link-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .link-info {
+    gap: 0.6rem;
+  }
+
+  .link-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .btn-copy,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
