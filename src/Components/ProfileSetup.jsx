@@ -8,6 +8,7 @@ import './ProfileSetup.css';
 
 function ProfileSetup() {
   const [organizationName, setOrganizationName] = useState('');
+  const [eventType, setEventType] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -26,6 +27,11 @@ function ProfileSetup() {
       return;
     }
 
+    if (!eventType) {
+      setError('Please select an event type');
+      return;
+    }
+
     if (!currentUser) {
       setError('User not authenticated');
       return;
@@ -39,6 +45,7 @@ function ProfileSetup() {
       const userRef = dbRef(database, `users/${currentUser.uid}`);
       await update(userRef, {
         organizationName: organizationName.trim(),
+        eventType: eventType,
         logoUrl: null,
         profileCompleted: true,
         profileCompletedAt: new Date().toISOString()
@@ -106,6 +113,32 @@ function ProfileSetup() {
               </small>
             </div>
 
+            {/* Event Type */}
+            <div className="form-group">
+              <label htmlFor="eventType">
+                Event Type <span className="required">*</span>
+              </label>
+              <select
+                id="eventType"
+                value={eventType}
+                onChange={(e) => setEventType(e.target.value)}
+                required
+                disabled={loading}
+              >
+                <option value="">Select event type...</option>
+                <option value="town-hall">Town Hall / Community Meeting</option>
+                <option value="conference">Conference / Seminar</option>
+                <option value="church">Church / Religious Service</option>
+                <option value="corporate">Corporate Event</option>
+                <option value="wedding">Wedding / Celebration</option>
+                <option value="workshop">Workshop / Training</option>
+                <option value="other">Other</option>
+              </select>
+              <small className="field-hint">
+                This helps us personalize your experience
+              </small>
+            </div>
+
             {/* Logo Upload - Temporarily Disabled */}
             <div className="form-group">
               <label>
@@ -137,7 +170,7 @@ function ProfileSetup() {
               <button
                 type="submit"
                 className="btn btn-primary"
-                disabled={loading || !organizationName.trim()}
+                disabled={loading || !organizationName.trim() || !eventType}
               >
                 {loading ? 'Saving...' : 'Complete Setup'}
               </button>

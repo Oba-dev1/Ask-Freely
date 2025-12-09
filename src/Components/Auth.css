@@ -144,7 +144,7 @@
 
 .auth-header .logo-icon {
   font-size: 2rem;
-  color: var(--primary, #667eea);
+  color: var(--primary, #FF6B35);
   margin-bottom: 1.5rem;
   display: block;
 }
@@ -205,10 +205,10 @@
 }
 
 .form-group input:focus {
-  border-color: var(--primary, #667eea);
+  border-color: var(--primary, #FF6B35);
   outline: none;
   background: var(--bg-card, #FFFFFF);
-  box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 102, 126, 234), 0.1);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
 }
 
 .form-group input:disabled {
@@ -247,7 +247,7 @@
 }
 
 .toggle-password:hover {
-  color: var(--primary, #667eea);
+  color: var(--primary, #FF6B35);
 }
 
 /* --- Remember Me & Forgot Password Row --- */
@@ -273,16 +273,16 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: var(--primary, #667eea);
+  accent-color: var(--primary, #FF6B35);
   border-radius: 4px;
 }
 
 .remember-me-checkbox:hover {
-  color: var(--primary, #667eea);
+  color: var(--primary, #FF6B35);
 }
 
 .forgot-password-link {
-  color: var(--primary, #667eea);
+  color: var(--primary, #FF6B35);
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 500;
@@ -290,7 +290,7 @@
 }
 
 .forgot-password-link:hover {
-  color: var(--primary-2, #5568d3);
+  color: var(--primary-hover, #FF8555);
   text-decoration: underline;
 }
 
@@ -338,17 +338,19 @@
 
 .btn.btn-primary {
   width: 100%;
-  background: linear-gradient(135deg, var(--primary, #4F46E5) 0%, var(--primary-2, #7C3AED) 100%);
+  background: var(--primary, #FF6B35);
   padding: 0.875rem 1.5rem;
   color: #FFFFFF;
   font-size: 0.95rem;
   margin-top: 0.5rem;
-  box-shadow: var(--shadow, 0 4px 14px rgba(79, 70, 229, 0.4));
+  box-shadow: var(--shadow, 0 2px 8px rgba(255, 107, 53, 0.2));
+  transition: all 0.2s ease;
 }
 
 .btn.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+  background: var(--primary-hover, #FF8555);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
 }
 
 .btn.btn-primary:active {
@@ -451,14 +453,14 @@
 }
 
 .auth-links a {
-  color: #667eea;
+  color: #FF6B35;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
 .auth-links a:hover {
-  color: #5568d3;
+  color: #FF8555;
   text-decoration: underline;
 }
 
@@ -595,6 +597,6 @@
 .form-group input:focus-visible,
 .toggle-password:focus-visible,
 .auth-links a:focus-visible {
-  outline: 2px solid #667eea;
+  outline: 2px solid #FF6B35;
   outline-offset: 2px;
 }
