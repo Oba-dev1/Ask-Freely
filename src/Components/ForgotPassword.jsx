@@ -24,8 +24,9 @@ function ForgotPassword() {
     try {
       setLoading(true);
       // Configure action code settings for password reset redirect
+      // Use window.location.origin to work in both dev and production
       const actionCodeSettings = {
-        url: `http://localhost:3000/login?resetSuccess=true`,
+        url: `${window.location.origin}/login?resetSuccess=true`,
         handleCodeInApp: false
       };
       await sendPasswordResetEmail(auth, email, actionCodeSettings);

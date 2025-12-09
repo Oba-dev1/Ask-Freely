@@ -31,8 +31,9 @@ export const AuthProvider = ({ children }) => {
     const user = userCredential.user;
 
     // Configure action code settings for email verification
+    // Use window.location.origin to work in both dev and production
     const actionCodeSettings = {
-      url: `http://localhost:3000/login?verified=true`,
+      url: `${window.location.origin}/login?verified=true`,
       handleCodeInApp: false
     };
 

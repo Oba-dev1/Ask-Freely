@@ -41,6 +41,8 @@ function ProfileSetup() {
       setLoading(true);
       setError('');
 
+      console.log('Updating profile for user:', currentUser.uid);
+
       // Update user profile in database (without logo for now)
       const userRef = dbRef(database, `users/${currentUser.uid}`);
       await update(userRef, {
@@ -51,11 +53,15 @@ function ProfileSetup() {
         profileCompletedAt: new Date().toISOString()
       });
 
+      console.log('Profile updated successfully');
+
       // Navigate to dashboard
       navigate('/organizer/dashboard');
     } catch (err) {
       console.error('Profile setup error:', err);
-      setError('Failed to save profile. Please try again.');
+      console.error('Error code:', err.code);
+      console.error('Error message:', err.message);
+      setError(`Failed to save profile: ${err.message || 'Please try again.'}`);
     } finally {
       setLoading(false);
     }
