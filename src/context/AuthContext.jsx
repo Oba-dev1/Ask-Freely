@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
     // Configure action code settings for email verification
     const actionCodeSettings = {
-      url: `${window.location.origin}/login?verified=true`,
+      url: `http://localhost:3000/login?verified=true`,
       handleCodeInApp: false
     };
 
