@@ -1,6 +1,7 @@
 // src/Components/Login.jsx
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { sendEmailVerification } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
@@ -12,23 +13,72 @@ function Login() {
   const [error, setError] = useState('');
   const [touched, setTouched] = useState({ email: false, password: false });
   const [loading, setLoading] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
   const emailRef = useRef(null);
 
-  const { login } = useAuth();
+  const { login, currentUser } = useAuth();
   const navigate = useNavigate();
 
-  // Load remembered email on mount
+  // Load remembered email on mount and check for verification/reset success
   useEffect(() => {
     const rememberedEmail = localStorage.getItem('rememberedEmail');
     if (rememberedEmail) {
       setEmail(rememberedEmail);
       setRememberMe(true);
     }
+
+    // Check if user was redirected from email verification or password reset
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('verified') === 'true') {
+      setError('');
+      // Show success message temporarily
+      const successDiv = document.createElement('div');
+      successDiv.className = 'success-banner';
+      successDiv.role = 'status';
+      successDiv.innerHTML = '<i class="fas fa-check-circle"></i> Email verified successfully! You can now sign in.';
+      const errorBanner = document.querySelector('.error-banner');
+      if (errorBanner) {
+        errorBanner.parentNode.insertBefore(successDiv, errorBanner);
+      }
+      // Remove verified param from URL
+      window.history.replaceState({}, '', '/login');
+      // Remove success message after 5 seconds
+      setTimeout(() => successDiv.remove(), 5000);
+    }
+
+    if (urlParams.get('resetSuccess') === 'true') {
+      setError('');
+      // Show success message temporarily
+      const successDiv = document.createElement('div');
+      successDiv.className = 'success-banner';
+      successDiv.role = 'status';
+      successDiv.innerHTML = '<i class="fas fa-check-circle"></i> Password reset successfully! You can now sign in with your new password.';
+      const errorBanner = document.querySelector('.error-banner');
+      if (errorBanner) {
+        errorBanner.parentNode.insertBefore(successDiv, errorBanner);
+      }
+      // Remove resetSuccess param from URL
+      window.history.replaceState({}, '', '/login');
+      // Remove success message after 5 seconds
+      setTimeout(() => successDiv.remove(), 5000);
+    }
   }, []);
 
   const emailValid = useMemo(() => /\S+@\S+\.\S+/.test(email), [email]);
   const passwordValid = useMemo(() => password.length >= 6, [password]);
   const formValid = emailValid && passwordValid;
+
+  const handleResendVerification = async () => {
+    if (!currentUser) return;
+    try {
+      await sendEmailVerification(currentUser);
+      setVerificationSent(true);
+      setTimeout(() => setVerificationSent(false), 5000);
+    } catch (err) {
+      console.error('Error sending verification:', err);
+      setError('Failed to send verification email. Please try again.');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +96,14 @@ function Login() {
         localStorage.removeItem('rememberedEmail');
       }
 
-      await login(email, password);
+      const userCredential = await login(email, password);
+
+      // Check if email is verified
+      if (!userCredential.user.emailVerified) {
+        setError('Please verify your email before logging in. Check your inbox for the verification link.');
+        return;
+      }
+
       navigate('/organizer/dashboard');
     } catch (err) {
       console.error('Login error:', err);
@@ -98,7 +155,23 @@ function Login() {
                 <p className="subtitle">Enter your credentials to access your account and manage your events.</p>
               </header>
 
-              {error && <div className="error-banner" role="alert">{error}</div>}
+              {error && (
+                <div className="error-banner" role="alert">
+                  {error}
+                  {error.includes('verify your email') && currentUser && (
+                    <div style={{ marginTop: '0.75rem' }}>
+                      <button
+                        type="button"
+                        onClick={handleResendVerification}
+                        className="link-button"
+                        style={{ fontSize: '0.9rem' }}
+                      >
+                        {verificationSent ? '✓ Verification email sent!' : 'Resend verification email'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="auth-form" noValidate>
                 <div className="form-group">

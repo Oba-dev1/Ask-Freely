@@ -18,6 +18,27 @@
   min-height: 100vh;
 }
 
+/* --- Centered Layout (for forgot password, etc) --- */
+.auth-layout-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.auth-layout-centered .auth-container {
+  width: 100%;
+  max-width: 480px;
+}
+
+.auth-layout-centered .auth-card {
+  background: var(--bg-card, #FFFFFF);
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
 /* --- Left Side: Visual / Image Section --- */
 .auth-visual {
   position: relative;
@@ -428,6 +449,24 @@
   font-size: 1rem;
 }
 
+.success-banner {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  color: #16A34A;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.success-banner i {
+  color: #16A34A;
+}
+
 /* --- Field Validation --- */
 .input-error {
   display: block;
@@ -590,6 +629,53 @@
     padding-top: max(2rem, env(safe-area-inset-top));
     padding-bottom: max(2rem, env(safe-area-inset-bottom));
   }
+}
+
+/* --- Success Message --- */
+.success-message {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.success-icon {
+  font-size: 4rem;
+  color: #10B981;
+  margin-bottom: 1.5rem;
+}
+
+.success-message h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text, #1a1a1a);
+  margin: 0 0 1rem 0;
+}
+
+.success-message p {
+  color: var(--text-muted, #6B7280);
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+}
+
+.success-message .help-text {
+  font-size: 0.9rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border, #E5E7EB);
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--primary, #FF6B35);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-size: inherit;
+}
+
+.link-button:hover {
+  color: var(--primary-hover, #FF8555);
 }
 
 /* Focus visible states for keyboard navigation */

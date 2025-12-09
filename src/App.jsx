@@ -15,6 +15,7 @@ import ParticipantForm from "./Components/ParticipantForm";
 import HostDashboard from "./Components/HostDashboard";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
+import ForgotPassword from "./Components/ForgotPassword";
 import ProfileSetup from "./Components/ProfileSetup";
 import OrganizerDashboard from "./Components/OrganizerDashboard";
 import OrganizerAnalytics from "./Components/OrganizerAnalytics";
@@ -690,6 +691,7 @@ function App() {
             <Route path="/response" element={<Navigate to="/host" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/profile-setup" element={
               <ProtectedRoute requireProfileComplete={false}>
                 <ProfileSetup />

@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { 
-  createUserWithEmailAndPassword, 
+import {
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  sendEmailVerification
 } from 'firebase/auth';
 import { ref, set, get } from 'firebase/database';
 import { auth, database } from '../Firebase/config';
@@ -28,6 +29,15 @@ export const AuthProvider = ({ children }) => {
   const signup = async (email, password, organizationName) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+
+    // Configure action code settings for email verification
+    const actionCodeSettings = {
+      url: `${window.location.origin}/login?verified=true`,
+      handleCodeInApp: false
+    };
+
+    // Send email verification with redirect
+    await sendEmailVerification(user, actionCodeSettings);
 
     // Create user profile in database
     const userRef = ref(database, `users/${user.uid}`);

@@ -1,6 +1,6 @@
 // src/Components/Signup.jsx
 import React, { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
@@ -15,8 +15,8 @@ function Signup() {
   const [touched, setTouched] = useState({});
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [signupSuccess, setSignupSuccess] = useState(false);
   const { signup } = useAuth();
-  const navigate = useNavigate();
 
   const emailValid = useMemo(() => /\S+@\S+\.\S+/.test(formData.email), [formData.email]);
   const passwordValid = useMemo(() => formData.password.length >= 6, [formData.password]);
@@ -57,8 +57,8 @@ function Signup() {
       setLoading(true);
       // Signup without organization name - will be collected in profile setup
       await signup(formData.email, formData.password, '');
-      // Redirect to profile setup instead of dashboard
-      navigate('/profile-setup');
+      // Show success message instead of redirecting
+      setSignupSuccess(true);
     } catch (err) {
       console.error(err);
       // More specific error messages
@@ -111,7 +111,29 @@ function Signup() {
 
               {error && <div className="error-banner" role="alert">{error}</div>}
 
-              <form onSubmit={handleSubmit} className="auth-form" noValidate>
+              {signupSuccess ? (
+                <div className="success-message">
+                  <div className="success-icon">
+                    <i className="fas fa-envelope-circle-check"></i>
+                  </div>
+                  <h3>Check Your Email!</h3>
+                  <p>
+                    We've sent a verification link to <strong>{formData.email}</strong>
+                  </p>
+                  <p>
+                    Please check your inbox and click the verification link to activate your account.
+                  </p>
+                  <p className="help-text">
+                    Didn't receive the email? Check your spam folder.
+                  </p>
+                  <div className="auth-links" style={{ marginTop: '2rem' }}>
+                    <Link to="/login" className="btn btn-primary" style={{ display: 'inline-block', textDecoration: 'none' }}>
+                      Go to Login
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="auth-form" noValidate>
                 <div className="form-group">
                   <label htmlFor="email">Your email</label>
                   <input
@@ -217,21 +239,26 @@ function Signup() {
                   {loading ? 'Creating Account...' : 'Get Started'}
                 </button>
               </form>
+              )}
 
-              <div className="auth-divider"><span>Or continue with</span></div>
+              {!signupSuccess && (
+                <>
+                  <div className="auth-divider"><span>Or continue with</span></div>
 
               {/* Social (optional; wire up later) */}
-              <button
-                type="button"
-                className="btn btn-google"
-                onClick={() => console.log('TODO: Google sign-up')}
-              >
-                <span className="g-icon"><i className="fa-brands fa-google"></i></span>
-              </button>
+                  <button
+                    type="button"
+                    className="btn btn-google"
+                    onClick={() => console.log('TODO: Google sign-up')}
+                  >
+                    <span className="g-icon"><i className="fa-brands fa-google"></i></span>
+                  </button>
 
-              <div className="auth-links">
-                <p>Don't have an account? <Link to="/login">Sign up</Link></p>
-              </div>
+                  <div className="auth-links">
+                    <p>Already have an account? <Link to="/login">Sign in</Link></p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </main>
