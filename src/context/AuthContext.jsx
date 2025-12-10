@@ -5,7 +5,9 @@ import {
   signOut,
   onAuthStateChanged,
   sendPasswordResetEmail,
-  sendEmailVerification
+  sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import { ref, set, get } from 'firebase/database';
 import { auth, database } from '../Firebase/config';
@@ -58,6 +60,31 @@ export const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
+  // Sign in with Google
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    // Check if user profile exists, if not create one
+    const userRef = ref(database, `users/${user.uid}`);
+    const snapshot = await get(userRef);
+
+    if (!snapshot.exists()) {
+      // New user - create profile
+      await set(userRef, {
+        email: user.email,
+        organizationName: user.displayName || '',
+        role: 'organizer',
+        profileCompleted: false,
+        createdAt: new Date().toISOString(),
+        photoURL: user.photoURL || null
+      });
+    }
+
+    return result;
+  };
+
   // Sign out
   const logout = () => {
     return signOut(auth);
@@ -97,8 +124,10 @@ export const AuthProvider = ({ children }) => {
     userProfile,
     signup,
     login,
+    signInWithGoogle,
     logout,
     resetPassword,
+    loadUserProfile,
     loading
   };
 

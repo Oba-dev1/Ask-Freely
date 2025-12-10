@@ -335,6 +335,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   color: #666666;
+  text-align: center;
 }
 
 .upload-label:hover {
@@ -343,9 +344,16 @@
 }
 
 .upload-label i {
-  font-size: 2.5rem;
-  color: #FF6B35;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: var(--primary, #FF6B35);
+  margin-bottom: 0.5rem;
+}
+
+.upload-label p {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #1a1a1a;
+  margin: 0.5rem 0;
 }
 
 .upload-label span {
@@ -357,7 +365,8 @@
 
 .upload-label small {
   font-size: 0.875rem;
-  color: #999999;
+  color: var(--text-muted, #999999);
+  margin: 0;
 }
 
 .file-input:focus + .upload-label {
@@ -366,6 +375,52 @@
 }
 
 /* --- Logo Preview --- */
+.logo-preview-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  background: #FAFAFA;
+}
+
+.logo-preview-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid rgba(0,0,0,0.08);
+  background: #FFFFFF;
+}
+
+.remove-logo-btn {
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  border: 2px solid #DC2626;
+  background: #FFFFFF;
+  color: #DC2626;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.remove-logo-btn:hover {
+  background: #DC2626;
+  color: #FFFFFF;
+}
+
+.remove-logo-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Legacy styles for backwards compatibility */
 .logo-preview-container {
   display: flex;
   align-items: center;

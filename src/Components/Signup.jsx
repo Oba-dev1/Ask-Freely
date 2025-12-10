@@ -1,6 +1,6 @@
 // src/Components/Signup.jsx
 import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
@@ -16,7 +16,8 @@ function Signup() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
-  const { signup } = useAuth();
+  const { signup, signInWithGoogle } = useAuth();
+  const navigate = useNavigate();
 
   const emailValid = useMemo(() => /\S+@\S+\.\S+/.test(formData.email), [formData.email]);
   const passwordValid = useMemo(() => formData.password.length >= 6, [formData.password]);
@@ -46,6 +47,26 @@ function Signup() {
   };
 
   const passwordStrength = useMemo(() => getPasswordStrength(formData.password), [formData.password]);
+
+  const handleGoogleSignUp = async () => {
+    try {
+      setError('');
+      setLoading(true);
+      await signInWithGoogle();
+      // Navigation will be handled by ProtectedRoute based on profile completion
+    } catch (err) {
+      console.error('Google sign-up error:', err);
+      if (err.code === 'auth/popup-closed-by-user') {
+        setError('Sign-up cancelled. Please try again.');
+      } else if (err.code === 'auth/popup-blocked') {
+        setError('Pop-up blocked. Please allow pop-ups for this site.');
+      } else {
+        setError('Failed to sign up with Google. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -245,11 +266,12 @@ function Signup() {
                 <>
                   <div className="auth-divider"><span>Or continue with</span></div>
 
-              {/* Social (optional; wire up later) */}
+              {/* Google Sign-Up */}
                   <button
                     type="button"
                     className="btn btn-google"
-                    onClick={() => console.log('TODO: Google sign-up')}
+                    onClick={handleGoogleSignUp}
+                    disabled={loading}
                   >
                     <span className="g-icon"><i className="fa-brands fa-google"></i></span>
                   </button>

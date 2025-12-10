@@ -16,7 +16,7 @@ function Login() {
   const [verificationSent, setVerificationSent] = useState(false);
   const emailRef = useRef(null);
 
-  const { login, currentUser } = useAuth();
+  const { login, signInWithGoogle, currentUser } = useAuth();
   const navigate = useNavigate();
 
   // Load remembered email on mount and check for verification/reset success
@@ -77,6 +77,26 @@ function Login() {
     } catch (err) {
       console.error('Error sending verification:', err);
       setError('Failed to send verification email. Please try again.');
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setError('');
+      setLoading(true);
+      await signInWithGoogle();
+      // Navigation will be handled by ProtectedRoute based on profile completion
+    } catch (err) {
+      console.error('Google sign-in error:', err);
+      if (err.code === 'auth/popup-closed-by-user') {
+        setError('Sign-in cancelled. Please try again.');
+      } else if (err.code === 'auth/popup-blocked') {
+        setError('Pop-up blocked. Please allow pop-ups for this site.');
+      } else {
+        setError('Failed to sign in with Google. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -251,11 +271,12 @@ function Login() {
 
               <div className="auth-divider"><span>Or continue with</span></div>
 
-              {/* Social (optional; wire up later) */}
+              {/* Google Sign-In */}
               <button
                 type="button"
                 className="btn btn-google"
-                onClick={() => console.log('TODO: Google sign-in')}
+                onClick={handleGoogleSignIn}
+                disabled={loading}
               >
                 <span className="g-icon"><i className="fa-brands fa-google"></i></span>
               </button>
