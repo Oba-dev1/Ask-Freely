@@ -7,7 +7,6 @@ import {
   sendPasswordResetEmail,
   sendEmailVerification,
   GoogleAuthProvider,
-  signInWithPopup,
   signInWithRedirect,
   getRedirectResult
 } from 'firebase/auth';
@@ -65,6 +64,10 @@ export const AuthProvider = ({ children }) => {
   // Sign in with Google (using redirect instead of popup to avoid COOP issues)
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
+    // Request email verification from Google
+    provider.setCustomParameters({
+      prompt: 'select_account'
+    });
     // Use redirect instead of popup
     await signInWithRedirect(auth, provider);
     // User will be redirected away and back - profile creation handled in useEffect
@@ -98,6 +101,23 @@ export const AuthProvider = ({ children }) => {
           console.log('✅ Google Sign-In redirect successful');
           const user = result.user;
 
+          // Validate email is verified by Google
+          if (!user.emailVerified) {
+            console.error('❌ Email not verified by Google');
+            await signOut(auth);
+            throw new Error('Email not verified. Please use a verified Google account.');
+          }
+
+          // Validate email format
+          const email = user.email || '';
+          if (!email || !email.includes('@')) {
+            console.error('❌ Invalid email format:', email);
+            await signOut(auth);
+            throw new Error('Invalid email address. Please try again.');
+          }
+
+          console.log('✅ Email verified:', email);
+
           // Check if user profile exists, if not create one
           const userRef = ref(database, `users/${user.uid}`);
           const snapshot = await get(userRef);
@@ -111,12 +131,17 @@ export const AuthProvider = ({ children }) => {
               role: 'organizer',
               profileCompleted: false,
               createdAt: new Date().toISOString(),
-              photoURL: user.photoURL || null
+              photoURL: user.photoURL || null,
+              emailVerified: true
             });
           }
+
+          // Load the profile to trigger ProtectedRoute navigation
+          await loadUserProfile(user.uid);
         }
       } catch (error) {
         console.error('Error handling redirect result:', error);
+        // Note: Error will be displayed to user through the auth context
       }
     };
 

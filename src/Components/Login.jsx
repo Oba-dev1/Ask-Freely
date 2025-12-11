@@ -16,8 +16,19 @@ function Login() {
   const [verificationSent, setVerificationSent] = useState(false);
   const emailRef = useRef(null);
 
-  const { login, signInWithGoogle, currentUser } = useAuth();
+  const { login, signInWithGoogle, currentUser, userProfile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (!authLoading && currentUser && userProfile) {
+      if (userProfile.profileCompleted) {
+        navigate('/organizer/dashboard');
+      } else {
+        navigate('/profile-setup');
+      }
+    }
+  }, [currentUser, userProfile, authLoading, navigate]);
 
   // Load remembered email on mount and check for verification/reset success
   useEffect(() => {

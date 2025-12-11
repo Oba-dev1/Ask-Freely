@@ -1,5 +1,5 @@
 // src/Components/Signup.jsx
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
@@ -16,8 +16,19 @@ function Signup() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
-  const { signup, signInWithGoogle } = useAuth();
+  const { signup, signInWithGoogle, currentUser, userProfile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (!authLoading && currentUser && userProfile) {
+      if (userProfile.profileCompleted) {
+        navigate('/organizer/dashboard');
+      } else {
+        navigate('/profile-setup');
+      }
+    }
+  }, [currentUser, userProfile, authLoading, navigate]);
 
   const emailValid = useMemo(() => /\S+@\S+\.\S+/.test(formData.email), [formData.email]);
   const passwordValid = useMemo(() => formData.password.length >= 6, [formData.password]);
