@@ -52,18 +52,20 @@ function Signup() {
     try {
       setError('');
       setLoading(true);
+      console.log('🔵 Starting Google Sign-Up (redirect)...');
       await signInWithGoogle();
-      // Navigation will be handled by ProtectedRoute based on profile completion
+      // User will be redirected to Google sign-in page
+      // After authentication, they'll be redirected back
     } catch (err) {
-      console.error('Google sign-up error:', err);
-      if (err.code === 'auth/popup-closed-by-user') {
-        setError('Sign-up cancelled. Please try again.');
-      } else if (err.code === 'auth/popup-blocked') {
-        setError('Pop-up blocked. Please allow pop-ups for this site.');
+      console.error('❌ Google sign-up error:', err);
+      console.error('Error code:', err.code);
+      console.error('Error message:', err.message);
+
+      if (err.code === 'auth/unauthorized-domain') {
+        setError('This domain is not authorized. Please add it to Firebase authorized domains.');
       } else {
-        setError('Failed to sign up with Google. Please try again.');
+        setError(`Failed to sign up with Google: ${err.message}`);
       }
-    } finally {
       setLoading(false);
     }
   };

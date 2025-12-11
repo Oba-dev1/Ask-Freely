@@ -7,7 +7,9 @@ import {
   sendPasswordResetEmail,
   sendEmailVerification,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult
 } from 'firebase/auth';
 import { ref, set, get } from 'firebase/database';
 import { auth, database } from '../Firebase/config';
@@ -60,29 +62,12 @@ export const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // Sign in with Google
+  // Sign in with Google (using redirect instead of popup to avoid COOP issues)
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-
-    // Check if user profile exists, if not create one
-    const userRef = ref(database, `users/${user.uid}`);
-    const snapshot = await get(userRef);
-
-    if (!snapshot.exists()) {
-      // New user - create profile
-      await set(userRef, {
-        email: user.email,
-        organizationName: user.displayName || '',
-        role: 'organizer',
-        profileCompleted: false,
-        createdAt: new Date().toISOString(),
-        photoURL: user.photoURL || null
-      });
-    }
-
-    return result;
+    // Use redirect instead of popup
+    await signInWithRedirect(auth, provider);
+    // User will be redirected away and back - profile creation handled in useEffect
   };
 
   // Sign out
@@ -105,6 +90,38 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    // Check for redirect result from Google Sign-In
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          console.log('✅ Google Sign-In redirect successful');
+          const user = result.user;
+
+          // Check if user profile exists, if not create one
+          const userRef = ref(database, `users/${user.uid}`);
+          const snapshot = await get(userRef);
+
+          if (!snapshot.exists()) {
+            console.log('Creating new user profile for Google user');
+            // New user - create profile
+            await set(userRef, {
+              email: user.email,
+              organizationName: user.displayName || '',
+              role: 'organizer',
+              profileCompleted: false,
+              createdAt: new Date().toISOString(),
+              photoURL: user.photoURL || null
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error handling redirect result:', error);
+      }
+    };
+
+    handleRedirectResult();
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.log('Auth state changed:', user ? user.email : 'No user');
       setCurrentUser(user);
