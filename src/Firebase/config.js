@@ -34,3 +34,7 @@ export const auth = getAuth(app);
 
 // Get a reference to the storage service
 export const storage = getStorage(app);
+
+// reCAPTCHA Site Key (safe to expose in frontend)
+// For Netlify free tier: fallback key is used if env var not set
+export const RECAPTCHA_SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LeGRCwsAAAAAID_HpNyNoNQNVzQJ09t4dApfmIL';

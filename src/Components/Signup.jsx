@@ -2,6 +2,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import useRecaptcha from '../hooks/useRecaptcha';
+import { RECAPTCHA_SITE_KEY } from '../Firebase/config';
 import './Auth.css';
 
 function Signup() {
@@ -18,6 +20,7 @@ function Signup() {
   const [signupSuccess, setSignupSuccess] = useState(false);
   const { signup, signInWithGoogle, currentUser, userProfile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { executeRecaptcha } = useRecaptcha(RECAPTCHA_SITE_KEY);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -63,6 +66,17 @@ function Signup() {
     try {
       setError('');
       setLoading(true);
+
+      // Execute reCAPTCHA verification
+      const recaptchaToken = await executeRecaptcha('google_signup');
+
+      if (!recaptchaToken) {
+        setError('reCAPTCHA verification failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      console.log('✅ reCAPTCHA verified for Google sign-up');
       console.log('🔵 Starting Google Sign-Up (redirect)...');
       await signInWithGoogle();
       // User will be redirected to Google sign-in page
@@ -89,6 +103,18 @@ function Signup() {
     try {
       setError('');
       setLoading(true);
+
+      // Execute reCAPTCHA verification
+      const recaptchaToken = await executeRecaptcha('signup');
+
+      if (!recaptchaToken) {
+        setError('reCAPTCHA verification failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      console.log('✅ reCAPTCHA verified for signup');
+
       // Signup without organization name - will be collected in profile setup
       await signup(formData.email, formData.password, '');
       // Show success message instead of redirecting
