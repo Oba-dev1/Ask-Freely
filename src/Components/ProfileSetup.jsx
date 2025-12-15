@@ -1,7 +1,7 @@
 // src/Components/ProfileSetup.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ref as dbRef, update, get, query, orderByChild } from 'firebase/database';
+import { ref as dbRef, update } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { database, storage } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
@@ -88,40 +88,12 @@ function ProfileSetup() {
       console.log('Storage object:', storage);
       console.log('Storage bucket:', storage?.app?.options?.storageBucket);
 
-      // Check for duplicate organization name
-      console.log('=== Checking for Duplicate Organization Name ===');
-      const usersRef = dbRef(database, 'users');
-      const orgNameLower = organizationName.trim().toLowerCase();
-      console.log('Searching for:', orgNameLower);
-
-      const orgQuery = query(
-        usersRef,
-        orderByChild('organizationName')
-      );
-
-      const snapshot = await get(orgQuery);
-
-      if (snapshot.exists()) {
-        let isDuplicate = false;
-        snapshot.forEach((childSnapshot) => {
-          const userData = childSnapshot.val();
-          const existingOrgName = (userData.organizationName || '').toLowerCase();
-
-          // Check if organization name matches and it's not the current user
-          if (existingOrgName === orgNameLower && childSnapshot.key !== currentUser.uid) {
-            isDuplicate = true;
-            console.log('❌ Duplicate found:', childSnapshot.key, userData.organizationName);
-          }
-        });
-
-        if (isDuplicate) {
-          setError('This organization name is already taken. Please choose a different name.');
-          setLoading(false);
-          return;
-        }
-      }
-
-      console.log('✅ Organization name is unique');
+      // Note: Duplicate organization name check removed due to Firebase security rules
+      // To implement this properly, we need to:
+      // 1. Update Firebase Realtime Database rules to allow reading user profiles
+      // 2. Or use a separate 'organizationNames' collection with public read access
+      // For now, we'll allow duplicate organization names
+      console.log('Organization name validation: Skipped (requires Firebase rules update)');
 
       let logoUrl = null;
 
