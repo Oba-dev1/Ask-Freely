@@ -24,9 +24,18 @@ function ForgotPassword() {
     try {
       setLoading(true);
       // Configure action code settings for password reset redirect
-      // Use window.location.origin to work in both dev and production
+      // Determine the appropriate URL based on environment
+      const getResetUrl = () => {
+        // In production/staging, use the actual domain
+        if (window.location.hostname !== 'localhost') {
+          return `${window.location.origin}/login?resetSuccess=true`;
+        }
+        // For localhost, use Firebase default domain which is always authorized
+        return `https://ask-freely.firebaseapp.com/__/auth/action?resetSuccess=true`;
+      };
+
       const actionCodeSettings = {
-        url: `${window.location.origin}/login?resetSuccess=true`,
+        url: getResetUrl(),
         handleCodeInApp: false
       };
       await sendPasswordResetEmail(auth, email, actionCodeSettings);
