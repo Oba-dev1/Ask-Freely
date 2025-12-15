@@ -3,6 +3,8 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { sendEmailVerification } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
+import useRecaptcha from '../hooks/useRecaptcha';
+import { RECAPTCHA_SITE_KEY } from '../Firebase/config';
 import './Auth.css';
 
 function Login() {
@@ -18,6 +20,7 @@ function Login() {
 
   const { login, signInWithGoogle, currentUser, userProfile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { executeRecaptcha } = useRecaptcha(RECAPTCHA_SITE_KEY);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -95,6 +98,17 @@ function Login() {
     try {
       setError('');
       setLoading(true);
+
+      // Execute reCAPTCHA verification
+      const recaptchaToken = await executeRecaptcha('google_login');
+
+      if (!recaptchaToken) {
+        setError('reCAPTCHA verification failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      console.log('✅ reCAPTCHA verified for Google login');
       console.log('🔵 Starting Google Sign-In (redirect)...');
       await signInWithGoogle();
       // User will be redirected to Google sign-in page
@@ -121,6 +135,17 @@ function Login() {
     try {
       setError('');
       setLoading(true);
+
+      // Execute reCAPTCHA verification
+      const recaptchaToken = await executeRecaptcha('login');
+
+      if (!recaptchaToken) {
+        setError('reCAPTCHA verification failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      console.log('✅ reCAPTCHA verified for login');
 
       // Handle remember me
       if (rememberMe) {
