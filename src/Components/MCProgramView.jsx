@@ -81,9 +81,10 @@ function MCProgramView({ eventId, eventTitle }) {
     return programItems.filter(item => item.status === 'completed').length;
   };
 
-  const getTotalDuration = () => {
-    return programItems.reduce((total, item) => total + (item.duration || 0), 0);
-  };
+  // Commented out unused function - may be needed later for statistics
+  // const getTotalDuration = () => {
+  //   return programItems.reduce((total, item) => total + (item.duration || 0), 0);
+  // };
 
   const getRemainingDuration = () => {
     return programItems

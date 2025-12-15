@@ -1,7 +1,7 @@
 // src/Components/ProfileSetup.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ref as dbRef, update, get, query, orderByChild, equalTo } from 'firebase/database';
+import { ref as dbRef, update, get, query, orderByChild } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { database, storage } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
