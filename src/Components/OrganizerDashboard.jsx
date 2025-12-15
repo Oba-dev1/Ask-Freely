@@ -71,17 +71,10 @@ function OrganizerDashboard() {
     <div className="page-wrapper">
       <nav className="navbar">
         <div className="nav-container">
-          {userProfile?.logoUrl ? (
-            <div className="logo org-logo">
-              <img src={userProfile.logoUrl} alt={userProfile.organizationName} className="org-logo-img" />
-              <span className="logo-text">{userProfile.organizationName}</span>
-            </div>
-          ) : (
-            <Link to="/" className="logo">
-              <span className="logo-icon"><i className="fas fa-comments"></i></span>
-              <span className="logo-text">Ask Freely</span>
-            </Link>
-          )}
+          <Link to="/" className="logo">
+            <span className="logo-icon"><i className="fas fa-comments"></i></span>
+            <span className="logo-text">Ask Freely</span>
+          </Link>
           <button onClick={handleLogout} className="nav-link">
             Logout
           </button>
@@ -94,7 +87,13 @@ function OrganizerDashboard() {
             <h2>Welcome back, {userProfile?.organizationName || 'Organizer'}!</h2>
             <p>Manage your Q&amp;A sessions and track engagement</p>
           </div>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
+          {userProfile?.logoUrl ? (
+            <div className="org-logo-display">
+              <img src={userProfile.logoUrl} alt={userProfile.organizationName} className="org-logo-img-large" />
+            </div>
+          ) : (
+            <button onClick={handleLogout} className="logout-btn">Logout</button>
+          )}
         </div>
 
         <div className="action-section">

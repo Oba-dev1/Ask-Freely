@@ -57,6 +57,22 @@
   color: #000000;
 }
 
+/* Organization Logo in Welcome Banner */
+.org-logo-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.org-logo-img-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* Action Section */
 .action-section {
   margin-bottom: 3rem;
