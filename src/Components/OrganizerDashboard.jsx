@@ -83,17 +83,18 @@ function OrganizerDashboard() {
 
       <div className="organizer-container">
         <div className="welcome-banner">
-          <div className="welcome-content">
-            <h2>Welcome back, {userProfile?.organizationName || 'Organizer'}!</h2>
-            <p>Manage your Q&amp;A sessions and track engagement</p>
-          </div>
-          {userProfile?.logoUrl ? (
-            <div className="org-logo-display">
-              <img src={userProfile.logoUrl} alt={userProfile.organizationName} className="org-logo-img-large" />
+          <div className="welcome-banner-left">
+            {userProfile?.logoUrl && (
+              <div className="org-logo-display">
+                <img src={userProfile.logoUrl} alt={userProfile.organizationName} className="org-logo-img-large" />
+              </div>
+            )}
+            <div className="welcome-content">
+              <h2>Welcome back, {userProfile?.organizationName || 'Organizer'}!</h2>
+              <p>Manage your Q&amp;A sessions and track engagement</p>
             </div>
-          ) : (
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
-          )}
+          </div>
+          <button onClick={handleLogout} className="logout-btn">Logout</button>
         </div>
 
         <div className="action-section">
