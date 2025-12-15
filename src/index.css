@@ -118,6 +118,19 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--primary);
 }
 
+/* Organization Logo */
+.org-logo {
+  cursor: default;
+}
+
+.org-logo-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+
 .nav-links {
   display: flex;
   align-items: center;
