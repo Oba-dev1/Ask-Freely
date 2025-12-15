@@ -1,7 +1,7 @@
 // src/Components/ProfileSetup.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ref as dbRef, update } from 'firebase/database';
+import { ref as dbRef, update, get } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { database, storage } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
@@ -88,12 +88,22 @@ function ProfileSetup() {
       console.log('Storage object:', storage);
       console.log('Storage bucket:', storage?.app?.options?.storageBucket);
 
-      // Note: Duplicate organization name check removed due to Firebase security rules
-      // To implement this properly, we need to:
-      // 1. Update Firebase Realtime Database rules to allow reading user profiles
-      // 2. Or use a separate 'organizationNames' collection with public read access
-      // For now, we'll allow duplicate organization names
-      console.log('Organization name validation: Skipped (requires Firebase rules update)');
+      // Check for duplicate organization name using separate collection
+      console.log('=== Checking for Duplicate Organization Name ===');
+      const orgNameKey = organizationName.trim().toLowerCase().replace(/[.#$[\]]/g, '_');
+      const orgNameRef = dbRef(database, `organizationNames/${orgNameKey}`);
+      console.log('Checking organization name key:', orgNameKey);
+
+      const orgSnapshot = await get(orgNameRef);
+
+      if (orgSnapshot.exists() && orgSnapshot.val().userId !== currentUser.uid) {
+        console.log('❌ Duplicate organization name found:', orgSnapshot.val());
+        setError('This organization name is already taken. Please choose a different name.');
+        setLoading(false);
+        return;
+      }
+
+      console.log('✅ Organization name is available');
 
       let logoUrl = null;
 
@@ -157,6 +167,16 @@ function ProfileSetup() {
       await update(userRef, profileData);
 
       console.log('✅ Profile updated successfully in database');
+
+      // Register organization name in separate collection
+      console.log('=== Registering Organization Name ===');
+      const orgNameData = {
+        userId: currentUser.uid,
+        organizationName: organizationName.trim(),
+        createdAt: new Date().toISOString()
+      };
+      await update(orgNameRef, orgNameData);
+      console.log('✅ Organization name registered');
 
       // Reload user profile to update the context
       console.log('Reloading user profile...');
