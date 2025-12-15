@@ -71,10 +71,17 @@ function OrganizerDashboard() {
     <div className="page-wrapper">
       <nav className="navbar">
         <div className="nav-container">
-          <Link to="/" className="logo">
-            <span className="logo-icon"><i className="fas fa-comments"></i></span>
-            <span className="logo-text">Ask Freely</span>
-          </Link>
+          {userProfile?.logoUrl ? (
+            <div className="logo org-logo">
+              <img src={userProfile.logoUrl} alt={userProfile.organizationName} className="org-logo-img" />
+              <span className="logo-text">{userProfile.organizationName}</span>
+            </div>
+          ) : (
+            <Link to="/" className="logo">
+              <span className="logo-icon"><i className="fas fa-comments"></i></span>
+              <span className="logo-text">Ask Freely</span>
+            </Link>
+          )}
           <button onClick={handleLogout} className="nav-link">
             Logout
           </button>
