@@ -633,12 +633,12 @@
 
 /* --- Success Message --- */
 .success-message {
-  text-align: left;
-  padding: 0;
+  text-align: center;
+  padding: 2rem 1rem;
 }
 
 .success-icon {
-  font-size: 3rem;
+  font-size: 4rem;
   color: #10B981;
   margin-bottom: 1.5rem;
 }

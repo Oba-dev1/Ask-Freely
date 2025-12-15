@@ -186,8 +186,8 @@ function Signup() {
                   <p className="help-text">
                     Didn't receive the email? Check your spam folder.
                   </p>
-                  <div style={{ marginTop: '2rem' }}>
-                    <Link to="/login" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+                  <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+                    <Link to="/login" className="btn btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>
                       Go to Login
                     </Link>
                   </div>
