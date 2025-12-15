@@ -141,6 +141,47 @@ src/
 - React Router v6
 - CSS3
 
+## Development Workflow
+
+**NEW!** We use a proper Git workflow to protect production:
+
+### Quick Start
+1. **Read the guides** (in order):
+   - 📖 [DEPLOYMENT_QUICKSTART.md](DEPLOYMENT_QUICKSTART.md) - Start here!
+   - 🎨 [WORKFLOW_VISUAL.md](WORKFLOW_VISUAL.md) - Visual guide
+   - 📝 [GIT_CHEATSHEET.md](GIT_CHEATSHEET.md) - Quick reference
+   - 📚 [DEPLOYMENT.md](DEPLOYMENT.md) - Full documentation
+
+2. **Setup your workflow** (one-time):
+   ```bash
+   # Windows
+   setup-workflow.bat
+
+   # Mac/Linux
+   bash setup-workflow.sh
+   ```
+
+3. **Daily workflow**:
+   ```bash
+   git checkout develop
+   git checkout -b feature/my-feature
+   # ... make changes ...
+   git add . && git commit -m "feat: description"
+   git push -u origin feature/my-feature
+   # Create PR on GitHub → develop → main
+   ```
+
+### Environments
+- **Production**: `https://ask-freely.com` (main branch)
+- **Staging**: `https://develop--ask-freely.netlify.app` (develop branch)
+- **Previews**: Auto-generated for all PRs
+
+### Branch Protection
+- ✅ `main` branch is protected (requires PR)
+- ✅ All changes go through `develop` first
+- ✅ Test on staging before production
+- ✅ Deploy previews for every PR
+
 ## Support
 
 For issues or questions, please contact the development team.
