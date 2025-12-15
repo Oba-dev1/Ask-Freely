@@ -227,14 +227,16 @@ For local development, you can create `.env.development`:
 
 ```env
 REACT_APP_ENV=development
-REACT_APP_FIREBASE_API_KEY=AIzaSyBHobPiQY7xAWAHrrT6XLa3F3U5HBYfycU
-REACT_APP_FIREBASE_AUTH_DOMAIN=ask-freely.firebaseapp.com
-REACT_APP_FIREBASE_DATABASE_URL=https://ask-freely-default-rtdb.firebaseio.com/
-REACT_APP_FIREBASE_PROJECT_ID=ask-freely
-REACT_APP_FIREBASE_STORAGE_BUCKET=ask-freely.firebasestorage.app
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=457495551077
-REACT_APP_FIREBASE_APP_ID=1:457495551077:web:29401003fa26c9102c3a8c
+REACT_APP_FIREBASE_API_KEY=your-api-key-from-firebase-console
+REACT_APP_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+REACT_APP_FIREBASE_DATABASE_URL=https://your-project-default-rtdb.firebaseio.com/
+REACT_APP_FIREBASE_PROJECT_ID=your-project-id
+REACT_APP_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+REACT_APP_FIREBASE_APP_ID=your-app-id
 ```
+
+**Note:** Copy these values from your Firebase Console → Project Settings → Your apps.
 
 **Note**: This file is in `.gitignore` and won't be committed.
 
