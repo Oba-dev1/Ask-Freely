@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     const user = userCredential.user;
 
     // Configure action code settings for email verification
-    // Use window.location.origin to work in both dev and production
+    // Since localhost is now authorized in Firebase, we can use it directly
     const actionCodeSettings = {
       url: `${window.location.origin}/login?verified=true`,
       handleCodeInApp: false

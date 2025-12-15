@@ -1,7 +1,7 @@
 // src/Components/ProfileSetup.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ref as dbRef, update, get, query, orderByChild } from 'firebase/database';
+import { ref as dbRef, update, get } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { database, storage } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
@@ -88,40 +88,22 @@ function ProfileSetup() {
       console.log('Storage object:', storage);
       console.log('Storage bucket:', storage?.app?.options?.storageBucket);
 
-      // Check for duplicate organization name
+      // Check for duplicate organization name using separate collection
       console.log('=== Checking for Duplicate Organization Name ===');
-      const usersRef = dbRef(database, 'users');
-      const orgNameLower = organizationName.trim().toLowerCase();
-      console.log('Searching for:', orgNameLower);
+      const orgNameKey = organizationName.trim().toLowerCase().replace(/[.#$[\]]/g, '_');
+      const orgNameRef = dbRef(database, `organizationNames/${orgNameKey}`);
+      console.log('Checking organization name key:', orgNameKey);
 
-      const orgQuery = query(
-        usersRef,
-        orderByChild('organizationName')
-      );
+      const orgSnapshot = await get(orgNameRef);
 
-      const snapshot = await get(orgQuery);
-
-      if (snapshot.exists()) {
-        let isDuplicate = false;
-        snapshot.forEach((childSnapshot) => {
-          const userData = childSnapshot.val();
-          const existingOrgName = (userData.organizationName || '').toLowerCase();
-
-          // Check if organization name matches and it's not the current user
-          if (existingOrgName === orgNameLower && childSnapshot.key !== currentUser.uid) {
-            isDuplicate = true;
-            console.log('❌ Duplicate found:', childSnapshot.key, userData.organizationName);
-          }
-        });
-
-        if (isDuplicate) {
-          setError('This organization name is already taken. Please choose a different name.');
-          setLoading(false);
-          return;
-        }
+      if (orgSnapshot.exists() && orgSnapshot.val().userId !== currentUser.uid) {
+        console.log('❌ Duplicate organization name found:', orgSnapshot.val());
+        setError('This organization name is already taken. Please choose a different name.');
+        setLoading(false);
+        return;
       }
 
-      console.log('✅ Organization name is unique');
+      console.log('✅ Organization name is available');
 
       let logoUrl = null;
 
@@ -185,6 +167,16 @@ function ProfileSetup() {
       await update(userRef, profileData);
 
       console.log('✅ Profile updated successfully in database');
+
+      // Register organization name in separate collection
+      console.log('=== Registering Organization Name ===');
+      const orgNameData = {
+        userId: currentUser.uid,
+        organizationName: organizationName.trim(),
+        createdAt: new Date().toISOString()
+      };
+      await update(orgNameRef, orgNameData);
+      console.log('✅ Organization name registered');
 
       // Reload user profile to update the context
       console.log('Reloading user profile...');

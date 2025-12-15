@@ -24,7 +24,7 @@ function ForgotPassword() {
     try {
       setLoading(true);
       // Configure action code settings for password reset redirect
-      // Use window.location.origin to work in both dev and production
+      // Since localhost is now authorized in Firebase, we can use it directly
       const actionCodeSettings = {
         url: `${window.location.origin}/login?resetSuccess=true`,
         handleCodeInApp: false
