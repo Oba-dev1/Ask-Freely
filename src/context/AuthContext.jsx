@@ -34,19 +34,9 @@ export const AuthProvider = ({ children }) => {
     const user = userCredential.user;
 
     // Configure action code settings for email verification
-    // Determine the appropriate URL based on environment
-    const getVerificationUrl = () => {
-      // In production/staging, use the actual domain
-      if (window.location.hostname !== 'localhost') {
-        return `${window.location.origin}/login?verified=true`;
-      }
-      // For localhost, use Firebase default domain which is always authorized
-      // This can be changed to localhost once it's added to Firebase authorized domains
-      return `https://ask-freely.firebaseapp.com/__/auth/action?verified=true`;
-    };
-
+    // Since localhost is now authorized in Firebase, we can use it directly
     const actionCodeSettings = {
-      url: getVerificationUrl(),
+      url: `${window.location.origin}/login?verified=true`,
       handleCodeInApp: false
     };
 
