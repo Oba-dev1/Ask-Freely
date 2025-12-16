@@ -142,6 +142,10 @@ export default function ParticipantForm() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notice, setNotice] = useState({ type: "", text: "" }); // {type: 'info'|'error'|'success', text}
+  const [lastSubmitTime, setLastSubmitTime] = useState(null);
+
+  // Rate limiting constants
+  const RATE_LIMIT_COOLDOWN = 30000; // 30 seconds between submissions
 
   // Computed guards
   const acceptingQuestions = useMemo(
@@ -197,6 +201,17 @@ export default function ParticipantForm() {
       e.preventDefault();
       if (!validate()) return;
 
+      // Rate limiting check
+      const now = Date.now();
+      if (lastSubmitTime && now - lastSubmitTime < RATE_LIMIT_COOLDOWN) {
+        const waitSeconds = Math.ceil((RATE_LIMIT_COOLDOWN - (now - lastSubmitTime)) / 1000);
+        setNotice({
+          type: "error",
+          text: `✗ Please wait ${waitSeconds} second${waitSeconds > 1 ? 's' : ''} before submitting another question.`
+        });
+        return;
+      }
+
       setIsSubmitting(true);
       setNotice({ type: "info", text: "Submitting your question…" });
 
@@ -216,6 +231,9 @@ export default function ParticipantForm() {
 
         await push(questionsRef, payload);
 
+        // Update last submit time after successful submission
+        setLastSubmitTime(Date.now());
+
         setNotice({ type: "success", text: "✓ Question submitted successfully!" });
         setFormData({ name: "", question: "", anonymous: false });
 
@@ -229,7 +247,7 @@ export default function ParticipantForm() {
         setIsSubmitting(false);
       }
     },
-    [formData, questionsRef, validate]
+    [formData, questionsRef, validate, lastSubmitTime, RATE_LIMIT_COOLDOWN]
   );
 
   // Early return: resolving link
