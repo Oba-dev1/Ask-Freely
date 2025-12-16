@@ -59,6 +59,8 @@ export default function HostDashboard() {
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [analytics, setAnalytics] = useState(EMPTY_ANALYTICS);
+  const [notification, setNotification] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
 
   const questionsPath = useMemo(
     () => (eventId ? `questions/${eventId}` : 'questions'),
@@ -105,6 +107,11 @@ export default function HostDashboard() {
     return () => unsubscribe();
   }, [questionsPath]);
 
+  const showNotification = useCallback((message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 4000);
+  }, []);
+
   const toggleAnswered = useCallback(
     async (id, currentStatus) => {
       try {
@@ -113,29 +120,43 @@ export default function HostDashboard() {
           eventId ? `questions/${eventId}/${id}` : `questions/${id}`
         );
         await update(qRef, { answered: !currentStatus });
+        showNotification(
+          currentStatus ? 'Question marked as unanswered' : 'Question marked as answered',
+          'success'
+        );
       } catch (err) {
         console.error('Error updating question:', err);
-        alert('Failed to update question. Please try again.');
+        showNotification('Failed to update question. Please try again.', 'error');
       }
     },
-    [eventId]
+    [eventId, showNotification]
   );
 
   const deleteQuestion = useCallback(
     async (id) => {
-      if (!window.confirm('Are you sure you want to delete this question?')) return;
+      setShowDeleteConfirm(id);
+    },
+    []
+  );
+
+  const confirmDelete = useCallback(
+    async () => {
+      const id = showDeleteConfirm;
+      setShowDeleteConfirm(null);
+
       try {
         const qRef = ref(
           database,
           eventId ? `questions/${eventId}/${id}` : `questions/${id}`
         );
         await remove(qRef);
+        showNotification('Question deleted successfully', 'success');
       } catch (err) {
         console.error('Error deleting question:', err);
-        alert('Failed to delete question. Please try again.');
+        showNotification('Failed to delete question. Please try again.', 'error');
       }
     },
-    [eventId]
+    [eventId, showDeleteConfirm, showNotification]
   );
 
   const filteredQuestions = useMemo(() => {
@@ -400,6 +421,38 @@ export default function HostDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Notification Toast */}
+      {notification && (
+        <div className={`notification-toast ${notification.type}`}>
+          <i className={`fas fa-${notification.type === 'success' ? 'check-circle' : 'exclamation-circle'}`}></i>
+          <span>{notification.message}</span>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="modal-overlay" onClick={() => setShowDeleteConfirm(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Delete Question?</h3>
+            <p>Are you sure you want to delete this question? This action cannot be undone.</p>
+            <div className="modal-actions">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowDeleteConfirm(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={confirmDelete}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

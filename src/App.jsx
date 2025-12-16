@@ -6,9 +6,9 @@ import {
   useNavigate,
   Navigate,
 } from "react-router-dom";
+import * as Sentry from "@sentry/react";
 import { ref, onValue } from "firebase/database";
 import { database } from "./Firebase/config";
-
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import ParticipantForm from "./Components/ParticipantForm";
@@ -22,10 +22,17 @@ import OrganizerAnalytics from "./Components/OrganizerAnalytics";
 import CreateEvent from "./Components/CreateEvent";
 import EventSetup from "./Components/EventSetup";
 import EventManagement from "./Components/EventManagement";
+import TermsOfService from "./Components/TermsOfService";
+import PrivacyPolicy from "./Components/PrivacyPolicy";
+import Help from "./Components/Help";
+import usePageTracking from "./hooks/usePageTracking";
 
 import "./App.css";
 import "./LandingPage.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+
+// Create Sentry-enhanced Router
+const SentryRoutes = Sentry.withSentryRouting(Routes);
 
 // ==================== HOOKS ====================
 
@@ -639,7 +646,19 @@ function Footer() {
 
       <div className="lp-container foot-bottom">
         <p>© {new Date().getFullYear()} Ask Freely</p>
-        <div className="foot-legal" />
+        <div className="foot-legal">
+          <button onClick={() => navigate("/help")} className="foot-legal-link">
+            Help
+          </button>
+          <span className="foot-separator">·</span>
+          <button onClick={() => navigate("/terms-of-service")} className="foot-legal-link">
+            Terms of Service
+          </button>
+          <span className="foot-separator">·</span>
+          <button onClick={() => navigate("/privacy-policy")} className="foot-legal-link">
+            Privacy Policy
+          </button>
+        </div>
       </div>
     </footer>
   );
@@ -674,12 +693,55 @@ function LandingPage() {
 
 // ==================== APP ====================
 
+// Component to track page views
+function AnalyticsWrapper({ children }) {
+  usePageTracking();
+  return children;
+}
+
 function App() {
   return (
-    <AuthProvider>
-      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <div className="app">
-          <Routes>
+    <Sentry.ErrorBoundary
+      fallback={({ error, resetError }) => (
+        <div style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          padding: '2rem',
+          textAlign: 'center'
+        }}>
+          <h1 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#DC2626' }}>
+            Oops! Something went wrong
+          </h1>
+          <p style={{ marginBottom: '1.5rem', color: '#6B7280' }}>
+            We've been notified and will fix this soon.
+          </p>
+          <button
+            onClick={resetError}
+            style={{
+              padding: '0.75rem 1.5rem',
+              background: '#FF6B35',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              fontWeight: '600'
+            }}
+          >
+            Try Again
+          </button>
+        </div>
+      )}
+      showDialog
+    >
+      <AuthProvider>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <AnalyticsWrapper>
+            <div className="app">
+              <SentryRoutes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/p/:slug" element={<ParticipantForm />} />
             <Route path="/event/:slug" element={<ParticipantForm />} />
@@ -692,6 +754,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/help" element={<Help />} />
             <Route path="/profile-setup" element={
               <ProtectedRoute requireProfileComplete={false}>
                 <ProfileSetup />
@@ -723,10 +788,12 @@ function App() {
               </ProtectedRoute>
             } />
             <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          </SentryRoutes>
         </div>
+        </AnalyticsWrapper>
       </Router>
     </AuthProvider>
+    </Sentry.ErrorBoundary>
   );
 }
 

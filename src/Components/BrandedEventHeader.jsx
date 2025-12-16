@@ -6,7 +6,7 @@ function BrandedEventHeader({ event }) {
   const branding = event?.branding || {};
   const hasLogo = branding?.logoUrl;
   const hasFlyer = branding?.flyerUrl;
-  const brandColor = branding?.primaryColor || '#667eea';
+  const brandColor = branding?.primaryColor || '#FF6B35';
   const orgName = branding?.organizationName || '';
   const tagline = branding?.tagline || 'Ask Your Questions ✨';
 

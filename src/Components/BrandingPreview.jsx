@@ -12,7 +12,7 @@ function BrandingPreview({ event }) {
     return null; // Don't show if no branding
   }
 
-  const brandColor = branding?.primaryColor || '#667eea';
+  const brandColor = branding?.primaryColor || '#FF6B35';
   const brandStyles = {
     '--preview-brand-color': brandColor,
     '--preview-brand-color-light': `${brandColor}20`

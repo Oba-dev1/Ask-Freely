@@ -391,3 +391,145 @@
   .stats { width: 100%; justify-content: center; }
   .header-actions { width: 100%; }
 }
+
+/* Notification Toast */
+.notification-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 1000;
+  animation: slideInRight 0.3s ease;
+  max-width: 400px;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.notification-toast.success {
+  border-left: 4px solid #22C55E;
+}
+
+.notification-toast.success i {
+  color: #22C55E;
+  font-size: 1.25rem;
+}
+
+.notification-toast.error {
+  border-left: 4px solid #EF4444;
+}
+
+.notification-toast.error i {
+  color: #EF4444;
+  font-size: 1.25rem;
+}
+
+.notification-toast span {
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-content h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.5rem;
+  color: #1a1a1a;
+}
+
+.modal-content p {
+  margin: 0 0 1.5rem 0;
+  color: #6B7280;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.modal-actions .btn {
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-size: 0.9375rem;
+}
+
+.modal-actions .btn-secondary {
+  background: #F3F4F6;
+  color: #374151;
+}
+
+.modal-actions .btn-secondary:hover {
+  background: #E5E7EB;
+}
+
+.modal-actions .btn-danger {
+  background: #EF4444;
+  color: white;
+}
+
+.modal-actions .btn-danger:hover {
+  background: #DC2626;
+}
