@@ -22,6 +22,8 @@ import OrganizerAnalytics from "./Components/OrganizerAnalytics";
 import CreateEvent from "./Components/CreateEvent";
 import EventSetup from "./Components/EventSetup";
 import EventManagement from "./Components/EventManagement";
+import TermsOfService from "./Components/TermsOfService";
+import PrivacyPolicy from "./Components/PrivacyPolicy";
 
 import "./App.css";
 import "./LandingPage.css";
@@ -692,6 +694,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/profile-setup" element={
               <ProtectedRoute requireProfileComplete={false}>
                 <ProfileSetup />
