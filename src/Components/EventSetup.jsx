@@ -17,7 +17,7 @@ function EventSetup() {
   const [branding, setBranding] = useState({
     logoUrl: '',
     flyerUrl: '',
-    primaryColor: '#667eea',
+    primaryColor: '#FF6B35',
     organizationName: '',
     tagline: ''
   });
@@ -69,7 +69,7 @@ function EventSetup() {
         branding: {
           logoUrl: branding.logoUrl || '',
           flyerUrl: branding.flyerUrl || '',
-          primaryColor: branding.primaryColor || '#667eea',
+          primaryColor: branding.primaryColor || '#FF6B35',
           organizationName: branding.organizationName || '',
           tagline: branding.tagline || ''
         }

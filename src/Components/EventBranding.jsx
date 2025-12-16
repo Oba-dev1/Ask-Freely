@@ -164,16 +164,16 @@ function EventBranding({ branding, onChange }) {
             <input
               type="color"
               id="primaryColor"
-              value={branding?.primaryColor || '#667eea'}
+              value={branding?.primaryColor || '#FF6B35'}
               onChange={handleColorChange}
               className="color-input"
             />
             <input
               type="text"
-              value={branding?.primaryColor || '#667eea'}
+              value={branding?.primaryColor || '#FF6B35'}
               onChange={handleColorChange}
               className="color-text-input"
-              placeholder="#667eea"
+              placeholder="#FF6B35"
               maxLength={7}
             />
           </div>

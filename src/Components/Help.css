@@ -37,7 +37,7 @@
 
 .logo-icon {
   font-size: 1.5rem;
-  color: #667eea;
+  color: #FF6B35;
 }
 
 .logo-text {
@@ -45,14 +45,14 @@
 }
 
 .nav-link {
-  color: #667eea;
+  color: #FF6B35;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
 }
 
 .nav-link:hover {
-  color: #5568d3;
+  color: #E85A2A;
 }
 
 /* Main Container */
@@ -111,12 +111,12 @@
 }
 
 .help-tab:hover {
-  color: #667eea;
+  color: #FF6B35;
 }
 
 .help-tab.active {
-  color: #667eea;
-  border-bottom-color: #667eea;
+  color: #FF6B35;
+  border-bottom-color: #FF6B35;
 }
 
 /* Content */
@@ -180,7 +180,7 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FF6B35 0%, #E85A2A 100%);
   color: #FFFFFF;
   border-radius: 50%;
   font-size: 1rem;
@@ -213,7 +213,7 @@
   content: "→";
   position: absolute;
   left: 0;
-  color: #667eea;
+  color: #FF6B35;
   font-weight: 700;
 }
 
@@ -224,13 +224,13 @@
 }
 
 .step-content a {
-  color: #667eea;
+  color: #FF6B35;
   text-decoration: underline;
   transition: color 0.2s ease;
 }
 
 .step-content a:hover {
-  color: #5568d3;
+  color: #E85A2A;
 }
 
 /* Tips and Warnings */
@@ -244,8 +244,8 @@
 }
 
 .tip {
-  background: #EEF2FF;
-  border-left: 4px solid #667eea;
+  background: #FFF4F0;
+  border-left: 4px solid #FF6B35;
 }
 
 .warning {
@@ -260,7 +260,7 @@
 }
 
 .tip i {
-  color: #667eea;
+  color: #FF6B35;
 }
 
 .warning i {
@@ -290,11 +290,11 @@
 }
 
 .faq-item:hover {
-  border-color: #667eea;
+  border-color: #FF6B35;
 }
 
 .faq-item.open {
-  border-color: #667eea;
+  border-color: #FF6B35;
 }
 
 .faq-question {
@@ -323,7 +323,7 @@
 }
 
 .faq-question i {
-  color: #667eea;
+  color: #FF6B35;
   font-size: 0.875rem;
   transition: transform 0.2s ease;
 }
@@ -371,13 +371,13 @@
 }
 
 .faq-contact a {
-  color: #667eea;
+  color: #FF6B35;
   text-decoration: underline;
   transition: color 0.2s ease;
 }
 
 .faq-contact a:hover {
-  color: #5568d3;
+  color: #E85A2A;
 }
 
 /* Responsive Design */

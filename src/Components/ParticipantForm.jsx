@@ -281,7 +281,7 @@ export default function ParticipantForm() {
   const tagline = "Ask Your Questions ✨";
 
   // Get brand color for dynamic styling
-  const brandColor = event?.branding?.primaryColor || '#667eea';
+  const brandColor = event?.branding?.primaryColor || '#FF6B35';
   const brandStyles = {
     '--brand-color': brandColor,
     '--brand-color-light': `${brandColor}20`,
