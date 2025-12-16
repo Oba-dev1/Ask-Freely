@@ -24,6 +24,7 @@ import EventSetup from "./Components/EventSetup";
 import EventManagement from "./Components/EventManagement";
 import TermsOfService from "./Components/TermsOfService";
 import PrivacyPolicy from "./Components/PrivacyPolicy";
+import Help from "./Components/Help";
 import usePageTracking from "./hooks/usePageTracking";
 
 import "./App.css";
@@ -646,6 +647,10 @@ function Footer() {
       <div className="lp-container foot-bottom">
         <p>© {new Date().getFullYear()} Ask Freely</p>
         <div className="foot-legal">
+          <button onClick={() => navigate("/help")} className="foot-legal-link">
+            Help
+          </button>
+          <span className="foot-separator">·</span>
           <button onClick={() => navigate("/terms-of-service")} className="foot-legal-link">
             Terms of Service
           </button>
@@ -751,6 +756,7 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/help" element={<Help />} />
             <Route path="/profile-setup" element={
               <ProtectedRoute requireProfileComplete={false}>
                 <ProfileSetup />
