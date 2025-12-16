@@ -9,29 +9,32 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
-/* Hero Image - Full width, crisp, clean */
-.event-hero-image {
+/* Hero Banner - 4:1 aspect ratio */
+.event-hero-banner {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 300px;
+  max-height: 300px;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%);
 }
 
-.event-hero-image img {
+.event-hero-banner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
 /* Event Details Card - Clean white card style */
 .event-details-card {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 2.5rem;
   display: flex;
   gap: 2rem;
   align-items: flex-start;
+  backdrop-filter: blur(20px);
 }
 
 /* Logo - Positioned on the left like Eventbrite */
@@ -76,23 +79,29 @@
 .event-datetime {
   margin: 0 0 0.75rem 0;
   font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--brand-color, #a78bfa);
-  display: flex;
+  font-weight: 700;
+  color: #ffffff;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .event-datetime::before {
   content: "📅";
   font-size: 1.2rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
 .event-tagline {
   margin: 0;
   font-size: 1.05rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.5;
 }
 

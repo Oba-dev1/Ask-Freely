@@ -24,10 +24,10 @@ function BrandedEventHeader({ event }) {
 
   return (
     <div className="branded-header" style={brandStyles}>
-      {/* Hero Flyer Image - Eventbrite style */}
+      {/* Hero Banner Image */}
       {hasFlyer && (
-        <div className="event-hero-image">
-          <img src={branding.flyerUrl} alt="Event flyer" />
+        <div className="event-hero-banner">
+          <img src={branding.flyerUrl} alt="Event banner" />
         </div>
       )}
 
