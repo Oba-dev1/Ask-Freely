@@ -348,7 +348,7 @@ function CreateEvent() {
                     <div key={q.id} className="preview-question">
                       <div className="preview-header">
                         <span className="question-number">Q{index + 1}</span>
-                        <span className={`priority-tag ${q.priority}`}>{q.priority}</span>
+                        <span className={`priority-tag ${q.priority}`}>{q.priority.toUpperCase()}</span>
                         {q.category && <span className="category-tag">{q.category}</span>}
                         <button
                           type="button"
