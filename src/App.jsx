@@ -24,6 +24,7 @@ import EventSetup from "./Components/EventSetup";
 import EventManagement from "./Components/EventManagement";
 import TermsOfService from "./Components/TermsOfService";
 import PrivacyPolicy from "./Components/PrivacyPolicy";
+import usePageTracking from "./hooks/usePageTracking";
 
 import "./App.css";
 import "./LandingPage.css";
@@ -676,12 +677,19 @@ function LandingPage() {
 
 // ==================== APP ====================
 
+// Component to track page views
+function AnalyticsWrapper({ children }) {
+  usePageTracking();
+  return children;
+}
+
 function App() {
   return (
     <AuthProvider>
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <div className="app">
-          <Routes>
+        <AnalyticsWrapper>
+          <div className="app">
+            <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/p/:slug" element={<ParticipantForm />} />
             <Route path="/event/:slug" element={<ParticipantForm />} />
@@ -729,6 +737,7 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
+        </AnalyticsWrapper>
       </Router>
     </AuthProvider>
   );
