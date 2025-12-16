@@ -645,7 +645,15 @@ function Footer() {
 
       <div className="lp-container foot-bottom">
         <p>© {new Date().getFullYear()} Ask Freely</p>
-        <div className="foot-legal" />
+        <div className="foot-legal">
+          <button onClick={() => navigate("/terms-of-service")} className="foot-legal-link">
+            Terms of Service
+          </button>
+          <span className="foot-separator">·</span>
+          <button onClick={() => navigate("/privacy-policy")} className="foot-legal-link">
+            Privacy Policy
+          </button>
+        </div>
       </div>
     </footer>
   );
