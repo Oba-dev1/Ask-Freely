@@ -239,6 +239,7 @@
 .analytics-card-title {
   color: #666666;
   font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+  flex: 1;
 }
 
 .analytics-icon {
