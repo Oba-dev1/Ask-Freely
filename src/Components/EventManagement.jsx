@@ -470,7 +470,9 @@ function EventManagement() {
               <div className="analytics-value">
                 {analytics.summary?.unanswered ?? 0}
               </div>
-              <div className="analytics-detail">Remaining in queue</div>
+              <div className="analytics-detail">
+                <span className="analytics-text">Remaining in queue</span>
+              </div>
             </div>
 
             {/* Anonymous */}

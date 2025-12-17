@@ -526,11 +526,16 @@
 .analytics-detail {
   color: #666666;
   font-size: 0.9rem;
+  min-height: 1.35rem;
 }
 
 .analytics-percentage {
   color: #10B981;
   font-weight: 600;
+}
+
+.analytics-text {
+  color: #666666;
 }
 
 /* Filters */
