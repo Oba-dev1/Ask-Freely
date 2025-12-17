@@ -28,11 +28,8 @@
   line-height: 1.5;
 }
 
-/* Grid Layout */
-.branding-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+/* Image Section - No grid needed */
+.branding-image-section {
   margin-bottom: 2rem;
 }
 
@@ -115,14 +112,24 @@
   background: rgba(0, 0, 0, 0.02);
 }
 
-.logo-preview {
-  max-width: 200px;
-  aspect-ratio: 1/1;
+/* Flexible Preview - adapts to any aspect ratio */
+.flexible-preview {
+  max-width: 100%;
+  max-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.flyer-preview {
+.flexible-preview img {
+  max-height: 600px;
+  width: auto;
   max-width: 100%;
-  aspect-ratio: 9/16;
+  object-fit: contain;
+}
+
+.flexible-upload {
+  min-height: 200px;
 }
 
 .media-preview img {
@@ -166,38 +173,96 @@
   margin-bottom: 2rem;
 }
 
-.color-picker-wrapper {
+/* Color Presets */
+.color-presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.color-preset-btn {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.color-input {
-  width: 80px;
-  height: 50px;
-  border: 2px solid rgba(0, 0, 0, 0.15);
-  border-radius: 8px;
+.color-preset-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.color-preset-btn.active {
+  border-color: #1a1a1a;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.color-preset-btn i {
+  color: white;
+  font-size: 1.25rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Color Picker Wrapper */
+.color-picker-wrapper {
+  margin-top: 1rem;
+}
+
+.color-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.color-preview {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  background: transparent;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.color-input:hover {
-  border-color: rgba(255, 107, 53, 0.4);
+.color-preview:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.color-input-hidden {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .color-text-input {
   flex: 1;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(0, 0, 0, 0.1);
   background: #FFFFFF;
   color: #1a1a1a;
-  font-size: 1rem;
+  font-size: 1.0625rem;
   font-family: 'Courier New', monospace;
   font-weight: 600;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
   max-width: 150px;
+  text-transform: uppercase;
 }
 
 .color-text-input:focus {
@@ -205,6 +270,13 @@
   border-color: #FF6B35;
   background: rgba(255, 107, 53, 0.02);
   box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.08);
+}
+
+.color-hint {
+  display: block;
+  color: #6B7280;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 }
 
 /* Text Fields */
@@ -220,10 +292,6 @@
 
 /* Responsive */
 @media (max-width: 900px) {
-  .branding-grid {
-    gap: 1.5rem;
-  }
-
   .branding-text-fields {
     gap: 1rem;
   }
@@ -232,11 +300,6 @@
 @media (max-width: 768px) {
   .branding-section {
     padding: 1.5rem;
-  }
-
-  .branding-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
 
   .branding-text-fields {
@@ -252,23 +315,24 @@
     font-size: 2rem;
   }
 
-  .color-picker-wrapper {
-    flex-direction: column;
-    align-items: stretch;
+  .color-presets {
+    grid-template-columns: repeat(6, 1fr);
   }
 
-  .color-input {
-    width: 100%;
-    height: 60px;
+  .color-input-group {
+    flex-direction: row;
   }
 
   .color-text-input {
     max-width: 100%;
   }
 
-  .logo-preview,
-  .flyer-preview {
-    max-width: 100%;
+  .flexible-preview {
+    max-height: 400px;
+  }
+
+  .flexible-preview img {
+    max-height: 400px;
   }
 }
 

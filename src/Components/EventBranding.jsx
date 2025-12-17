@@ -3,32 +3,14 @@ import React, { useState } from 'react';
 import './EventBranding.css';
 
 function EventBranding({ branding, onChange }) {
-  const [logoPreview, setLogoPreview] = useState(branding?.logoUrl || '');
-  const [flyerPreview, setFlyerPreview] = useState(branding?.flyerUrl || '');
+  const [imagePreview, setImagePreview] = useState(branding?.flyerUrl || '');
 
-  const handleLogoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Create preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result);
-        onChange({
-          ...branding,
-          logoUrl: reader.result,
-          logoFile: file
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleFlyerChange = (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFlyerPreview(reader.result);
+        setImagePreview(reader.result);
         onChange({
           ...branding,
           flyerUrl: reader.result,
@@ -46,6 +28,28 @@ function EventBranding({ branding, onChange }) {
     });
   };
 
+  const selectPresetColor = (color) => {
+    onChange({
+      ...branding,
+      primaryColor: color
+    });
+  };
+
+  const presetColors = [
+    { name: 'Orange', color: '#FF6B35' },
+    { name: 'Red', color: '#EF4444' },
+    { name: 'Pink', color: '#EC4899' },
+    { name: 'Purple', color: '#8B5CF6' },
+    { name: 'Indigo', color: '#6366F1' },
+    { name: 'Blue', color: '#3B82F6' },
+    { name: 'Cyan', color: '#06B6D4' },
+    { name: 'Teal', color: '#14B8A6' },
+    { name: 'Green', color: '#22C55E' },
+    { name: 'Yellow', color: '#F59E0B' },
+    { name: 'Gray', color: '#6B7280' },
+    { name: 'Black', color: '#1F2937' },
+  ];
+
   const handleTextChange = (field, value) => {
     onChange({
       ...branding,
@@ -53,17 +57,8 @@ function EventBranding({ branding, onChange }) {
     });
   };
 
-  const removeLogo = () => {
-    setLogoPreview('');
-    onChange({
-      ...branding,
-      logoUrl: '',
-      logoFile: null
-    });
-  };
-
-  const removeFlyer = () => {
-    setFlyerPreview('');
+  const removeImage = () => {
+    setImagePreview('');
     onChange({
       ...branding,
       flyerUrl: '',
@@ -76,78 +71,42 @@ function EventBranding({ branding, onChange }) {
       <div className="branding-header">
         <h3>Event Branding & Customization</h3>
         <p className="branding-subtitle">
-          Add your logo, event flyer, and customize the look to match your brand
+          Upload your event image and customize the look to match your brand
         </p>
       </div>
 
-      <div className="branding-grid">
-        {/* Logo Upload */}
+      {/* Event Image Upload - Flexible for banners or flyers */}
+      <div className="branding-image-section">
         <div className="branding-item">
           <label className="branding-label">
-            <i className="fas fa-building"></i> Organization Logo
+            <i className="fas fa-image"></i> Event Image
           </label>
-          <p className="branding-hint">Recommended: 200x200px, PNG or JPG</p>
+          <p className="branding-hint">Banner (1200×300px) or Flyer (1080×1920px) - any aspect ratio accepted</p>
 
-          {logoPreview ? (
-            <div className="media-preview logo-preview">
-              <img src={logoPreview} alt="Logo preview" />
+          {imagePreview ? (
+            <div className="media-preview flexible-preview">
+              <img src={imagePreview} alt="Preview of event banner or flyer" />
               <button
                 type="button"
-                onClick={removeLogo}
+                onClick={removeImage}
                 className="remove-media-btn"
-                title="Remove logo"
+                title="Remove"
               >
                 <i className="fas fa-times"></i>
               </button>
             </div>
           ) : (
-            <label className="upload-area">
+            <label className="upload-area flexible-upload">
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleLogoChange}
+                onChange={handleImageChange}
                 hidden
               />
               <div className="upload-content">
                 <i className="fas fa-cloud-upload-alt"></i>
-                <span>Click to upload logo</span>
-                <small>PNG, JPG up to 5MB</small>
-              </div>
-            </label>
-          )}
-        </div>
-
-        {/* Flyer Upload */}
-        <div className="branding-item">
-          <label className="branding-label">
-            <i className="fas fa-image"></i> Event Flyer
-          </label>
-          <p className="branding-hint">Recommended: 1080x1920px (portrait)</p>
-
-          {flyerPreview ? (
-            <div className="media-preview flyer-preview">
-              <img src={flyerPreview} alt="Flyer preview" />
-              <button
-                type="button"
-                onClick={removeFlyer}
-                className="remove-media-btn"
-                title="Remove flyer"
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-          ) : (
-            <label className="upload-area">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFlyerChange}
-                hidden
-              />
-              <div className="upload-content">
-                <i className="fas fa-cloud-upload-alt"></i>
-                <span>Click to upload flyer</span>
-                <small>PNG, JPG up to 10MB</small>
+                <span>Click to upload event image</span>
+                <small>PNG, JPG up to 10MB · Banner or Flyer format</small>
               </div>
             </label>
           )}
@@ -160,24 +119,51 @@ function EventBranding({ branding, onChange }) {
           <label htmlFor="primaryColor">
             <i className="fas fa-palette"></i> Brand Color
           </label>
-          <div className="color-picker-wrapper">
-            <input
-              type="color"
-              id="primaryColor"
-              value={branding?.primaryColor || '#FF6B35'}
-              onChange={handleColorChange}
-              className="color-input"
-            />
-            <input
-              type="text"
-              value={branding?.primaryColor || '#FF6B35'}
-              onChange={handleColorChange}
-              className="color-text-input"
-              placeholder="#FF6B35"
-              maxLength={7}
-            />
+
+          {/* Preset Colors */}
+          <div className="color-presets">
+            {presetColors.map((preset) => (
+              <button
+                key={preset.color}
+                type="button"
+                className={`color-preset-btn ${(branding?.primaryColor || '#FF6B35') === preset.color ? 'active' : ''}`}
+                style={{ backgroundColor: preset.color }}
+                onClick={() => selectPresetColor(preset.color)}
+                title={preset.name}
+              >
+                {(branding?.primaryColor || '#FF6B35') === preset.color && (
+                  <i className="fas fa-check"></i>
+                )}
+              </button>
+            ))}
           </div>
-          <small>This color will be used for buttons and accents</small>
+
+          {/* Custom Color Picker */}
+          <div className="color-picker-wrapper">
+            <div className="color-input-group">
+              <div
+                className="color-preview"
+                style={{ backgroundColor: branding?.primaryColor || '#FF6B35' }}
+              >
+                <input
+                  type="color"
+                  id="primaryColor"
+                  value={branding?.primaryColor || '#FF6B35'}
+                  onChange={handleColorChange}
+                  className="color-input-hidden"
+                />
+              </div>
+              <input
+                type="text"
+                value={branding?.primaryColor || '#FF6B35'}
+                onChange={handleColorChange}
+                className="color-text-input"
+                placeholder="#FF6B35"
+                maxLength={7}
+              />
+            </div>
+            <small className="color-hint">Choose a preset or enter a custom hex color</small>
+          </div>
         </div>
       </div>
 
