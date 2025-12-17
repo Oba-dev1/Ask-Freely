@@ -3,32 +3,14 @@ import React, { useState } from 'react';
 import './EventBranding.css';
 
 function EventBranding({ branding, onChange }) {
-  const [logoPreview, setLogoPreview] = useState(branding?.logoUrl || '');
-  const [flyerPreview, setFlyerPreview] = useState(branding?.flyerUrl || '');
+  const [imagePreview, setImagePreview] = useState(branding?.flyerUrl || '');
 
-  const handleLogoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Create preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result);
-        onChange({
-          ...branding,
-          logoUrl: reader.result,
-          logoFile: file
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleFlyerChange = (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFlyerPreview(reader.result);
+        setImagePreview(reader.result);
         onChange({
           ...branding,
           flyerUrl: reader.result,
@@ -75,17 +57,8 @@ function EventBranding({ branding, onChange }) {
     });
   };
 
-  const removeLogo = () => {
-    setLogoPreview('');
-    onChange({
-      ...branding,
-      logoUrl: '',
-      logoFile: null
-    });
-  };
-
-  const removeFlyer = () => {
-    setFlyerPreview('');
+  const removeImage = () => {
+    setImagePreview('');
     onChange({
       ...branding,
       flyerUrl: '',
@@ -98,78 +71,42 @@ function EventBranding({ branding, onChange }) {
       <div className="branding-header">
         <h3>Event Branding & Customization</h3>
         <p className="branding-subtitle">
-          Add your logo, event banner, and customize the look to match your brand
+          Upload your event image and customize the look to match your brand
         </p>
       </div>
 
-      <div className="branding-grid">
-        {/* Logo Upload */}
+      {/* Event Image Upload - Flexible for banners or flyers */}
+      <div className="branding-image-section">
         <div className="branding-item">
           <label className="branding-label">
-            <i className="fas fa-building"></i> Organization Logo
+            <i className="fas fa-image"></i> Event Image
           </label>
-          <p className="branding-hint">Recommended: 200x200px, PNG or JPG</p>
+          <p className="branding-hint">Banner (1200×300px) or Flyer (1080×1920px) - any aspect ratio accepted</p>
 
-          {logoPreview ? (
-            <div className="media-preview logo-preview">
-              <img src={logoPreview} alt="Logo preview" />
+          {imagePreview ? (
+            <div className="media-preview flexible-preview">
+              <img src={imagePreview} alt="Preview of event banner or flyer" />
               <button
                 type="button"
-                onClick={removeLogo}
+                onClick={removeImage}
                 className="remove-media-btn"
-                title="Remove logo"
+                title="Remove"
               >
                 <i className="fas fa-times"></i>
               </button>
             </div>
           ) : (
-            <label className="upload-area">
+            <label className="upload-area flexible-upload">
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleLogoChange}
+                onChange={handleImageChange}
                 hidden
               />
               <div className="upload-content">
                 <i className="fas fa-cloud-upload-alt"></i>
-                <span>Click to upload logo</span>
-                <small>PNG, JPG up to 5MB</small>
-              </div>
-            </label>
-          )}
-        </div>
-
-        {/* Banner Upload */}
-        <div className="branding-item">
-          <label className="branding-label">
-            <i className="fas fa-image"></i> Event Banner
-          </label>
-          <p className="branding-hint">Recommended: 1200x300px (16:4 ratio)</p>
-
-          {flyerPreview ? (
-            <div className="media-preview banner-preview">
-              <img src={flyerPreview} alt="Banner preview" />
-              <button
-                type="button"
-                onClick={removeFlyer}
-                className="remove-media-btn"
-                title="Remove banner"
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-          ) : (
-            <label className="upload-area banner-upload">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFlyerChange}
-                hidden
-              />
-              <div className="upload-content">
-                <i className="fas fa-cloud-upload-alt"></i>
-                <span>Click to upload banner</span>
-                <small>PNG, JPG up to 10MB · 1200x300px recommended</small>
+                <span>Click to upload event image</span>
+                <small>PNG, JPG up to 10MB · Banner or Flyer format</small>
               </div>
             </label>
           )}
