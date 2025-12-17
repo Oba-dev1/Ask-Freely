@@ -249,13 +249,6 @@ function EventManagement() {
     );
   }
 
-  const audienceCount = questions.filter(
-    (q) => q.source === "audience" || q.source === "anonymous"
-  ).length;
-  const organizerCount = questions.filter(
-    (q) => q.source === "organizer"
-  ).length;
-
   // ---- UI ----
   return (
     <div className="container">
@@ -417,46 +410,30 @@ function EventManagement() {
       <div className="questions-dashboard">
         <div className="dashboard-header">
           <h2>Questions</h2>
-          <div className="header-actions">
-            <div className="stats-row">
-              <div className="stat-badge">
-                <span className="stat-number">{questions.length}</span>
-                <span className="stat-text">Total</span>
+          <div className="export-dropdown">
+            <button
+              className="btn btn-export"
+              onClick={() => setShowExportMenu((v) => !v)}
+            >
+              <i className="fas fa-download" aria-hidden="true" />
+              Export
+            </button>
+            {showExportMenu && (
+              <div className="export-menu">
+                <button onClick={() => handleExport("csv")}>
+                  <i className="fas fa-file-csv" aria-hidden="true" />
+                  Export as CSV
+                </button>
+                <button onClick={() => handleExport("json")}>
+                  <i className="fas fa-code" aria-hidden="true" />
+                  Export as JSON
+                </button>
+                <button onClick={() => handleExport("txt")}>
+                  <i className="fas fa-file-lines" aria-hidden="true" />
+                  Export as Text
+                </button>
               </div>
-              <div className="stat-badge organizer">
-                <span className="stat-number">{organizerCount}</span>
-                <span className="stat-text">Strategic</span>
-              </div>
-              <div className="stat-badge audience">
-                <span className="stat-number">{audienceCount}</span>
-                <span className="stat-text">Audience</span>
-              </div>
-            </div>
-            <div className="export-dropdown">
-              <button
-                className="btn btn-export"
-                onClick={() => setShowExportMenu((v) => !v)}
-              >
-                <i className="fas fa-download" aria-hidden="true" />
-                Export
-              </button>
-              {showExportMenu && (
-                <div className="export-menu">
-                  <button onClick={() => handleExport("csv")}>
-                    <i className="fas fa-file-csv" aria-hidden="true" />
-                    Export as CSV
-                  </button>
-                  <button onClick={() => handleExport("json")}>
-                    <i className="fas fa-code" aria-hidden="true" />
-                    Export as JSON
-                  </button>
-                  <button onClick={() => handleExport("txt")}>
-                    <i className="fas fa-file-lines" aria-hidden="true" />
-                    Export as Text
-                  </button>
-                </div>
-              )}
-            </div>
+            )}
           </div>
         </div>
 
