@@ -158,7 +158,7 @@ export default function HostDashboard() {
       <nav className="navbar">
         <div className="nav-container">
           <Link to="/" className="logo">
-            <span className="logo-icon">💬</span>
+            <span className="logo-icon"><i className="fas fa-comments"></i></span>
             <span className="logo-text">Ask Freely</span>
           </Link>
         </div>
