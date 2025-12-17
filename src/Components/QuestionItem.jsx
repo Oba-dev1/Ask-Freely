@@ -90,13 +90,15 @@ function QuestionItem({ question, onToggleAnswered, onDelete }) {
           <i className={question.answered ? 'fas fa-undo' : 'fas fa-check'}></i>
           {question.answered ? 'Mark as Pending' : 'Mark as Answered'}
         </button>
-        <button
-          className="action-btn delete-btn"
-          onClick={() => onDelete(question.id)}
-        >
-          <i className="fas fa-trash-alt"></i>
-          Delete
-        </button>
+        {onDelete && (
+          <button
+            className="action-btn delete-btn"
+            onClick={() => onDelete(question.id)}
+          >
+            <i className="fas fa-trash-alt"></i>
+            Delete
+          </button>
+        )}
       </div>
     </div>
   );

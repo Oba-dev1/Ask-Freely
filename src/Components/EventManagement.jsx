@@ -6,7 +6,32 @@ import { database } from "../Firebase/config";
 import { useAuth } from "../context/AuthContext";
 import QuestionItem from "./QuestionItem";
 import BrandingPreview from "./BrandingPreview";
+import {
+  exportToCSV,
+  exportToJSON,
+  exportToText,
+  generateAnalytics,
+} from "../utils/exportutils";
 import "./EventManagement.css";
+
+// Helper functions
+function fmtPct(n) {
+  if (n == null || isNaN(n)) return "0%";
+  return `${Math.round(n)}%`;
+}
+
+function compactTimeLabel(first, last) {
+  if (!first || !last || first === "N/A" || last === "N/A") return null;
+  try {
+    const t1 = new Date(first);
+    const t2 = new Date(last);
+    const toHHMM = (d) =>
+      d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return `Started ${toHHMM(t1)} • Last ${toHHMM(t2)}`;
+  } catch {
+    return null;
+  }
+}
 
 function EventManagement() {
   // ---- Router & Auth ----
@@ -20,6 +45,8 @@ function EventManagement() {
   const [filter, setFilter] = useState("all");
   const [copiedLink, setCopiedLink] = useState("");
   const [saving, setSaving] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [analytics, setAnalytics] = useState(null);
 
   // Invite modal
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -127,6 +154,19 @@ function EventManagement() {
     setMcEmail("");
   }, [mcEmail, mcLink, eventTitle]);
 
+  const handleExport = useCallback(
+    (format) => {
+      const all = [...questions].sort(
+        (a, b) => (b.createdAt || 0) - (a.createdAt || 0)
+      );
+      if (format === "csv") exportToCSV(all);
+      else if (format === "json") exportToJSON(all);
+      else if (format === "txt") exportToText(all);
+      setShowExportMenu(false);
+    },
+    [questions]
+  );
+
   // ---- Data subscriptions ----
   useEffect(() => {
     if (!currentUser) {
@@ -151,6 +191,7 @@ function EventManagement() {
       const data = snap.val();
       if (!data) {
         setQuestions([]);
+        setAnalytics(generateAnalytics([]));
         return;
       }
       const arr = Object.keys(data)
@@ -158,6 +199,7 @@ function EventManagement() {
         .filter((q) => !q.deleted)
         .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
       setQuestions(arr);
+      setAnalytics(generateAnalytics(arr));
     });
 
     return () => {
@@ -206,13 +248,6 @@ function EventManagement() {
       </div>
     );
   }
-
-  const audienceCount = questions.filter(
-    (q) => q.source === "audience" || q.source === "anonymous"
-  ).length;
-  const organizerCount = questions.filter(
-    (q) => q.source === "organizer"
-  ).length;
 
   // ---- UI ----
   return (
@@ -375,21 +410,115 @@ function EventManagement() {
       <div className="questions-dashboard">
         <div className="dashboard-header">
           <h2>Questions</h2>
-          <div className="stats-row">
-            <div className="stat-badge">
-              <span className="stat-number">{questions.length}</span>
-              <span className="stat-text">Total</span>
-            </div>
-            <div className="stat-badge organizer">
-              <span className="stat-number">{organizerCount}</span>
-              <span className="stat-text">Strategic</span>
-            </div>
-            <div className="stat-badge audience">
-              <span className="stat-number">{audienceCount}</span>
-              <span className="stat-text">Audience</span>
-            </div>
+          <div className="export-dropdown">
+            <button
+              className="btn btn-export"
+              onClick={() => setShowExportMenu((v) => !v)}
+            >
+              <i className="fas fa-download" aria-hidden="true" />
+              Export
+            </button>
+            {showExportMenu && (
+              <div className="export-menu">
+                <button onClick={() => handleExport("csv")}>
+                  <i className="fas fa-file-csv" aria-hidden="true" />
+                  Export as CSV
+                </button>
+                <button onClick={() => handleExport("json")}>
+                  <i className="fas fa-code" aria-hidden="true" />
+                  Export as JSON
+                </button>
+                <button onClick={() => handleExport("txt")}>
+                  <i className="fas fa-file-lines" aria-hidden="true" />
+                  Export as Text
+                </button>
+              </div>
+            )}
           </div>
         </div>
+
+        {/* Analytics Cards */}
+        {analytics && (
+          <section className="analytics-section">
+            {/* Answered */}
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <span className="analytics-card-title">Answered</span>
+                <div className="analytics-icon success">
+                  <i className="fas fa-check-circle" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div className="analytics-value">
+                {analytics.summary?.answered ?? 0}
+              </div>
+              <div className="analytics-detail">
+                <span className="analytics-percentage">
+                  {fmtPct(analytics.summary?.percentAnswered)}
+                </span>{" "}
+                of total
+              </div>
+            </div>
+
+            {/* Unanswered */}
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <span className="analytics-card-title">Unanswered</span>
+                <div className="analytics-icon warning">
+                  <i className="fas fa-question-circle" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div className="analytics-value">
+                {analytics.summary?.unanswered ?? 0}
+              </div>
+              <div className="analytics-detail">
+                <span className="analytics-text">Remaining in queue</span>
+              </div>
+            </div>
+
+            {/* Anonymous */}
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <span className="analytics-card-title">Anonymous</span>
+                <div className="analytics-icon info">
+                  <i className="fas fa-user-secret" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div className="analytics-value">
+                {analytics.summary?.anonymous ?? 0}
+              </div>
+              <div className="analytics-detail">
+                <span className="analytics-percentage">
+                  {fmtPct(analytics.summary?.percentAnonymous)}
+                </span>{" "}
+                of submissions
+              </div>
+            </div>
+
+            {/* Session Duration */}
+            <div className="analytics-card">
+              <div className="analytics-card-header">
+                <span className="analytics-card-title">Session Duration</span>
+                <div className="analytics-icon primary">
+                  <i className="fas fa-clock" aria-hidden="true"></i>
+                </div>
+              </div>
+              <div className="analytics-value" style={{ fontSize: "2rem" }}>
+                {analytics.timeline?.duration || "N/A"}
+              </div>
+              {compactTimeLabel(
+                analytics.timeline?.firstQuestion,
+                analytics.timeline?.lastQuestion
+              ) && (
+                <div className="analytics-detail">
+                  {compactTimeLabel(
+                    analytics.timeline?.firstQuestion,
+                    analytics.timeline?.lastQuestion
+                  )}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
 
         <div className="filter-controls">
           <button

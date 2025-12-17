@@ -1,14 +1,12 @@
 // src/Components/HostDashboard.jsx
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ref, onValue, update, remove } from 'firebase/database';
+import { ref, onValue, update, get } from 'firebase/database';
 import { database } from '../Firebase/config'; // keep your actual casing
 import QuestionItem from './QuestionItem';
 import MCProgramView from './MCProgramView';
+import OfflineBanner from './OfflineBanner';
 import {
-  exportToCSV,
-  exportToJSON,
-  exportToText,
   generateAnalytics,
 } from '../utils/exportutils'; // <-- ensure this matches your file name
 import './HostDashboard.css';
@@ -53,14 +51,13 @@ export default function HostDashboard() {
   const { eventId } = useParams();
 
   const [event, setEvent] = useState(null);
+  const [organizerProfile, setOrganizerProfile] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [filter, setFilter] = useState('all');
   const [isConnected, setIsConnected] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
-  const [showExportMenu, setShowExportMenu] = useState(false);
   const [analytics, setAnalytics] = useState(EMPTY_ANALYTICS);
   const [notification, setNotification] = useState(null);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
 
   const questionsPath = useMemo(
     () => (eventId ? `questions/${eventId}` : 'questions'),
@@ -72,10 +69,23 @@ export default function HostDashboard() {
     if (!eventId) return;
 
     const eventRef = ref(database, `events/${eventId}`);
-    const unsubscribe = onValue(eventRef, (snap) => {
+    const unsubscribe = onValue(eventRef, async (snap) => {
       const data = snap.val();
       if (data) {
         setEvent(data);
+
+        // Load organizer profile if organizerId exists
+        if (data.organizerId) {
+          try {
+            const userRef = ref(database, `users/${data.organizerId}`);
+            const userSnap = await get(userRef);
+            if (userSnap.exists()) {
+              setOrganizerProfile(userSnap.val());
+            }
+          } catch (error) {
+            console.error('Error loading organizer profile:', error);
+          }
+        }
       }
     });
 
@@ -132,33 +142,6 @@ export default function HostDashboard() {
     [eventId, showNotification]
   );
 
-  const deleteQuestion = useCallback(
-    async (id) => {
-      setShowDeleteConfirm(id);
-    },
-    []
-  );
-
-  const confirmDelete = useCallback(
-    async () => {
-      const id = showDeleteConfirm;
-      setShowDeleteConfirm(null);
-
-      try {
-        const qRef = ref(
-          database,
-          eventId ? `questions/${eventId}/${id}` : `questions/${id}`
-        );
-        await remove(qRef);
-        showNotification('Question deleted successfully', 'success');
-      } catch (err) {
-        console.error('Error deleting question:', err);
-        showNotification('Failed to delete question. Please try again.', 'error');
-      }
-    },
-    [eventId, showDeleteConfirm, showNotification]
-  );
-
   const filteredQuestions = useMemo(() => {
     let list = questions;
     switch (filter) {
@@ -180,19 +163,6 @@ export default function HostDashboard() {
     return [...list].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
   }, [questions, filter]);
 
-  const handleExport = useCallback(
-    (format) => {
-      const all = [...questions].sort(
-        (a, b) => (b.createdAt || 0) - (a.createdAt || 0)
-      );
-      if (format === 'csv') exportToCSV(all);
-      else if (format === 'json') exportToJSON(all);
-      else if (format === 'txt') exportToText(all);
-      setShowExportMenu(false);
-    },
-    [questions]
-  );
-
   const durationNote = compactTimeLabel(
     analytics.timeline?.firstQuestion,
     analytics.timeline?.lastQuestion
@@ -200,10 +170,11 @@ export default function HostDashboard() {
 
   return (
     <div className="page-wrapper">
+      <OfflineBanner />
       <nav className="navbar">
         <div className="nav-container">
           <Link to="/" className="logo">
-            <span className="logo-icon">💬</span>
+            <span className="logo-icon"><i className="fas fa-comments"></i></span>
             <span className="logo-text">Ask Freely</span>
           </Link>
         </div>
@@ -211,10 +182,10 @@ export default function HostDashboard() {
 
       <div className="container host-container">
         {/* Event Branding Header */}
-        {event && event.branding && (event.branding.logoUrl || event.branding.organizationName) && (
+        {event && event.branding && (organizerProfile?.logoUrl || event.branding.organizationName) && (
           <div className="mc-branding-header">
-            {event.branding.logoUrl && (
-              <img src={event.branding.logoUrl} alt="Event logo" className="mc-event-logo" />
+            {organizerProfile?.logoUrl && (
+              <img src={organizerProfile.logoUrl} alt="Organization logo" className="mc-event-logo" />
             )}
             <div className="mc-event-info">
               {event.branding.organizationName && (
@@ -249,31 +220,6 @@ export default function HostDashboard() {
             <div className="header-actions">
               <div className="stats">
                 <span>{questions.length}</span> questions
-              </div>
-              <div className="export-dropdown">
-                <button
-                  className="export-btn"
-                  onClick={() => setShowExportMenu((v) => !v)}
-                >
-                  <i className="fas fa-download" aria-hidden="true" />
-                  Export
-                </button>
-                {showExportMenu && (
-                  <div className="export-menu">
-                    <button onClick={() => handleExport('csv')}>
-                      <i className="fas fa-file-csv" aria-hidden="true" />
-                      Export as CSV
-                    </button>
-                    <button onClick={() => handleExport('json')}>
-                      <i className="fas fa-code" aria-hidden="true" />
-                      Export as JSON
-                    </button>
-                    <button onClick={() => handleExport('txt')}>
-                      <i className="fas fa-file-lines" aria-hidden="true" />
-                      Export as Text
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -310,7 +256,9 @@ export default function HostDashboard() {
               <div className="analytics-value">
                 {analytics.summary?.unanswered ?? 0}
               </div>
-              <div className="analytics-detail">Remaining in queue</div>
+              <div className="analytics-detail">
+                <span className="analytics-text">Remaining in queue</span>
+              </div>
             </div>
 
             {/* Anonymous */}
@@ -414,7 +362,6 @@ export default function HostDashboard() {
                   key={q.id}
                   question={q}
                   onToggleAnswered={toggleAnswered}
-                  onDelete={deleteQuestion}
                 />
               ))
             )}
@@ -427,30 +374,6 @@ export default function HostDashboard() {
         <div className={`notification-toast ${notification.type}`}>
           <i className={`fas fa-${notification.type === 'success' ? 'check-circle' : 'exclamation-circle'}`}></i>
           <span>{notification.message}</span>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
-        <div className="modal-overlay" onClick={() => setShowDeleteConfirm(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>Delete Question?</h3>
-            <p>Are you sure you want to delete this question? This action cannot be undone.</p>
-            <div className="modal-actions">
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowDeleteConfirm(null)}
-              >
-                Cancel
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={confirmDelete}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
         </div>
       )}
     </div>

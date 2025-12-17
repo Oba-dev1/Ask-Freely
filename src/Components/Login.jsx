@@ -5,6 +5,8 @@ import { sendEmailVerification } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
 import useRecaptcha from '../hooks/useRecaptcha';
 import { RECAPTCHA_SITE_KEY } from '../Firebase/config';
+import { getFriendlyErrorMessage, retryWithBackoff } from '../utils/errorHandler';
+import OfflineBanner from './OfflineBanner';
 import './Auth.css';
 
 function Login() {
@@ -102,8 +104,11 @@ function Login() {
       setError('');
       setLoading(true);
 
-      // Execute reCAPTCHA verification
-      const recaptchaToken = await executeRecaptcha('google_login');
+      // Execute reCAPTCHA verification with retry
+      const recaptchaToken = await retryWithBackoff(
+        () => executeRecaptcha('google_login'),
+        2 // Max 2 retries for reCAPTCHA
+      );
 
       if (!recaptchaToken) {
         setError('reCAPTCHA verification failed. Please try again.');
@@ -118,14 +123,8 @@ function Login() {
       // After authentication, they'll be redirected back
     } catch (err) {
       console.error('❌ Google sign-in error:', err);
-      console.error('Error code:', err.code);
-      console.error('Error message:', err.message);
-
-      if (err.code === 'auth/unauthorized-domain') {
-        setError('This domain is not authorized. Please add it to Firebase authorized domains.');
-      } else {
-        setError(`Failed to sign in with Google: ${err.message}`);
-      }
+      // Use friendly error message utility
+      setError(getFriendlyErrorMessage(err));
       setLoading(false);
     }
   };
@@ -168,13 +167,8 @@ function Login() {
       navigate('/organizer/dashboard');
     } catch (err) {
       console.error('Login error:', err);
-      // More specific error messages
-      const errorMessage = err?.code === 'auth/wrong-password' || err?.code === 'auth/user-not-found'
-        ? 'Invalid email or password. Please try again.'
-        : err?.code === 'auth/too-many-requests'
-        ? 'Too many failed attempts. Please try again later.'
-        : 'Failed to sign in. Please check your credentials.';
-      setError(errorMessage);
+      // Use friendly error message utility
+      setError(getFriendlyErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -182,6 +176,7 @@ function Login() {
 
   return (
     <div className="page-wrapper">
+      <OfflineBanner />
       <div className="auth-layout">
         {/* Left: Visual / Brand */}
         <aside className="auth-visual" aria-hidden="true">
