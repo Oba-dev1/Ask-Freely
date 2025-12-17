@@ -5,6 +5,7 @@ import { ref, onValue, update, get } from 'firebase/database';
 import { database } from '../Firebase/config'; // keep your actual casing
 import QuestionItem from './QuestionItem';
 import MCProgramView from './MCProgramView';
+import OfflineBanner from './OfflineBanner';
 import {
   generateAnalytics,
 } from '../utils/exportutils'; // <-- ensure this matches your file name
@@ -169,6 +170,7 @@ export default function HostDashboard() {
 
   return (
     <div className="page-wrapper">
+      <OfflineBanner />
       <nav className="navbar">
         <div className="nav-container">
           <Link to="/" className="logo">
