@@ -1,7 +1,7 @@
 // src/Components/HostDashboard.jsx
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ref, onValue, update } from 'firebase/database';
+import { ref, onValue, update, get } from 'firebase/database';
 import { database } from '../Firebase/config'; // keep your actual casing
 import QuestionItem from './QuestionItem';
 import MCProgramView from './MCProgramView';
@@ -50,6 +50,7 @@ export default function HostDashboard() {
   const { eventId } = useParams();
 
   const [event, setEvent] = useState(null);
+  const [organizerProfile, setOrganizerProfile] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [filter, setFilter] = useState('all');
   const [isConnected, setIsConnected] = useState(true);
@@ -67,10 +68,23 @@ export default function HostDashboard() {
     if (!eventId) return;
 
     const eventRef = ref(database, `events/${eventId}`);
-    const unsubscribe = onValue(eventRef, (snap) => {
+    const unsubscribe = onValue(eventRef, async (snap) => {
       const data = snap.val();
       if (data) {
         setEvent(data);
+
+        // Load organizer profile if organizerId exists
+        if (data.organizerId) {
+          try {
+            const userRef = ref(database, `users/${data.organizerId}`);
+            const userSnap = await get(userRef);
+            if (userSnap.exists()) {
+              setOrganizerProfile(userSnap.val());
+            }
+          } catch (error) {
+            console.error('Error loading organizer profile:', error);
+          }
+        }
       }
     });
 
@@ -166,10 +180,10 @@ export default function HostDashboard() {
 
       <div className="container host-container">
         {/* Event Branding Header */}
-        {event && event.branding && (event.branding.logoUrl || event.branding.organizationName) && (
+        {event && event.branding && (organizerProfile?.logoUrl || event.branding.organizationName) && (
           <div className="mc-branding-header">
-            {event.branding.logoUrl && (
-              <img src={event.branding.logoUrl} alt="Event logo" className="mc-event-logo" />
+            {organizerProfile?.logoUrl && (
+              <img src={organizerProfile.logoUrl} alt="Organization logo" className="mc-event-logo" />
             )}
             <div className="mc-event-info">
               {event.branding.organizationName && (
