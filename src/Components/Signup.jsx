@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import useRecaptcha from '../hooks/useRecaptcha';
 import { RECAPTCHA_SITE_KEY } from '../Firebase/config';
+import { getFriendlyErrorMessage, retryWithBackoff } from '../utils/errorHandler';
+import OfflineBanner from './OfflineBanner';
 import './Auth.css';
 
 function Signup() {
@@ -82,8 +84,11 @@ function Signup() {
       setError('');
       setLoading(true);
 
-      // Execute reCAPTCHA verification
-      const recaptchaToken = await executeRecaptcha('google_signup');
+      // Execute reCAPTCHA verification with retry
+      const recaptchaToken = await retryWithBackoff(
+        () => executeRecaptcha('google_signup'),
+        2 // Max 2 retries for reCAPTCHA
+      );
 
       if (!recaptchaToken) {
         setError('reCAPTCHA verification failed. Please try again.');
@@ -98,14 +103,8 @@ function Signup() {
       // After authentication, they'll be redirected back
     } catch (err) {
       console.error('❌ Google sign-up error:', err);
-      console.error('Error code:', err.code);
-      console.error('Error message:', err.message);
-
-      if (err.code === 'auth/unauthorized-domain') {
-        setError('This domain is not authorized. Please add it to Firebase authorized domains.');
-      } else {
-        setError(`Failed to sign up with Google: ${err.message}`);
-      }
+      // Use friendly error message utility
+      setError(getFriendlyErrorMessage(err));
       setLoading(false);
     }
   };
@@ -136,15 +135,8 @@ function Signup() {
       setSignupSuccess(true);
     } catch (err) {
       console.error(err);
-      // More specific error messages
-      const errorMessage = err?.code === 'auth/email-already-in-use'
-        ? 'This email is already registered. Please sign in instead.'
-        : err?.code === 'auth/weak-password'
-        ? 'Password is too weak. Please use a stronger password.'
-        : err?.code === 'auth/invalid-email'
-        ? 'Invalid email address format.'
-        : 'Failed to create account. ' + (err?.message || 'Please try again.');
-      setError(errorMessage);
+      // Use friendly error message utility
+      setError(getFriendlyErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -152,6 +144,7 @@ function Signup() {
 
   return (
     <div className="page-wrapper">
+      <OfflineBanner />
       <div className="auth-layout">
         <aside className="auth-visual" aria-hidden="true">
           <div className="auth-image-container">
