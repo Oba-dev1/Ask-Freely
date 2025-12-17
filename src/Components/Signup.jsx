@@ -22,16 +22,31 @@ function Signup() {
   const navigate = useNavigate();
   const { executeRecaptcha } = useRecaptcha(RECAPTCHA_SITE_KEY);
 
-  // Redirect if already logged in
+  // Handle already logged in users
   useEffect(() => {
-    if (!authLoading && currentUser && userProfile) {
-      if (userProfile.profileCompleted) {
-        navigate('/organizer/dashboard');
-      } else {
-        navigate('/profile-setup');
+    // Only redirect if auth has finished loading
+    if (authLoading) return;
+
+    if (currentUser && userProfile) {
+      // If user successfully just signed up, redirect them
+      if (signupSuccess) {
+        if (userProfile.profileCompleted) {
+          navigate('/organizer/dashboard');
+        } else {
+          navigate('/profile-setup');
+        }
+      }
+      // If user is already logged in but didn't just sign up,
+      // redirect them to dashboard (they shouldn't be on signup page)
+      else {
+        if (userProfile.profileCompleted) {
+          navigate('/organizer/dashboard', { replace: true });
+        } else {
+          navigate('/profile-setup', { replace: true });
+        }
       }
     }
-  }, [currentUser, userProfile, authLoading, navigate]);
+  }, [currentUser, userProfile, authLoading, navigate, signupSuccess]);
 
   const emailValid = useMemo(() => /\S+@\S+\.\S+/.test(formData.email), [formData.email]);
   const passwordValid = useMemo(() => formData.password.length >= 6, [formData.password]);
