@@ -74,8 +74,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Sign out
-  const logout = () => {
-    return signOut(auth);
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      // Clear any persisted state
+      setCurrentUser(null);
+      setUserProfile(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+      throw error;
+    }
   };
 
   // Reset password
@@ -93,6 +101,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    let unsubscribe;
+
     // Check for redirect result from Google Sign-In
     const handleRedirectResult = async () => {
       try {
@@ -141,13 +151,18 @@ export const AuthProvider = ({ children }) => {
         }
       } catch (error) {
         console.error('Error handling redirect result:', error);
-        // Note: Error will be displayed to user through the auth context
+        // Clear auth state on error
+        await signOut(auth).catch(console.error);
+        setCurrentUser(null);
+        setUserProfile(null);
+      } finally {
+        // Always set loading to false after handling redirect
+        setLoading(false);
       }
     };
 
-    handleRedirectResult();
-
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    // Set up auth state listener
+    unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.log('Auth state changed:', user ? user.email : 'No user');
       setCurrentUser(user);
       if (user) {
@@ -157,6 +172,9 @@ export const AuthProvider = ({ children }) => {
       }
       setLoading(false);
     });
+
+    // Handle redirect result after setting up listener
+    handleRedirectResult();
 
     return unsubscribe;
   }, []);

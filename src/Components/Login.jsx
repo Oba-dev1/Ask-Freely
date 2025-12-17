@@ -24,7 +24,10 @@ function Login() {
 
   // Redirect if already logged in
   useEffect(() => {
-    if (!authLoading && currentUser && userProfile) {
+    // Only redirect if auth has finished loading
+    if (authLoading) return;
+
+    if (currentUser && userProfile) {
       if (userProfile.profileCompleted) {
         navigate('/organizer/dashboard');
       } else {

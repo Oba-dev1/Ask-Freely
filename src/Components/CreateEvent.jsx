@@ -359,7 +359,7 @@ function CreateEvent() {
                         </button>
                       </div>
                       <p className="preview-text">{q.text}</p>
-                      {q.notes && <p className="preview-notes">📝 {q.notes}</p>}
+                      {q.notes && <p className="preview-notes">{q.notes}</p>}
                     </div>
                   ))}
                 </div>
