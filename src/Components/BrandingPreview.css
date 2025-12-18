@@ -1,297 +1,343 @@
 /* ============================================
-   BRANDING PREVIEW COMPONENT STYLES
+   BRANDING PREVIEW - MODERN DESIGN
 ============================================ */
 
 .branding-preview-section {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: 2rem;
-  margin-top: 2rem;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  padding: 1.75rem;
+  margin: 1rem 0 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Header Section */
+.preview-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  min-width: 0; /* Allow flex children to shrink */
+}
+
+.preview-header-section > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.preview-header-section > .preview-url-chip {
+  flex-shrink: 0;
 }
 
 .preview-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.3rem;
-  color: #000000;
+  margin: 0 0 0.35rem 0;
+  font-size: 1.15rem;
+  color: #1a1a1a;
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
 }
 
 .preview-title i {
   color: #FF6B35;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
 }
 
 .preview-subtitle {
-  margin: 0 0 1.5rem 0;
-  /* color: rgba(255, 255, 255, 0.7); */
-  font-size: 0.95rem;
+  margin: 0;
+  color: #666;
+  font-size: 0.875rem;
 }
 
-/* Browser Mockup */
-.preview-mockup {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-}
-
-.mockup-browser {
-  background: #1a1a2e;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.browser-bar {
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.75rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.browser-dots {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.browser-dots span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.browser-dots span:nth-child(1) {
-  background: #ef4444;
-}
-
-.browser-dots span:nth-child(2) {
-  background: #f59e0b;
-}
-
-.browser-dots span:nth-child(3) {
-  background: #10b981;
-}
-
-.browser-url {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.4rem 0.875rem;
-  border-radius: 6px;
-  color: rgba(255, 255, 255, 0.6);
+.preview-url-chip {
+  background: rgba(255, 107, 53, 0.06);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  color: #FF6B35;
+  padding: 0.5rem 0.875rem;
+  border-radius: 8px;
   font-size: 0.8rem;
   font-family: 'Courier New', monospace;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
-.browser-content {
-  padding: 1.5rem;
-  background: #0f0f1e;
-}
-
-/* Preview Header */
-.preview-header {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+/* Preview Content Container */
+.preview-content {
+  display: grid;
   gap: 1rem;
 }
 
-.preview-logo-section {
+/* Event Card */
+.preview-event-card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.preview-card-content {
+  padding: 1.5rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.preview-logo-wrapper {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
 }
 
 .preview-logo {
-  width: 60px;
-  height: 60px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.5rem;
-  border: 1px solid var(--preview-brand-color, #FF6B35);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0.75rem;
+  border: 2px solid var(--preview-brand-color, #FF6B35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.preview-org-name {
-  margin: 0;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.preview-event-info {
-  flex: 1;
+.preview-event-details {
+  text-align: center;
+  color: #ffffff;
 }
 
 .preview-event-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
+  margin: 0 0 0.75rem 0;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #ffffff;
   line-height: 1.3;
 }
 
-.preview-event-date {
-  margin: 0 0 0.4rem 0;
-  font-size: 0.8rem;
+.preview-event-meta {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--preview-brand-color, #FF6B35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.preview-event-meta i {
+  font-size: 0.85rem;
+}
+
+.preview-org-badge {
+  margin: 0 0 0.65rem 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.preview-org-badge i {
+  font-size: 0.75rem;
+  opacity: 0.7;
 }
 
 .preview-tagline {
   margin: 0;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75);
   font-style: italic;
+  line-height: 1.5;
 }
 
-.preview-flyer-thumb {
-  width: 80px;
-  height: 120px;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.preview-flyer-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Form Mockup */
-.preview-form-mockup {
+.preview-flyer-wrapper {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  justify-content: center;
 }
 
-.mockup-input {
-  height: 35px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+.preview-flyer {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.mockup-textarea {
-  height: 80px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+/* Form Card */
+.preview-form-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.mockup-button {
-  height: 44px;
+.preview-form-label {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.preview-form-inputs {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.preview-input-field,
+.preview-textarea-field {
+  background: #f8f9fa;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.preview-input-field {
+  height: 46px;
+  display: flex;
+  align-items: center;
+}
+
+.preview-textarea-field {
+  min-height: 100px;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 0.875rem;
+}
+
+.preview-input-placeholder,
+.preview-textarea-placeholder {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  user-select: none;
+}
+
+.preview-submit-btn {
+  width: 100%;
+  height: 48px;
   background: #FF6B35;
-  border-radius: 8px;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  font-weight: 600;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+}
+
+.preview-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.35);
+}
+
+.preview-submit-btn i {
   font-size: 0.9rem;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
 }
 
-/* Responsive */
-@media (max-width: 900px) {
+/* Responsive Design */
+@media (max-width: 860px) {
   .branding-preview-section {
-    padding: 1.75rem;
-  }
-
-  .preview-mockup {
     padding: 1rem;
   }
 
-  .browser-content {
-    padding: 1.25rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .branding-preview-section {
-    padding: 1.5rem;
-  }
-
-  .preview-title {
-    font-size: 1.2rem;
-  }
-
-  .preview-mockup {
-    padding: 0.75rem;
-  }
-
-  .browser-content {
-    padding: 1rem;
-  }
-
-  .preview-header {
-    padding: 1.25rem;
-  }
-
-  .preview-flyer-thumb {
-    width: 60px;
-    height: 90px;
-  }
-}
-
-@media (max-width: 480px) {
-  .branding-preview-section {
-    padding: 1.25rem;
-  }
-
-  .preview-title {
-    font-size: 1.1rem;
+  .preview-header-section {
     flex-direction: column;
-    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
   }
 
-  .preview-mockup {
-    padding: 0.5rem;
+  .preview-title {
+    font-size: 1.05rem;
   }
 
-  .browser-bar {
-    padding: 0.6rem 0.75rem;
+  .preview-subtitle {
+    font-size: 0.8rem;
   }
 
-  .browser-url {
+  .preview-url-chip {
     font-size: 0.7rem;
+    padding: 0.45rem 0.65rem;
+    align-self: flex-start;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .browser-content {
-    padding: 0.875rem;
-  }
-
-  .preview-header {
-    padding: 1rem;
+  .preview-card-content {
+    padding: 1.25rem;
+    gap: 1rem;
   }
 
   .preview-logo {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
+    padding: 0.6rem;
   }
 
   .preview-event-title {
-    font-size: 1rem;
+    font-size: 1.15rem;
   }
 
-  .preview-flyer-thumb {
-    width: 50px;
-    height: 75px;
+  .preview-event-meta {
+    font-size: 0.85rem;
+  }
+
+  .preview-org-badge {
+    font-size: 0.75rem;
+  }
+
+  .preview-tagline {
+    font-size: 0.85rem;
+  }
+
+  .preview-flyer {
+    max-width: 200px;
+  }
+
+  .preview-form-card {
+    padding: 1.25rem;
+  }
+
+  .preview-form-label {
+    font-size: 0.95rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .preview-input-field {
+    height: 42px;
+    padding: 0.75rem 0.875rem;
+  }
+
+  .preview-textarea-field {
+    min-height: 90px;
+    padding: 0.75rem 0.875rem;
+  }
+
+  .preview-input-placeholder,
+  .preview-textarea-placeholder {
+    font-size: 0.85rem;
+  }
+
+  .preview-submit-btn {
+    height: 44px;
+    font-size: 0.9rem;
   }
 }
