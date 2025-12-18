@@ -1,0 +1,106 @@
+rules_version = '2';
+
+// ============================================
+// Firebase Storage Security Rules
+// ============================================
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper function to check file size (max 5MB for images)
+    function isValidImageSize() {
+      return request.resource.size < 5 * 1024 * 1024;
+    }
+
+    // Helper function to check if file is an image
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if user owns the resource
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // ============================================
+    // USER PROFILE IMAGES
+    // ============================================
+    match /users/{userId}/profile/{imageName} {
+      // Users can read their own profile images
+      allow read: if isAuthenticated();
+
+      // Users can only upload to their own profile folder
+      allow write: if isAuthenticated()
+                   && isOwner(userId)
+                   && isImage()
+                   && isValidImageSize();
+
+      // Allow delete only by owner
+      allow delete: if isAuthenticated() && isOwner(userId);
+    }
+
+    // ============================================
+    // EVENT LOGOS
+    // ============================================
+    match /events/{eventId}/logo/{imageName} {
+      // Anyone can read published event logos
+      allow read: if true;
+
+      // Only event organizer can upload logos
+      allow write: if isAuthenticated()
+                   && isImage()
+                   && isValidImageSize()
+                   && firestore.get(/databases/(default)/documents/events/$(eventId)).data.organizerId == request.auth.uid;
+
+      // Only event organizer can delete
+      allow delete: if isAuthenticated()
+                    && firestore.get(/databases/(default)/documents/events/$(eventId)).data.organizerId == request.auth.uid;
+    }
+
+    // ============================================
+    // EVENT FLYERS
+    // ============================================
+    match /events/{eventId}/flyer/{imageName} {
+      // Anyone can read published event flyers
+      allow read: if true;
+
+      // Only event organizer can upload flyers
+      allow write: if isAuthenticated()
+                   && isImage()
+                   && isValidImageSize()
+                   && firestore.get(/databases/(default)/documents/events/$(eventId)).data.organizerId == request.auth.uid;
+
+      // Only event organizer can delete
+      allow delete: if isAuthenticated()
+                    && firestore.get(/databases/(default)/documents/events/$(eventId)).data.organizerId == request.auth.uid;
+    }
+
+    // ============================================
+    // TEMPORARY UPLOADS
+    // ============================================
+    match /temp/{userId}/{imageName} {
+      // Users can read their own temp uploads
+      allow read: if isAuthenticated() && isOwner(userId);
+
+      // Users can upload to their own temp folder
+      allow write: if isAuthenticated()
+                   && isOwner(userId)
+                   && isImage()
+                   && isValidImageSize();
+
+      // Users can delete their own temp files
+      allow delete: if isAuthenticated() && isOwner(userId);
+    }
+
+    // ============================================
+    // DENY ALL OTHER PATHS
+    // ============================================
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "rules": {
+    // ============================================
+    // USER DATA - Only accessible to the owner
+    // ============================================
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        ".validate": "newData.hasChildren(['email', 'role', 'createdAt'])",
+        "email": {
+          ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$/i)"
+        },
+        "organizationName": {
+          ".validate": "newData.isString() && newData.val().length <= 200"
+        },
+        "role": {
+          ".validate": "newData.isString() && (newData.val() === 'organizer' || newData.val() === 'admin')"
+        },
+        "profileCompleted": {
+          ".validate": "newData.isBoolean()"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+
+    // ============================================
+    // EVENTS - Organizer owns, participants can read
+    // ============================================
+    "events": {
+      "$eventId": {
+        // Organizers can read their own events
+        // Participants can read if event is published or unlisted
+        ".read": "auth != null && (data.child('organizerId').val() === auth.uid || data.child('status').val() === 'published' || data.child('status').val() === 'unlisted')",
+
+        // Only event organizer can write
+        ".write": "auth != null && (
+          !data.exists() && newData.child('organizerId').val() === auth.uid ||
+          data.exists() && data.child('organizerId').val() === auth.uid
+        )",
+
+        // Validate event structure
+        ".validate": "newData.hasChildren(['title', 'organizerId', 'status', 'createdAt'])",
+
+        "title": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 200"
+        },
+        "description": {
+          ".validate": "newData.isString() && newData.val().length <= 2000"
+        },
+        "slug": {
+          ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9-]+$/)"
+        },
+        "organizerId": {
+          ".validate": "newData.val() === auth.uid"
+        },
+        "organizationName": {
+          ".validate": "newData.isString() && newData.val().length <= 200"
+        },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'draft' || newData.val() === 'published' || newData.val() === 'unlisted' || newData.val() === 'archived')"
+        },
+        "dateTime": {
+          ".validate": "newData.isString()"
+        },
+        "createdAt": {
+          ".validate": "newData.isString()"
+        },
+        "updatedAt": {
+          ".validate": "newData.isString()"
+        },
+        "brandColor": {
+          ".validate": "newData.isString() && newData.val().matches(/^#[0-9A-Fa-f]{6}$/)"
+        },
+        "logoUrl": {
+          ".validate": "newData.isString() && newData.val().matches(/^https?:\\/\\/.+/)"
+        },
+        "flyerUrl": {
+          ".validate": "newData.isString() && newData.val().matches(/^https?:\\/\\/.+/)"
+        },
+        "tagline": {
+          ".validate": "newData.isString() && newData.val().length <= 300"
+        },
+        "enableQuestionSubmission": {
+          ".validate": "newData.isBoolean()"
+        },
+        "requireApproval": {
+          ".validate": "newData.isBoolean()"
+        },
+        "allowAnonymous": {
+          ".validate": "newData.isBoolean()"
+        }
+      }
+    },
+
+    // ============================================
+    // QUESTIONS - Controlled access based on event settings
+    // ============================================
+    "questions": {
+      "$eventId": {
+        "$questionId": {
+          // Organizer can read all questions
+          // Participants can read approved/answered questions
+          ".read": "auth != null && (
+            root.child('events/' + $eventId + '/organizerId').val() === auth.uid ||
+            (data.child('status').val() === 'approved' || data.child('status').val() === 'answered')
+          )",
+
+          // Participants can create (if submissions enabled)
+          // Organizer can update (status, response, upvotes, etc.)
+          ".write": "auth != null && (
+            !data.exists() && root.child('events/' + $eventId + '/enableQuestionSubmission').val() === true ||
+            data.exists() && root.child('events/' + $eventId + '/organizerId').val() === auth.uid
+          )",
+
+          "questionText": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+          },
+          "authorName": {
+            ".validate": "newData.isString() && newData.val().length <= 100"
+          },
+          "status": {
+            ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'approved' || newData.val() === 'rejected' || newData.val() === 'answered')"
+          },
+          "response": {
+            ".validate": "newData.isString() && newData.val().length <= 2000"
+          },
+          "upvotes": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "createdAt": {
+            ".validate": "newData.isString()"
+          },
+          "answeredAt": {
+            ".validate": "newData.isString()"
+          }
+        }
+      }
+    },
+
+    // ============================================
+    // UPVOTES - Track user votes on questions
+    // ============================================
+    "upvotes": {
+      "$eventId": {
+        "$questionId": {
+          "$userId": {
+            // Users can read/write their own upvotes
+            ".read": "auth != null",
+            ".write": "auth != null && $userId === auth.uid",
+            ".validate": "newData.isBoolean()"
+          }
+        }
+      }
+    },
+
+    // ============================================
+    // EVENT ANALYTICS - Only organizer can access
+    // ============================================
+    "analytics": {
+      "$eventId": {
+        ".read": "auth != null && root.child('events/' + $eventId + '/organizerId').val() === auth.uid",
+        ".write": "auth != null && root.child('events/' + $eventId + '/organizerId').val() === auth.uid",
+
+        "totalQuestions": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "totalParticipants": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "questionsAnswered": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "avgResponseTime": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "engagementRate": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        }
+      }
+    },
+
+    // ============================================
+    // EVENT PROGRAMS - Only organizer can manage
+    // ============================================
+    "programs": {
+      "$eventId": {
+        ".read": "auth != null && (
+          root.child('events/' + $eventId + '/organizerId').val() === auth.uid ||
+          root.child('events/' + $eventId + '/status').val() === 'published'
+        )",
+        ".write": "auth != null && root.child('events/' + $eventId + '/organizerId').val() === auth.uid",
+
+        "$programId": {
+          "title": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 200"
+          },
+          "duration": {
+            ".validate": "newData.isString() && newData.val().length <= 50"
+          },
+          "description": {
+            ".validate": "newData.isString() && newData.val().length <= 1000"
+          },
+          "order": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          }
+        }
+      }
+    },
+
+    // ============================================
+    // RATE LIMITING - Track request counts
+    // ============================================
+    "rateLimits": {
+      "$userId": {
+        ".read": "$userId === auth.uid",
+        ".write": "$userId === auth.uid",
+
+        "questionSubmissions": {
+          "count": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+          "resetAt": {
+            ".validate": "newData.isNumber()"
+          }
+        },
+        "eventCreations": {
+          "count": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 50"
+          },
+          "resetAt": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    }
+  }
+}
