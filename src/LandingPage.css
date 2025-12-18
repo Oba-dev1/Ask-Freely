@@ -359,103 +359,177 @@
 }
 
 /* ---------- TICKER ---------- */
-.lp-ticker {
-  padding: 8px 0;
+/* ============== LIVE EVENTS SECTION ============== */
+.lp-events {
+  padding: 48px 0;
   background: var(--bg-soft);
 }
 
-.ticker-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  position: relative;
-}
-
-.ticker-heading {
-  margin: 0;
-  font-size: 1.35rem;
+.events-heading {
+  margin: 0 0 32px 0;
+  font-size: 1.5rem;
   letter-spacing: 0.2px;
   font-weight: 800;
   color: var(--ink);
-  border-right: 1px solid var(--border);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  white-space: nowrap;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 2;
-  background: var(--bg-soft);
-  padding-right: 20px;
-}
-
-.ticker-heading i {
-  color: var(--primary);
-}
-
-/* Gradient fade effect on the right side of heading */
-.ticker-heading::after {
-  content: "";
-  position: absolute;
-  right: -60px;
-  top: 0;
-  bottom: 0;
-  width: 60px;
-  background: linear-gradient(90deg, var(--bg-soft), transparent);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.tick-track {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-}
-
-.tick-items {
   display: flex;
-  gap: 32px;
-  padding: 12px 0;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+  justify-content: center;
 }
 
-.tick-items.animate {
-  animation: scroll 28s linear infinite;
+.events-heading i {
+  color: var(--primary);
+  font-size: 1.4rem;
 }
 
-.tick-items.static {
-  animation: none;
-  justify-content: flex-start;
-}
-
-.tick-item {
-  white-space: nowrap;
-  opacity: .9;
+.events-empty {
+  text-align: center;
+  padding: 40px 20px;
   color: var(--ink-light);
+  font-size: 1.05rem;
+}
+
+/* Carousel Container */
+.events-carousel {
+  position: relative;
+}
+
+.events-track {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Event Card */
+.event-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  opacity: 0.6;
+  transform: scale(0.96);
+}
+
+.event-card.active {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 8px 24px rgba(255, 107, 53, 0.15);
+  border-color: rgba(255, 107, 53, 0.3);
+}
+
+.event-card:hover {
+  opacity: 1;
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(255, 107, 53, 0.2);
+}
+
+/* Card Header */
+.event-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.event-status {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
 }
 
-.tick-item i {
-  color: #a78bfa !important;
-  font-size: 1.2rem !important;
-  filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.9)) drop-shadow(0 0 4px rgba(167, 139, 250, 0.6));
-  display: inline-block;
+.event-status i {
+  font-size: 0.5rem;
+  animation: pulse 2s ease-in-out infinite;
 }
 
-.tick-item .t {
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.event-activity {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.event-activity i {
+  font-size: 0.85rem;
+}
+
+/* Card Content */
+.event-card-title {
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--ink);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.tick-item .m {
-  color: var(--muted);
-  margin-left: 0.4rem;
+.event-card-org {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-light);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-@keyframes scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+.event-card-org i {
+  color: var(--primary);
+  font-size: 0.85rem;
+}
+
+/* Carousel Dots */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.carousel-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.carousel-dots .dot:hover {
+  background: rgba(255, 107, 53, 0.5);
+  transform: scale(1.2);
+}
+
+.carousel-dots .dot.active {
+  background: var(--primary);
+  width: 24px;
+  border-radius: 5px;
 }
 
 /* Section heading for other sections */
@@ -1332,23 +1406,27 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     height: 350px;
   }
 
-  /* Ticker - stack on mobile */
-  .ticker-wrapper {
-    flex-direction: column;
-    align-items: flex-start;
+  /* Live Events - Mobile adjustments */
+  .lp-events {
+    padding: 32px 0;
+  }
+
+  .events-heading {
+    font-size: 1.3rem;
+    margin-bottom: 24px;
+  }
+
+  .events-track {
+    grid-template-columns: 1fr;
     gap: 16px;
   }
 
-  .tick-track {
-    width: 100%; /* Ensure full width on mobile for animation to work */
+  .event-card {
+    padding: 20px;
   }
 
-  .ticker-heading {
-    padding-right: 0;
-  }
-
-  .ticker-heading::after {
-    display: none;
+  .event-card-title {
+    font-size: 1.1rem;
   }
 
   /* Live stats - 2 column on mobile */
@@ -1537,17 +1615,32 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     font-size: 0.95rem;
   }
 
-  /* Ticker compact */
-  .lp-ticker {
+  /* Live Events compact */
+  .lp-events {
     padding: 24px 0;
   }
 
-  .ticker-heading {
+  .events-heading {
     font-size: 1.15rem;
+    margin-bottom: 20px;
   }
 
-  .tick-items {
-    gap: 24px;
+  .event-card {
+    padding: 18px;
+  }
+
+  .event-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .event-card-title {
+    font-size: 1.05rem;
+  }
+
+  .event-card-org {
+    font-size: 0.85rem;
   }
 
   /* Fix live stats */
