@@ -1339,6 +1339,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     gap: 16px;
   }
 
+  .tick-track {
+    width: 100%; /* Ensure full width on mobile for animation to work */
+  }
+
   .ticker-heading {
     padding-right: 0;
   }
