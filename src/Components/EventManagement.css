@@ -677,7 +677,16 @@
     margin: 1rem 0;
   }
 
-  .header h1 { font-size: 1.65rem; }
+  .header h1 {
+    font-size: 1.5rem; /* Smaller title on mobile */
+    flex-direction: column; /* Stack title and pill vertically */
+    align-items: flex-start; /* Left-align items */
+    gap: 0.5rem; /* Space between title text and pill */
+  }
+
+  .pill {
+    font-size: 0.8rem; /* Slightly smaller pill on mobile */
+  }
 
   .controls-row {
     display: flex;
