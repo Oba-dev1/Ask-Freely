@@ -26,6 +26,7 @@ import TermsOfService from "./Components/TermsOfService";
 import PrivacyPolicy from "./Components/PrivacyPolicy";
 import Help from "./Components/Help";
 import usePageTracking from "./hooks/usePageTracking";
+import { initializeSecurity } from "./utils/security";
 
 import "./App.css";
 import "./LandingPage.css";
@@ -790,6 +791,11 @@ function AnalyticsWrapper({ children }) {
 }
 
 function App() {
+  // Initialize security features on app mount
+  useEffect(() => {
+    initializeSecurity();
+  }, []);
+
   return (
     <Sentry.ErrorBoundary
       fallback={({ error, resetError }) => (
