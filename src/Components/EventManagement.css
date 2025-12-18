@@ -273,6 +273,14 @@
   min-width: 0;
 }
 
+/* Show full URL by default, hide short URL */
+.link-url-full {
+  display: inline;
+}
+.link-url-short {
+  display: none;
+}
+
 .link-url--muted {
   color: var(--muted);
   background: rgba(0, 0, 0, 0.02);
@@ -700,6 +708,14 @@
     overflow-wrap: anywhere; /* Break long words */
   }
 
+  /* Show short URL on mobile, hide full URL */
+  .link-url-full {
+    display: none;
+  }
+  .link-url-short {
+    display: inline;
+  }
+
   .link-actions {
     width: 100%;
     flex-direction: column;
@@ -709,6 +725,8 @@
   .btn-secondary {
     width: 100%;
     justify-content: center;
+    padding: 0.6rem 0.75rem; /* Smaller padding for mobile buttons */
+    font-size: 0.85rem; /* Slightly smaller font */
   }
 
   .dashboard-header {

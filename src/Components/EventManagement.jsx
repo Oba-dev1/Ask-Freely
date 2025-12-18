@@ -33,6 +33,18 @@ function compactTimeLabel(first, last) {
   }
 }
 
+// Shorten URL for mobile display
+function shortenUrl(url) {
+  if (!url) return "";
+  try {
+    const urlObj = new URL(url);
+    // Return just the path + search (e.g., /p/event-slug or /host/123)
+    return urlObj.pathname + urlObj.search;
+  } catch {
+    return url;
+  }
+}
+
 function EventManagement() {
   // ---- Router & Auth ----
   const { eventId } = useParams();
@@ -341,7 +353,10 @@ function EventManagement() {
               <i className="fas fa-users" aria-hidden="true"></i> Participant Link
             </span>
             {canShareParticipant ? (
-              <code className="link-url">{participantLink}</code>
+              <code className="link-url">
+                <span className="link-url-full">{participantLink}</span>
+                <span className="link-url-short">{shortenUrl(participantLink)}</span>
+              </code>
             ) : (
               <div className="link-url link-url--muted">
                 {hasSlug
@@ -374,7 +389,10 @@ function EventManagement() {
             <span className="link-label">
               <i className="fas fa-microphone" aria-hidden="true"></i> MC/Host Link
             </span>
-            <code className="link-url">{mcLink}</code>
+            <code className="link-url">
+              <span className="link-url-full">{mcLink}</span>
+              <span className="link-url-short">{shortenUrl(mcLink)}</span>
+            </code>
           </div>
           <div className="link-actions">
             <button
