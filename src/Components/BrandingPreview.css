@@ -20,6 +20,16 @@
   margin-bottom: 1.5rem;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  min-width: 0; /* Allow flex children to shrink */
+}
+
+.preview-header-section > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.preview-header-section > .preview-url-chip {
+  flex-shrink: 0;
 }
 
 .preview-title {
@@ -52,7 +62,10 @@
   font-size: 0.8rem;
   font-family: 'Courier New', monospace;
   font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 100%;
 }
 
 /* Preview Content Container */
@@ -260,9 +273,12 @@
   }
 
   .preview-url-chip {
-    font-size: 0.75rem;
-    padding: 0.45rem 0.75rem;
+    font-size: 0.7rem;
+    padding: 0.45rem 0.65rem;
     align-self: flex-start;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .preview-card-content {
