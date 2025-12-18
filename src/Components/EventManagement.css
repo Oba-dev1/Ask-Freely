@@ -680,6 +680,9 @@
     font-size: 0.8rem; /* Smaller font for better fit */
     word-break: break-all; /* Allow breaking anywhere for URLs */
     hyphens: none; /* Disable hyphenation for URLs */
+    width: 100%; /* Ensure full width on mobile */
+    max-width: 100%; /* Prevent overflow */
+    box-sizing: border-box; /* Include padding in width calculation */
   }
 
   .link-actions {
