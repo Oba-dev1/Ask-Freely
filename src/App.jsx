@@ -357,14 +357,18 @@ function LiveStatsSection({ liveStats }) {
 function ActivityTicker({ recentEvents }) {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = React.useState(true);
+  const cardsPerView = 3; // Show 3 cards at a time on desktop
 
-  // Auto-scroll every 4 seconds
+  // Auto-scroll every 5 seconds
   React.useEffect(() => {
-    if (!isAutoScrolling || recentEvents.length === 0) return;
+    if (!isAutoScrolling || recentEvents.length <= cardsPerView) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % recentEvents.length);
-    }, 4000);
+      setCurrentIndex((prev) => {
+        const maxIndex = recentEvents.length - cardsPerView;
+        return prev >= maxIndex ? 0 : prev + 1;
+      });
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [isAutoScrolling, recentEvents.length]);
@@ -375,9 +379,18 @@ function ActivityTicker({ recentEvents }) {
     return Math.floor(Math.random() * 50) + 5;
   };
 
-  const handleCardClick = (event) => {
-    // Placeholder for future "Join Event" functionality
-    console.log('Event clicked:', event);
+  const handleNext = () => {
+    const maxIndex = recentEvents.length - cardsPerView;
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    setIsAutoScrolling(false);
+    setTimeout(() => setIsAutoScrolling(true), 8000);
+  };
+
+  const handlePrev = () => {
+    const maxIndex = recentEvents.length - cardsPerView;
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
+    setIsAutoScrolling(false);
+    setTimeout(() => setIsAutoScrolling(true), 8000);
   };
 
   if (recentEvents.length === 0) {
@@ -395,6 +408,8 @@ function ActivityTicker({ recentEvents }) {
     );
   }
 
+  const showNavigation = recentEvents.length > cardsPerView;
+
   return (
     <section id="happening" className="lp-events" aria-labelledby="events-heading">
       <div className="lp-container">
@@ -402,58 +417,84 @@ function ActivityTicker({ recentEvents }) {
           <i className="fa-solid fa-bolt" /> Live Events
         </h3>
 
-        <div className="events-carousel">
-          <div className="events-track">
-            {recentEvents.map((event, index) => {
-              const questionCount = getQuestionCount(event);
-              const isActive = index === currentIndex;
+        <div className="events-carousel-wrapper">
+          {showNavigation && (
+            <button
+              className="carousel-nav carousel-nav-prev"
+              onClick={handlePrev}
+              aria-label="Previous events"
+            >
+              <i className="fa-solid fa-chevron-left"></i>
+            </button>
+          )}
 
-              return (
-                <div
-                  key={event.id}
-                  className={`event-card ${isActive ? 'active' : ''}`}
-                  onMouseEnter={() => setIsAutoScrolling(false)}
-                  onMouseLeave={() => setIsAutoScrolling(true)}
-                >
-                  <div className="event-card-header">
-                    <span className="event-status">
-                      <i className="fa-solid fa-circle"></i> Live now
-                    </span>
-                    <span className="event-activity">
-                      <i className="fa-solid fa-fire"></i> {questionCount} questions
-                    </span>
+          <div className="events-carousel">
+            <div
+              className="events-track"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / cardsPerView)}%)`,
+              }}
+              onMouseEnter={() => setIsAutoScrolling(false)}
+              onMouseLeave={() => setIsAutoScrolling(true)}
+            >
+              {recentEvents.map((event) => {
+                const questionCount = getQuestionCount(event);
+
+                return (
+                  <div
+                    key={event.id}
+                    className="event-card"
+                  >
+                    <div className="event-card-header">
+                      <span className="event-status">
+                        <i className="fa-solid fa-circle"></i> Live now
+                      </span>
+                      <span className="event-activity">
+                        <i className="fa-solid fa-fire"></i> {questionCount} questions
+                      </span>
+                    </div>
+
+                    <h4 className="event-card-title">{event.title}</h4>
+
+                    {event.org && (
+                      <p className="event-card-org">
+                        <i className="fa-solid fa-building"></i> {event.org}
+                      </p>
+                    )}
                   </div>
-
-                  <h4 className="event-card-title">{event.title}</h4>
-
-                  {event.org && (
-                    <p className="event-card-org">
-                      <i className="fa-solid fa-building"></i> {event.org}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
 
-          {/* Carousel dots */}
-          {recentEvents.length > 1 && (
-            <div className="carousel-dots">
-              {recentEvents.map((_, index) => (
-                <button
-                  key={index}
-                  className={`dot ${index === currentIndex ? 'active' : ''}`}
-                  onClick={() => {
-                    setCurrentIndex(index);
-                    setIsAutoScrolling(false);
-                    setTimeout(() => setIsAutoScrolling(true), 5000);
-                  }}
-                  aria-label={`Go to event ${index + 1}`}
-                />
-              ))}
-            </div>
+          {showNavigation && (
+            <button
+              className="carousel-nav carousel-nav-next"
+              onClick={handleNext}
+              aria-label="Next events"
+            >
+              <i className="fa-solid fa-chevron-right"></i>
+            </button>
           )}
         </div>
+
+        {/* Carousel dots */}
+        {showNavigation && (
+          <div className="carousel-dots">
+            {Array.from({ length: recentEvents.length - cardsPerView + 1 }).map((_, index) => (
+              <button
+                key={index}
+                className={`dot ${index === currentIndex ? 'active' : ''}`}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  setIsAutoScrolling(false);
+                  setTimeout(() => setIsAutoScrolling(true), 8000);
+                }}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

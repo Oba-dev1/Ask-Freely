@@ -390,42 +390,73 @@
   font-size: 1.05rem;
 }
 
+/* Carousel Wrapper with Navigation */
+.events-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.carousel-nav {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid rgba(255, 107, 53, 0.2);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.carousel-nav:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.carousel-nav i {
+  font-size: 1rem;
+}
+
 /* Carousel Container */
 .events-carousel {
+  flex: 1;
+  overflow: hidden;
   position: relative;
 }
 
 .events-track {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
   gap: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
+  transition: transform 0.5s ease-in-out;
 }
 
 /* Event Card */
 .event-card {
+  min-width: calc(33.333% - 14px); /* 3 cards per view */
+  flex-shrink: 0;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 16px;
   padding: 24px;
   transition: all 0.3s ease;
   cursor: pointer;
-  opacity: 0.6;
-  transform: scale(0.96);
-}
-
-.event-card.active {
-  opacity: 1;
-  transform: scale(1);
-  box-shadow: 0 8px 24px rgba(255, 107, 53, 0.15);
-  border-color: rgba(255, 107, 53, 0.3);
 }
 
 .event-card:hover {
-  opacity: 1;
-  transform: scale(1.02);
+  transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(255, 107, 53, 0.2);
+  border-color: rgba(255, 107, 53, 0.3);
 }
 
 /* Card Header */
@@ -1416,12 +1447,21 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     margin-bottom: 24px;
   }
 
-  .events-track {
-    grid-template-columns: 1fr;
-    gap: 16px;
+  .events-carousel-wrapper {
+    gap: 12px;
+  }
+
+  .carousel-nav {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carousel-nav i {
+    font-size: 0.9rem;
   }
 
   .event-card {
+    min-width: calc(50% - 10px); /* 2 cards per view on tablet */
     padding: 20px;
   }
 
@@ -1625,7 +1665,16 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     margin-bottom: 20px;
   }
 
+  .events-carousel-wrapper {
+    gap: 8px;
+  }
+
+  .carousel-nav {
+    display: none; /* Hide nav arrows on small mobile */
+  }
+
   .event-card {
+    min-width: 100%; /* 1 card per view on mobile */
     padding: 18px;
   }
 
