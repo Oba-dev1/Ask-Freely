@@ -357,7 +357,7 @@ function LiveStatsSection({ liveStats }) {
 function ActivityTicker({ recentEvents }) {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = React.useState(true);
-  const cardsPerView = 3; // Show 3 cards at a time on desktop
+  const cardsPerView = 4; // Show 4 cards at a time on desktop
 
   // Auto-scroll every 5 seconds
   React.useEffect(() => {

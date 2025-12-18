@@ -443,7 +443,7 @@
 
 /* Event Card */
 .event-card {
-  min-width: calc(33.333% - 14px); /* 3 cards per view */
+  min-width: calc(25% - 15px); /* 4 cards per view */
   flex-shrink: 0;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
