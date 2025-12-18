@@ -258,6 +258,7 @@
 }
 
 .link-url {
+  display: block; /* Ensure code tag behaves as block element */
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: .9rem;
   color: #1a1a1a;
