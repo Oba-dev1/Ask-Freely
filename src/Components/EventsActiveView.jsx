@@ -23,7 +23,11 @@ function EventsActiveView() {
         const activeEvents = Object.keys(data)
           .filter((key) => data[key]?.organizerId === currentUser.uid && data[key]?.status === 'active')
           .map((key) => ({ id: key, ...data[key] }))
-          .sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+          .sort((a, b) => {
+            const dateA = new Date(a.date || 0);
+            const dateB = new Date(b.date || 0);
+            return dateB - dateA;
+          });
         setEvents(activeEvents);
       } else {
         setEvents([]);

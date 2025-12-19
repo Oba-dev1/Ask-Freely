@@ -76,15 +76,13 @@ function DashboardOverview() {
       pendingQuestions += (eventQuestions - eventAnswered);
 
       // Add to recent activity
-      if (event.updatedAt || event.createdAt) {
-        recentActivity.push({
-          type: 'event',
-          title: event.title,
-          date: event.updatedAt || event.createdAt,
-          status: event.status,
-          id: event.id
-        });
-      }
+      recentActivity.push({
+        type: 'event',
+        title: event.title,
+        date: event.date || new Date().toISOString(),
+        status: event.status,
+        id: event.id
+      });
     });
 
     // Sort recent activity by date
@@ -108,7 +106,11 @@ function DashboardOverview() {
 
   const getRecentEvents = () => {
     return events
-      .sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt))
+      .sort((a, b) => {
+        const dateA = new Date(a.date || 0);
+        const dateB = new Date(b.date || 0);
+        return dateB - dateA;
+      })
       .slice(0, 3);
   };
 
