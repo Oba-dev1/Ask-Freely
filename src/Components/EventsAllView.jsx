@@ -34,10 +34,18 @@ function EventsAllView() {
     return () => unsubscribe();
   }, [currentUser]);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const getEventDisplayDate = (event) => {
+    if (!event) return 'N/A';
+    if (event.date) {
+      try {
+        const date = new Date(event.date);
+        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        return event.time ? `${dateStr} • ${event.time}` : dateStr;
+      } catch (e) {
+        return event.date;
+      }
+    }
+    return 'Date TBA';
   };
 
   if (loading) {
@@ -100,11 +108,11 @@ function EventsAllView() {
                 <div className="event-card-header">
                   <h3 className="event-card-title">{event.title}</h3>
                   <span className={`event-status-badge status-${event.status}`}>
-                    {event.status === 'published' ? 'Active' : 'Draft'}
+                    {event.status === 'active' ? 'Active' : 'Draft'}
                   </span>
                 </div>
                 <p className="event-card-date">
-                  <i className="far fa-calendar"></i> {formatDate(event.dateTime)}
+                  <i className="far fa-calendar"></i> {getEventDisplayDate(event)}
                 </p>
                 <div className="event-card-stats">
                   <div className="stat-item">

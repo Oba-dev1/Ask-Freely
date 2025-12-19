@@ -21,7 +21,7 @@ function EventsActiveView() {
       const data = snapshot.val();
       if (data) {
         const activeEvents = Object.keys(data)
-          .filter((key) => data[key]?.organizerId === currentUser.uid && data[key]?.status === 'published')
+          .filter((key) => data[key]?.organizerId === currentUser.uid && data[key]?.status === 'active')
           .map((key) => ({ id: key, ...data[key] }))
           .sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
         setEvents(activeEvents);
@@ -34,10 +34,18 @@ function EventsActiveView() {
     return () => unsubscribe();
   }, [currentUser]);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const getEventDisplayDate = (event) => {
+    if (!event) return 'N/A';
+    if (event.date) {
+      try {
+        const date = new Date(event.date);
+        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        return event.time ? `${dateStr} • ${event.time}` : dateStr;
+      } catch (e) {
+        return event.date;
+      }
+    }
+    return 'Date TBA';
   };
 
   if (loading) {
@@ -101,7 +109,7 @@ function EventsActiveView() {
                   </span>
                 </div>
                 <p className="event-card-date">
-                  <i className="far fa-calendar"></i> {formatDate(event.dateTime)}
+                  <i className="far fa-calendar"></i> {getEventDisplayDate(event)}
                 </p>
                 <div className="event-card-stats">
                   <div className="stat-item">

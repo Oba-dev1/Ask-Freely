@@ -59,7 +59,7 @@ function DashboardOverview() {
 
   const calculateStats = (userEvents) => {
     const totalEvents = userEvents.length;
-    const activeEvents = userEvents.filter(e => e.status === 'published').length;
+    const activeEvents = userEvents.filter(e => e.status === 'active').length;
     const draftEvents = userEvents.filter(e => e.status === 'draft').length;
 
     let totalQuestions = 0;
@@ -114,8 +114,21 @@ function DashboardOverview() {
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch (e) {
+      return dateString;
+    }
+  };
+
+  const getEventDisplayDate = (event) => {
+    if (!event) return 'N/A';
+    if (event.date) {
+      const dateStr = formatDate(event.date);
+      return event.time ? `${dateStr} • ${event.time}` : dateStr;
+    }
+    return 'Date TBA';
   };
 
   if (loading) {
@@ -232,9 +245,9 @@ function DashboardOverview() {
                       <h4 className="event-item-title">{event.title}</h4>
                       <p className="event-item-meta">
                         <span className={`status-badge status-${event.status}`}>
-                          {event.status === 'published' ? 'Active' : 'Draft'}
+                          {event.status === 'active' ? 'Active' : 'Draft'}
                         </span>
-                        <span className="event-item-date">{formatDate(event.dateTime)}</span>
+                        <span className="event-item-date">{getEventDisplayDate(event)}</span>
                       </p>
                       <p className="event-item-stats">
                         <span><i className="fas fa-question"></i> {event.questionCount || 0} questions</span>

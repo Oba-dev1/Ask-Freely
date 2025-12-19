@@ -160,18 +160,6 @@ function DashboardSidebar({ isOpen, onClose }) {
                 <span className="nav-text">Settings</span>
               </NavLink>
             </li>
-
-            {/* Help */}
-            <li>
-              <NavLink
-                to="/help"
-                className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-                onClick={closeSidebarOnMobile}
-              >
-                <i className="fas fa-question-circle nav-icon"></i>
-                <span className="nav-text">Help & Support</span>
-              </NavLink>
-            </li>
           </ul>
         </nav>
 
