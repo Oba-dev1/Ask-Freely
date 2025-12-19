@@ -25,6 +25,12 @@ import EventManagement from "./Components/EventManagement";
 import TermsOfService from "./Components/TermsOfService";
 import PrivacyPolicy from "./Components/PrivacyPolicy";
 import Help from "./Components/Help";
+import DashboardLayout from "./Components/DashboardLayout";
+import DashboardOverview from "./Components/DashboardOverview";
+import EventsAllView from "./Components/EventsAllView";
+import EventsActiveView from "./Components/EventsActiveView";
+import EventsDraftView from "./Components/EventsDraftView";
+import OrganizerSettings from "./Components/OrganizerSettings";
 import usePageTracking from "./hooks/usePageTracking";
 import { initializeSecurity } from "./utils/security";
 
@@ -858,31 +864,24 @@ function App() {
                 <ProfileSetup />
               </ProtectedRoute>
             } />
-            <Route path="/organizer/dashboard" element={
+            {/* Organizer Dashboard - Nested Routes with Sidebar */}
+            <Route path="/organizer" element={
               <ProtectedRoute>
-                <OrganizerDashboard />
+                <DashboardLayout />
               </ProtectedRoute>
-            } />
-            <Route path="/organizer/analytics" element={
-              <ProtectedRoute>
-                <OrganizerAnalytics />
-              </ProtectedRoute>
-            } />
-            <Route path="/organizer/create-event" element={
-              <ProtectedRoute>
-                <CreateEvent />
-              </ProtectedRoute>
-            } />
-            <Route path="/organizer/event/:eventId/setup" element={
-              <ProtectedRoute>
-                <EventSetup />
-              </ProtectedRoute>
-            } />
-            <Route path="/organizer/event/:eventId" element={
-              <ProtectedRoute>
-                <EventManagement />
-              </ProtectedRoute>
-            } />
+            }>
+              <Route path="dashboard" element={<DashboardOverview />} />
+              <Route path="events/all" element={<EventsAllView />} />
+              <Route path="events/active" element={<EventsActiveView />} />
+              <Route path="events/draft" element={<EventsDraftView />} />
+              <Route path="create-event" element={<CreateEvent />} />
+              <Route path="analytics" element={<OrganizerAnalytics />} />
+              <Route path="settings" element={<OrganizerSettings />} />
+              <Route path="event/:eventId/setup" element={<EventSetup />} />
+              <Route path="event/:eventId" element={<EventManagement />} />
+              {/* Redirect /organizer to /organizer/dashboard */}
+              <Route index element={<Navigate to="/organizer/dashboard" replace />} />
+            </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </SentryRoutes>
         </div>

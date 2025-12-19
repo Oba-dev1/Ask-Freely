@@ -1,0 +1,137 @@
+// src/Components/EventsAllView.jsx
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../Firebase/config';
+import { useAuth } from '../context/AuthContext';
+import './EventsView.css';
+
+function EventsAllView() {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const eventsRef = ref(database, 'events');
+    const unsubscribe = onValue(eventsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const userEvents = Object.keys(data)
+          .filter((key) => data[key]?.organizerId === currentUser.uid)
+          .map((key) => ({ id: key, ...data[key] }))
+          .sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+        setEvents(userEvents);
+      } else {
+        setEvents([]);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [currentUser]);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  if (loading) {
+    return (
+      <div className="events-view">
+        <div className="events-loading">
+          <div className="spinner"></div>
+          <p>Loading events...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="events-view">
+      {/* Page Header */}
+      <div className="events-header">
+        <div>
+          <h1 className="events-title">All Events</h1>
+          <p className="events-subtitle">Manage all your Q&A sessions</p>
+        </div>
+        <div className="events-header-actions">
+          <div className="view-mode-toggle">
+            <button
+              className={`view-mode-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              onClick={() => setViewMode('grid')}
+              aria-label="Grid view"
+            >
+              <i className="fas fa-th"></i>
+            </button>
+            <button
+              className={`view-mode-btn ${viewMode === 'list' ? 'active' : ''}`}
+              onClick={() => setViewMode('list')}
+              aria-label="List view"
+            >
+              <i className="fas fa-list"></i>
+            </button>
+          </div>
+          <button className="btn btn-primary" onClick={() => navigate('/organizer/create-event')}>
+            <i className="fas fa-plus"></i> Create Event
+          </button>
+        </div>
+      </div>
+
+      {/* Events Grid/List */}
+      {events.length > 0 ? (
+        <div className={`events-container events-${viewMode}`}>
+          {events.map((event) => (
+            <div
+              key={event.id}
+              className="event-card"
+              onClick={() => navigate(`/organizer/event/${event.id}`)}
+            >
+              {event.flyerUrl && (
+                <div className="event-card-image">
+                  <img src={event.flyerUrl} alt={event.title} />
+                </div>
+              )}
+              <div className="event-card-content">
+                <div className="event-card-header">
+                  <h3 className="event-card-title">{event.title}</h3>
+                  <span className={`event-status-badge status-${event.status}`}>
+                    {event.status === 'published' ? 'Active' : 'Draft'}
+                  </span>
+                </div>
+                <p className="event-card-date">
+                  <i className="far fa-calendar"></i> {formatDate(event.dateTime)}
+                </p>
+                <div className="event-card-stats">
+                  <div className="stat-item">
+                    <i className="fas fa-question-circle"></i>
+                    <span>{event.questionCount || 0} Questions</span>
+                  </div>
+                  <div className="stat-item">
+                    <i className="fas fa-check-circle"></i>
+                    <span>{event.answeredCount || 0} Answered</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="events-empty">
+          <i className="fas fa-calendar-plus"></i>
+          <h3>No Events Yet</h3>
+          <p>Create your first event to get started</p>
+          <button className="btn btn-primary" onClick={() => navigate('/organizer/create-event')}>
+            <i className="fas fa-plus"></i> Create Event
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default EventsAllView;
