@@ -4,36 +4,49 @@ import { useNavigate } from 'react-router-dom';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
+import CreateEventModal from './CreateEventModal';
 import './EventsView.css';
 
 function EventsDraftView() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser) {
+      setLoading(false);
+      return;
+    }
 
     const eventsRef = ref(database, 'events');
-    const unsubscribe = onValue(eventsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const draftEvents = Object.keys(data)
-          .filter((key) => data[key]?.organizerId === currentUser.uid && data[key]?.status === 'draft')
-          .map((key) => ({ id: key, ...data[key] }))
-          .sort((a, b) => {
-            const dateA = new Date(a.date || 0);
-            const dateB = new Date(b.date || 0);
-            return dateB - dateA;
-          });
-        setEvents(draftEvents);
-      } else {
+    const unsubscribe = onValue(
+      eventsRef,
+      (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const draftEvents = Object.keys(data)
+            .filter((key) => data[key]?.organizerId === currentUser.uid && data[key]?.status === 'draft')
+            .map((key) => ({ id: key, ...data[key] }))
+            .sort((a, b) => {
+              const dateA = new Date(a.date || 0);
+              const dateB = new Date(b.date || 0);
+              return dateB - dateA;
+            });
+          setEvents(draftEvents);
+        } else {
+          setEvents([]);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        // Handle Firebase errors gracefully
+        setLoading(false);
         setEvents([]);
       }
-      setLoading(false);
-    });
+    );
 
     return () => unsubscribe();
   }, [currentUser]);
@@ -139,6 +152,9 @@ function EventsDraftView() {
           </button>
         </div>
       )}
+
+      {/* Create Event Modal */}
+      <CreateEventModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

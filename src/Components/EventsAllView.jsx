@@ -4,36 +4,49 @@ import { useNavigate } from 'react-router-dom';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
+import CreateEventModal from './CreateEventModal';
 import './EventsView.css';
 
 function EventsAllView() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser) {
+      setLoading(false);
+      return;
+    }
 
     const eventsRef = ref(database, 'events');
-    const unsubscribe = onValue(eventsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const userEvents = Object.keys(data)
-          .filter((key) => data[key]?.organizerId === currentUser.uid)
-          .map((key) => ({ id: key, ...data[key] }))
-          .sort((a, b) => {
-            const dateA = new Date(a.date || 0);
-            const dateB = new Date(b.date || 0);
-            return dateB - dateA;
-          });
-        setEvents(userEvents);
-      } else {
+    const unsubscribe = onValue(
+      eventsRef,
+      (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const userEvents = Object.keys(data)
+            .filter((key) => data[key]?.organizerId === currentUser.uid)
+            .map((key) => ({ id: key, ...data[key] }))
+            .sort((a, b) => {
+              const dateA = new Date(a.date || 0);
+              const dateB = new Date(b.date || 0);
+              return dateB - dateA;
+            });
+          setEvents(userEvents);
+        } else {
+          setEvents([]);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        // Handle Firebase errors gracefully
+        setLoading(false);
         setEvents([]);
       }
-      setLoading(false);
-    });
+    );
 
     return () => unsubscribe();
   }, [currentUser]);
@@ -88,7 +101,7 @@ function EventsAllView() {
               <i className="fas fa-list"></i>
             </button>
           </div>
-          <button className="btn btn-primary" onClick={() => navigate('/organizer/create-event')}>
+          <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
             <i className="fas fa-plus"></i> Create Event
           </button>
         </div>
@@ -112,7 +125,7 @@ function EventsAllView() {
                 <div className="event-card-header">
                   <h3 className="event-card-title">{event.title}</h3>
                   <span className={`event-status-badge status-${event.status}`}>
-                    {event.status === 'active' ? 'Active' : 'Draft'}
+                    {event.status === 'published' ? 'Active' : event.status === 'draft' ? 'Draft' : event.status}
                   </span>
                 </div>
                 <p className="event-card-date">
@@ -137,11 +150,14 @@ function EventsAllView() {
           <i className="fas fa-calendar-plus"></i>
           <h3>No Events Yet</h3>
           <p>Create your first event to get started</p>
-          <button className="btn btn-primary" onClick={() => navigate('/organizer/create-event')}>
+          <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
             <i className="fas fa-plus"></i> Create Event
           </button>
         </div>
       )}
+
+      {/* Create Event Modal */}
+      <CreateEventModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

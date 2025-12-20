@@ -777,3 +777,398 @@
     align-items: flex-start;
   }
 }
+
+/* ============================================
+   NEW CARD-BASED CONTROLS & LINKS DESIGN
+   ============================================ */
+
+/* Control Cards Grid */
+.control-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.control-card {
+  background: #FFFFFF;
+  border: 2px solid #e8eaed;
+  border-radius: 16px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.control-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Control Card Variants */
+.control-card-success {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.03) 0%, rgba(16, 185, 129, 0.01) 100%);
+}
+
+.control-card-warning {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.03) 0%, rgba(245, 158, 11, 0.01) 100%);
+}
+
+.control-card-muted {
+  border-color: rgba(107, 114, 128, 0.2);
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.02) 0%, rgba(107, 114, 128, 0.01) 100%);
+}
+
+/* Control Card Icon */
+.control-card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  background: linear-gradient(135deg, #FF6B35 0%, #f97316 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+}
+
+.control-card-success .control-card-icon {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.control-card-warning .control-card-icon {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+}
+
+.control-card-muted .control-card-icon {
+  background: linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.2);
+}
+
+/* Control Card Content */
+.control-card-content {
+  flex: 1;
+}
+
+.control-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.01em;
+}
+
+.control-card-status {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.control-card-description {
+  font-size: 0.875rem;
+  color: #6B7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Control Card Action */
+.control-card-action {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-control {
+  flex: 1;
+  padding: 0.875rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1.5px solid transparent;
+}
+
+.btn-control.btn-primary {
+  background: linear-gradient(135deg, #FF6B35 0%, #f97316 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.25);
+}
+
+.btn-control.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+.btn-control.btn-secondary {
+  background: #FFFFFF;
+  color: #374151;
+  border-color: #e8eaed;
+}
+
+.btn-control.btn-secondary:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+.btn-control.btn-outline {
+  background: #FFFFFF;
+  color: #FF6B35;
+  border-color: #FF6B35;
+}
+
+.btn-control.btn-outline:hover:not(:disabled) {
+  background: rgba(255, 107, 53, 0.05);
+  border-color: #f97316;
+  transform: translateY(-1px);
+}
+
+.btn-control:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Section Header */
+.section-header {
+  margin: 2.5rem 0 1.5rem;
+}
+
+.section-header .section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.section-header .section-title i {
+  color: #FF6B35;
+  font-size: 1.25rem;
+}
+
+.section-header .section-description {
+  font-size: 0.9375rem;
+  color: #6B7280;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Link Cards Grid */
+.link-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.link-card {
+  background: #FFFFFF;
+  border: 1.5px solid #e8eaed;
+  border-radius: 16px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.link-card:hover:not(.link-card-disabled) {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  border-color: #FF6B35;
+}
+
+.link-card-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f9fafb;
+}
+
+/* Link Card Header */
+.link-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.link-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.link-card-icon-primary {
+  background: linear-gradient(135deg, #FF6B35 0%, #f97316 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+}
+
+.link-card-icon-success {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.link-card-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+  letter-spacing: -0.01em;
+}
+
+.link-card-subtitle {
+  font-size: 0.875rem;
+  color: #6B7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Link Card Body */
+.link-card-body {
+  flex: 1;
+}
+
+.link-display {
+  background: #f9fafb;
+  border: 1px solid #e8eaed;
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+}
+
+.link-code {
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 0.8125rem;
+  color: #374151;
+  word-break: break-all;
+  line-height: 1.6;
+}
+
+.link-disabled-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: rgba(245, 158, 11, 0.05);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 8px;
+  color: #92400E;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.link-disabled-message i {
+  color: #F59E0B;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Link Card Footer */
+.link-card-footer {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e8eaed;
+}
+
+.btn-link-action {
+  flex: 1;
+  padding: 0.75rem 1.125rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #FF6B35;
+  color: #ffffff;
+  border: 1.5px solid #FF6B35;
+}
+
+.btn-link-action:hover:not(:disabled) {
+  background: #f97316;
+  border-color: #f97316;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+.btn-link-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-link-action-secondary {
+  background: #FFFFFF;
+  color: #374151;
+  border-color: #e8eaed;
+}
+
+.btn-link-action-secondary:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+/* Responsive Design for New Cards */
+@media (max-width: 768px) {
+  .control-cards-grid,
+  .link-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .control-card,
+  .link-card {
+    padding: 1.25rem;
+  }
+
+  .control-card-icon,
+  .link-card-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+  }
+
+  .control-card-status {
+    font-size: 1.5rem;
+  }
+
+  .section-header .section-title {
+    font-size: 1.25rem;
+  }
+
+  .link-card-footer {
+    flex-direction: column;
+  }
+
+  .btn-link-action {
+    width: 100%;
+  }
+}

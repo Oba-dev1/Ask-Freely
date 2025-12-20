@@ -17,9 +17,7 @@ import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import ForgotPassword from "./Components/ForgotPassword";
 import ProfileSetup from "./Components/ProfileSetup";
-import OrganizerDashboard from "./Components/OrganizerDashboard";
 import OrganizerAnalytics from "./Components/OrganizerAnalytics";
-import CreateEvent from "./Components/CreateEvent";
 import EventSetup from "./Components/EventSetup";
 import EventManagement from "./Components/EventManagement";
 import TermsOfService from "./Components/TermsOfService";
@@ -874,7 +872,6 @@ function App() {
               <Route path="events/all" element={<EventsAllView />} />
               <Route path="events/active" element={<EventsActiveView />} />
               <Route path="events/draft" element={<EventsDraftView />} />
-              <Route path="create-event" element={<CreateEvent />} />
               <Route path="analytics" element={<OrganizerAnalytics />} />
               <Route path="settings" element={<OrganizerSettings />} />
               <Route path="event/:eventId/setup" element={<EventSetup />} />

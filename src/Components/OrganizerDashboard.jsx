@@ -127,7 +127,7 @@ function OrganizerDashboard() {
                   <div className="event-card-image">
                     <img src={event.branding.flyerUrl} alt={event.title} />
                     <span className={`event-status-badge ${event.status}`}>
-                      {event.status === 'active' ? 'Active' : 'Draft'}
+                      {event.status === 'published' ? 'Active' : event.status === 'draft' ? 'Draft' : event.status}
                     </span>
                   </div>
                 )}
@@ -153,7 +153,7 @@ function OrganizerDashboard() {
                     </div>
                     {!event.branding?.flyerUrl && (
                       <span className={`event-status ${event.status}`}>
-                        {event.status === 'active' ? 'Active' : 'Draft'}
+                        {event.status === 'published' ? 'Active' : event.status === 'draft' ? 'Draft' : event.status}
                       </span>
                     )}
                   </div>

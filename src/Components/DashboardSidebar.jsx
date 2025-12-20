@@ -122,18 +122,6 @@ function DashboardSidebar({ isOpen, onClose }) {
               )}
             </li>
 
-            {/* Create Event */}
-            <li>
-              <NavLink
-                to="/organizer/create-event"
-                className={({ isActive }) => `nav-item nav-item-primary ${isActive ? 'active' : ''}`}
-                onClick={closeSidebarOnMobile}
-              >
-                <i className="fas fa-plus-circle nav-icon"></i>
-                <span className="nav-text">Create Event</span>
-              </NavLink>
-            </li>
-
             {/* Analytics */}
             <li>
               <NavLink

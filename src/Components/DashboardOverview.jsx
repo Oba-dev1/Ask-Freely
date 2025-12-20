@@ -4,12 +4,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
+import CreateEventModal from './CreateEventModal';
 import './DashboardOverview.css';
 
 function DashboardOverview() {
   const [events, setEvents] = useState([]);
-  const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [stats, setStats] = useState({
     totalEvents: 0,
     activeEvents: 0,
@@ -25,19 +26,70 @@ function DashboardOverview() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser) {
+      setLoading(false);
+      return;
+    }
 
     // Load all user's events
     const eventsRef = ref(database, 'events');
-    const unsubscribeEvents = onValue(eventsRef, (snapshot) => {
-      const data = snapshot.val();
+    const unsubscribeEvents = onValue(
+      eventsRef,
+      (snapshot) => {
+        const data = snapshot.val();
+
       if (data) {
         const userEvents = Object.keys(data)
           .filter((key) => data[key]?.organizerId === currentUser.uid)
           .map((key) => ({ id: key, ...data[key] }));
 
         setEvents(userEvents);
-        calculateStats(userEvents);
+
+        // Calculate stats inline
+        const totalEvents = userEvents.length;
+        const activeEvents = userEvents.filter(e => e.status === 'published').length;
+        const draftEvents = userEvents.filter(e => e.status === 'draft').length;
+
+        let totalQuestions = 0;
+        let answeredQuestions = 0;
+        let pendingQuestions = 0;
+        const recentActivity = [];
+
+        userEvents.forEach(event => {
+          const eventQuestions = event.questionCount || 0;
+          const eventAnswered = event.answeredCount || 0;
+
+          totalQuestions += eventQuestions;
+          answeredQuestions += eventAnswered;
+          pendingQuestions += (eventQuestions - eventAnswered);
+
+          // Add to recent activity
+          recentActivity.push({
+            type: 'event',
+            title: event.title,
+            date: event.date || new Date().toISOString(),
+            status: event.status,
+            id: event.id
+          });
+        });
+
+        // Sort recent activity by date
+        recentActivity.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const totalEngagement = totalQuestions > 0
+          ? Math.round((answeredQuestions / totalQuestions) * 100)
+          : 0;
+
+        setStats({
+          totalEvents,
+          activeEvents,
+          draftEvents,
+          totalQuestions,
+          answeredQuestions,
+          pendingQuestions,
+          totalEngagement,
+          recentActivity: recentActivity.slice(0, 5)
+        });
       } else {
         setEvents([]);
         setStats({
@@ -52,57 +104,25 @@ function DashboardOverview() {
         });
       }
       setLoading(false);
+    },
+    (error) => {
+      // Handle Firebase errors gracefully
+      setLoading(false);
+      setEvents([]);
+      setStats({
+        totalEvents: 0,
+        activeEvents: 0,
+        draftEvents: 0,
+        totalQuestions: 0,
+        answeredQuestions: 0,
+        pendingQuestions: 0,
+        totalEngagement: 0,
+        recentActivity: []
+      });
     });
 
     return () => unsubscribeEvents();
   }, [currentUser]);
-
-  const calculateStats = (userEvents) => {
-    const totalEvents = userEvents.length;
-    const activeEvents = userEvents.filter(e => e.status === 'active').length;
-    const draftEvents = userEvents.filter(e => e.status === 'draft').length;
-
-    let totalQuestions = 0;
-    let answeredQuestions = 0;
-    let pendingQuestions = 0;
-    const recentActivity = [];
-
-    userEvents.forEach(event => {
-      const eventQuestions = event.questionCount || 0;
-      const eventAnswered = event.answeredCount || 0;
-
-      totalQuestions += eventQuestions;
-      answeredQuestions += eventAnswered;
-      pendingQuestions += (eventQuestions - eventAnswered);
-
-      // Add to recent activity
-      recentActivity.push({
-        type: 'event',
-        title: event.title,
-        date: event.date || new Date().toISOString(),
-        status: event.status,
-        id: event.id
-      });
-    });
-
-    // Sort recent activity by date
-    recentActivity.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    const totalEngagement = totalQuestions > 0
-      ? Math.round((answeredQuestions / totalQuestions) * 100)
-      : 0;
-
-    setStats({
-      totalEvents,
-      activeEvents,
-      draftEvents,
-      totalQuestions,
-      answeredQuestions,
-      pendingQuestions,
-      totalEngagement,
-      recentActivity: recentActivity.slice(0, 5) // Top 5 recent
-    });
-  };
 
   const getRecentEvents = () => {
     return events
@@ -150,9 +170,6 @@ function DashboardOverview() {
           <h1 className="overview-title">Overview</h1>
           <p className="overview-subtitle">Welcome back! Here's what's happening with your events</p>
         </div>
-        <button className="btn btn-primary" onClick={() => navigate('/organizer/create-event')}>
-          <i className="fas fa-plus"></i> Create Event
-        </button>
       </div>
 
       {/* Stats Cards */}
@@ -247,7 +264,7 @@ function DashboardOverview() {
                       <h4 className="event-item-title">{event.title}</h4>
                       <p className="event-item-meta">
                         <span className={`status-badge status-${event.status}`}>
-                          {event.status === 'active' ? 'Active' : 'Draft'}
+                          {event.status === 'published' ? 'Active' : event.status === 'draft' ? 'Draft' : event.status}
                         </span>
                         <span className="event-item-date">{getEventDisplayDate(event)}</span>
                       </p>
@@ -266,7 +283,7 @@ function DashboardOverview() {
               <div className="empty-state">
                 <i className="fas fa-calendar-plus"></i>
                 <p>No events yet</p>
-                <button className="btn btn-secondary" onClick={() => navigate('/organizer/create-event')}>
+                <button className="btn btn-secondary" onClick={() => setIsModalOpen(true)}>
                   Create Your First Event
                 </button>
               </div>
@@ -285,7 +302,7 @@ function DashboardOverview() {
             <div className="quick-actions-grid">
               <button
                 className="quick-action-btn"
-                onClick={() => navigate('/organizer/create-event')}
+                onClick={() => setIsModalOpen(true)}
               >
                 <div className="quick-action-icon quick-action-icon-primary">
                   <i className="fas fa-plus"></i>
@@ -350,6 +367,9 @@ function DashboardOverview() {
           </div>
         </div>
       )}
+
+      {/* Create Event Modal */}
+      <CreateEventModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

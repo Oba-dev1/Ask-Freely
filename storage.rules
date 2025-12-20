@@ -80,6 +80,23 @@ service firebase.storage {
     }
 
     // ============================================
+    // EVENT FLYERS (User-organized path)
+    // ============================================
+    match /event-flyers/{userId}/{imageName} {
+      // Anyone can read event flyers (public events)
+      allow read: if true;
+
+      // Users can upload to their own flyer folder
+      allow write: if isAuthenticated()
+                   && isOwner(userId)
+                   && isImage()
+                   && isValidImageSize();
+
+      // Users can delete their own flyer files
+      allow delete: if isAuthenticated() && isOwner(userId);
+    }
+
+    // ============================================
     // TEMPORARY UPLOADS
     // ============================================
     match /temp/{userId}/{imageName} {

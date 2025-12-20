@@ -235,6 +235,29 @@
           }
         }
       }
+    },
+
+    // ============================================
+    // SLUG MAPPINGS - For event URL resolution
+    // ============================================
+    "slugs": {
+      "$slug": {
+        // Anyone can read slugs to resolve event URLs
+        ".read": true,
+        // Only authenticated users can create/update slugs
+        ".write": "auth != null",
+        ".validate": "newData.isString()"
+      }
+    },
+
+    "eventSlugs": {
+      "$eventId": {
+        // Anyone can read event slugs
+        ".read": true,
+        // Only the event organizer can write
+        ".write": "auth != null && root.child('events/' + $eventId + '/organizerId').val() === auth.uid",
+        ".validate": "newData.isString()"
+      }
     }
   }
 }

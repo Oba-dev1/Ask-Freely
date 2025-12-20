@@ -65,9 +65,9 @@ function EventManagement() {
   const [mcEmail, setMcEmail] = useState("");
 
   // ---- Derived ----
-  const isActive = event?.status === "active";
+  const isActive = event?.status === "published";
   const hasSlug = !!event?.slug;
-  const accepting = event?.acceptingQuestions !== false; // default true if undefined
+  const accepting = event?.enableQuestionSubmission !== false; // default true if undefined
   const canShareParticipant = isActive && hasSlug;
 
   const participantLink = useMemo(() => {
@@ -96,8 +96,8 @@ function EventManagement() {
     try {
       setSaving(true);
       await update(ref(database, `events/${eventId}`), {
-        status: "active",
-        acceptingQuestions: event.acceptingQuestions !== false,
+        status: "published",
+        enableQuestionSubmission: event.enableQuestionSubmission !== false,
       });
     } finally {
       setSaving(false);
@@ -119,9 +119,9 @@ function EventManagement() {
     try {
       setSaving(true);
       const next =
-        event.acceptingQuestions === false ? true : !event.acceptingQuestions;
+        event.enableQuestionSubmission === false ? true : !event.enableQuestionSubmission;
       await update(ref(database, `events/${eventId}`), {
-        acceptingQuestions: next,
+        enableQuestionSubmission: next,
       });
     } finally {
       setSaving(false);
@@ -286,136 +286,163 @@ function EventManagement() {
         </p>
       </header>
 
-      {/* Controls */}
-      <div className="controls-card">
-        <h2 className="section-title">
-          <i className="fas fa-sliders-h" aria-hidden="true"></i> Event Controls
-        </h2>
-
-        <div className="controls-row">
-          {isActive ? (
-            <button
-              className="btn btn-secondary"
-              onClick={handleUnpublish}
-              disabled={saving}
-              title="Hide the event and stop showing a public participant link"
-            >
-              {saving ? "Unpublishing…" : "Unpublish"}
-            </button>
-          ) : (
-            <button
-              className="btn btn-primary"
-              onClick={handlePublish}
-              disabled={saving || !hasSlug}
-              title={hasSlug ? "Make event public and shareable" : "Add a slug to publish"}
-            >
-              {saving ? "Publishing…" : "Publish"}
-            </button>
-          )}
-
-          <button
-            className="btn btn-outline"
-            onClick={toggleAccepting}
-            disabled={saving}
-            title="Allow or pause new questions from participants"
-          >
-            {accepting ? "Pause Questions" : "Resume Questions"}
-          </button>
+      {/* Event Control Cards Grid */}
+      <div className="control-cards-grid">
+        {/* Publish Status Card */}
+        <div className={`control-card ${isActive ? 'control-card-success' : 'control-card-warning'}`}>
+          <div className="control-card-icon">
+            <i className={`fas ${isActive ? 'fa-check-circle' : 'fa-circle'}`}></i>
+          </div>
+          <div className="control-card-content">
+            <h3 className="control-card-title">Event Status</h3>
+            <p className="control-card-status">{isActive ? 'Published' : 'Draft'}</p>
+            <p className="control-card-description">
+              {isActive
+                ? 'Your event is live and accessible to participants'
+                : 'Event is hidden from participants'}
+            </p>
+          </div>
+          <div className="control-card-action">
+            {isActive ? (
+              <button
+                className="btn btn-control btn-secondary"
+                onClick={handleUnpublish}
+                disabled={saving}
+              >
+                <i className="fas fa-eye-slash"></i>
+                {saving ? 'Hiding...' : 'Hide Event'}
+              </button>
+            ) : (
+              <button
+                className="btn btn-control btn-primary"
+                onClick={handlePublish}
+                disabled={saving || !hasSlug}
+              >
+                <i className="fas fa-rocket"></i>
+                {saving ? 'Publishing...' : 'Publish Event'}
+              </button>
+            )}
+          </div>
         </div>
 
-        <div className="chips-row">
-          <span className={`chip ${isActive ? "chip-success" : "chip-muted"}`}>
-            <i className="fas fa-eye" aria-hidden="true"></i>{" "}
-            {isActive ? "Public" : "Hidden"}
-          </span>
-          <span className={`chip ${accepting ? "chip-success" : "chip-warn"}`}>
-            <i className="fas fa-inbox" aria-hidden="true"></i>{" "}
-            {accepting ? "Accepting Questions" : "Intake Paused"}
-          </span>
-          {!hasSlug && (
-            <span className="chip chip-warn">
-              <i className="fas fa-link-slash" aria-hidden="true"></i> No slug set
-            </span>
-          )}
+        {/* Questions Status Card */}
+        <div className={`control-card ${accepting ? 'control-card-success' : 'control-card-muted'}`}>
+          <div className="control-card-icon">
+            <i className={`fas ${accepting ? 'fa-inbox' : 'fa-pause-circle'}`}></i>
+          </div>
+          <div className="control-card-content">
+            <h3 className="control-card-title">Question Submissions</h3>
+            <p className="control-card-status">{accepting ? 'Accepting' : 'Paused'}</p>
+            <p className="control-card-description">
+              {accepting
+                ? 'Participants can submit questions'
+                : 'New questions are temporarily paused'}
+            </p>
+          </div>
+          <div className="control-card-action">
+            <button
+              className="btn btn-control btn-outline"
+              onClick={toggleAccepting}
+              disabled={saving}
+            >
+              <i className={`fas ${accepting ? 'fa-pause' : 'fa-play'}`}></i>
+              {accepting ? 'Pause Questions' : 'Resume Questions'}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Event Links */}
-      <div className="links-card">
+      {/* Event Links Section */}
+      <div className="section-header">
         <h2 className="section-title">
-          <i className="fas fa-link" aria-hidden="true"></i> Event Links
+          <i className="fas fa-share-nodes"></i> Event Links
         </h2>
+        <p className="section-description">Share these links to give access to participants and hosts</p>
+      </div>
 
-        {/* Participant link */}
-        <div className={`link-item ${canShareParticipant ? "" : "is-disabled"}`}>
-          <div className="link-info">
-            <span className="link-label">
-              <i className="fas fa-users" aria-hidden="true"></i> Participant Link
-            </span>
+      <div className="link-cards-grid">
+        {/* Participant Link Card */}
+        <div className={`link-card ${!canShareParticipant ? 'link-card-disabled' : ''}`}>
+          <div className="link-card-header">
+            <div className="link-card-icon link-card-icon-primary">
+              <i className="fas fa-users"></i>
+            </div>
+            <div>
+              <h3 className="link-card-title">Participant Link</h3>
+              <p className="link-card-subtitle">For attendees to submit questions</p>
+            </div>
+          </div>
+          <div className="link-card-body">
             {canShareParticipant ? (
-              <code className="link-url">
-                <span className="link-url-full">{participantLink}</span>
-                <span className="link-url-short">{shortenUrl(participantLink)}</span>
-              </code>
+              <div className="link-display">
+                <code className="link-code">{participantLink}</code>
+              </div>
             ) : (
-              <div className="link-url link-url--muted">
-                {hasSlug
-                  ? "Event is not published yet. Publish to enable this link."
-                  : "Add an event slug to generate a shareable link."}
+              <div className="link-disabled-message">
+                <i className="fas fa-info-circle"></i>
+                <span>
+                  {hasSlug
+                    ? "Publish your event to enable this link"
+                    : "Add an event slug to generate a shareable link"}
+                </span>
               </div>
             )}
           </div>
-          <button
-            onClick={() => copyToClipboard(participantLink, "participant")}
-            className="btn btn-copy"
-            disabled={!canShareParticipant}
-            title={canShareParticipant ? "Copy participant link" : "Participant link disabled"}
-          >
-            {copiedLink === "participant" ? (
-              <>
-                <i className="fas fa-check" aria-hidden="true"></i> Copied!
-              </>
-            ) : (
-              <>
-                <i className="far fa-copy" aria-hidden="true"></i> Copy
-              </>
-            )}
-          </button>
-        </div>
-
-        {/* MC/Host link */}
-        <div className="link-item">
-          <div className="link-info">
-            <span className="link-label">
-              <i className="fas fa-microphone" aria-hidden="true"></i> MC/Host Link
-            </span>
-            <code className="link-url">
-              <span className="link-url-full">{mcLink}</span>
-              <span className="link-url-short">{shortenUrl(mcLink)}</span>
-            </code>
-          </div>
-          <div className="link-actions">
+          <div className="link-card-footer">
             <button
-              onClick={() => copyToClipboard(mcLink, "mc")}
-              className="btn btn-copy"
-              title="Copy MC link"
+              onClick={() => copyToClipboard(participantLink, "participant")}
+              className="btn btn-link-action"
+              disabled={!canShareParticipant}
             >
-              {copiedLink === "mc" ? (
+              {copiedLink === "participant" ? (
                 <>
-                  <i className="fas fa-check" aria-hidden="true"></i> Copied!
+                  <i className="fas fa-check"></i> Copied!
                 </>
               ) : (
                 <>
-                  <i className="far fa-copy" aria-hidden="true"></i> Copy
+                  <i className="far fa-copy"></i> Copy Link
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* MC/Host Link Card */}
+        <div className="link-card">
+          <div className="link-card-header">
+            <div className="link-card-icon link-card-icon-success">
+              <i className="fas fa-microphone"></i>
+            </div>
+            <div>
+              <h3 className="link-card-title">MC/Host Link</h3>
+              <p className="link-card-subtitle">For event moderators and hosts</p>
+            </div>
+          </div>
+          <div className="link-card-body">
+            <div className="link-display">
+              <code className="link-code">{mcLink}</code>
+            </div>
+          </div>
+          <div className="link-card-footer">
+            <button
+              onClick={() => copyToClipboard(mcLink, "mc")}
+              className="btn btn-link-action"
+            >
+              {copiedLink === "mc" ? (
+                <>
+                  <i className="fas fa-check"></i> Copied!
+                </>
+              ) : (
+                <>
+                  <i className="far fa-copy"></i> Copy Link
                 </>
               )}
             </button>
             <button
               onClick={() => setShowInviteModal(true)}
-              className="btn btn-secondary"
-              title="Email invite to MC/Host"
+              className="btn btn-link-action btn-link-action-secondary"
             >
-              <i className="fas fa-envelope" aria-hidden="true"></i> Send Invite
+              <i className="fas fa-envelope"></i> Send Invite
             </button>
           </div>
         </div>
