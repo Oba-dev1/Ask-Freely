@@ -11,18 +11,37 @@ function OrganizerAnalytics() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!currentUser?.uid) return;
-
-    const organizerEventsRef = ref(database, `organizers/${currentUser.uid}/events`);
-    const unsubscribe = onValue(organizerEventsRef, (snapshot) => {
-      const data = snapshot.val() || {};
-      const formatted = Object.entries(data).map(([id, value]) => ({
-        id,
-        ...value,
-      }));
-      setEvents(formatted);
+    if (!currentUser) {
       setLoading(false);
-    });
+      return;
+    }
+
+    const eventsRef = ref(database, 'events');
+    const unsubscribe = onValue(
+      eventsRef,
+      (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const userEvents = Object.keys(data)
+            .filter((key) => data[key]?.organizerId === currentUser.uid)
+            .map((key) => ({ id: key, ...data[key] }))
+            .sort((a, b) => {
+              const dateA = new Date(a.date || 0);
+              const dateB = new Date(b.date || 0);
+              return dateB - dateA;
+            });
+          setEvents(userEvents);
+        } else {
+          setEvents([]);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        // Handle Firebase errors gracefully
+        setLoading(false);
+        setEvents([]);
+      }
+    );
 
     return () => unsubscribe();
   }, [currentUser]);

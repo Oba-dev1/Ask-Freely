@@ -1,0 +1,156 @@
+/* ============================================
+   ORGANIZER SETTINGS STYLES
+   ============================================ */
+
+.settings-view {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Settings Header */
+.settings-header {
+  margin-bottom: 2rem;
+}
+
+.settings-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.25rem 0;
+}
+
+.settings-subtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Settings Content */
+.settings-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Settings Card */
+.settings-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.settings-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.settings-card-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.settings-card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.settings-card-title i {
+  color: #FF6B35;
+}
+
+.coming-soon-badge {
+  padding: 0.375rem 0.75rem;
+  background: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.settings-card-body {
+  padding: 1.5rem;
+}
+
+/* Settings Info Rows */
+.settings-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.settings-info-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.settings-info-row:first-child {
+  padding-top: 0;
+}
+
+.settings-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.settings-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-align: right;
+}
+
+/* Settings Placeholder */
+.settings-placeholder {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+  .settings-title {
+    font-size: 1.5rem;
+  }
+
+  .settings-content {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .settings-value {
+    text-align: left;
+  }
+
+  .settings-card-header {
+    padding: 1.25rem;
+  }
+
+  .settings-card-body {
+    padding: 1.25rem;
+  }
+}

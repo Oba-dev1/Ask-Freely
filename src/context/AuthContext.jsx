@@ -12,6 +12,7 @@ import {
 } from 'firebase/auth';
 import { ref, set, get } from 'firebase/database';
 import { auth, database } from '../Firebase/config';
+import { cleanupOnLogout } from '../utils/security';
 
 const AuthContext = createContext();
 
@@ -77,6 +78,8 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await signOut(auth);
+      // Clear sensitive data from storage
+      cleanupOnLogout();
       // Clear any persisted state
       setCurrentUser(null);
       setUserProfile(null);
