@@ -263,6 +263,8 @@ function CreateEventModal({ isOpen, onClose }) {
       const eventPayload = {
         title: eventData.title,
         description: eventData.description || '',
+        date: eventData.date,
+        time: eventData.time || '',
         dateTime: dateTime,
         slug,
         organizerId: currentUser.uid,
