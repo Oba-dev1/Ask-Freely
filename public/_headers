@@ -34,30 +34,37 @@
 /static/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Images - allow caching
-*.jpg
+# Images - allow caching (using proper Netlify path format)
+/:splat.jpg
   Cache-Control: public, max-age=31536000, immutable
-*.png
+
+/:splat.png
   Cache-Control: public, max-age=31536000, immutable
-*.gif
+
+/:splat.gif
   Cache-Control: public, max-age=31536000, immutable
-*.webp
+
+/:splat.webp
   Cache-Control: public, max-age=31536000, immutable
-*.svg
+
+/:splat.svg
   Cache-Control: public, max-age=31536000, immutable
 
 # Fonts - allow caching
-*.woff2
+/:splat.woff2
   Cache-Control: public, max-age=31536000, immutable
-*.woff
+
+/:splat.woff
   Cache-Control: public, max-age=31536000, immutable
-*.ttf
+
+/:splat.ttf
   Cache-Control: public, max-age=31536000, immutable
 
 # JavaScript and CSS - allow caching with revalidation
-*.js
+/:splat.js
   Cache-Control: public, max-age=604800, must-revalidate
-*.css
+
+/:splat.css
   Cache-Control: public, max-age=604800, must-revalidate
 
 # HTML files - no caching for main pages
