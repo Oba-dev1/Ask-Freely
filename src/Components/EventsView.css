@@ -241,6 +241,32 @@
   font-size: 0.5rem;
 }
 
+.status-archived {
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.15) 0%, rgba(75, 85, 99, 0.1) 100%);
+  color: #374151;
+  border: 1px solid rgba(107, 114, 128, 0.2);
+}
+
+.status-archived i {
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+.event-card-archived {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin: -0.5rem 0 1rem 0;
+  font-style: italic;
+}
+
+.event-card-archived i {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
 .event-card-date {
   display: flex;
   align-items: center;

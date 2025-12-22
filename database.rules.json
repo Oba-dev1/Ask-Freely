@@ -79,6 +79,12 @@
         "updatedAt": {
           ".validate": "newData.isString()"
         },
+        "archivedAt": {
+          ".validate": "newData.isString()"
+        },
+        "restoredAt": {
+          ".validate": "newData.isString()"
+        },
         "brandColor": {
           ".validate": "newData.isString() && newData.val().matches(/^#[0-9A-Fa-f]{6}$/)"
         },

@@ -28,6 +28,7 @@ import DashboardOverview from "./Components/DashboardOverview";
 import EventsAllView from "./Components/EventsAllView";
 import EventsActiveView from "./Components/EventsActiveView";
 import EventsDraftView from "./Components/EventsDraftView";
+import EventsArchivedView from "./Components/EventsArchivedView";
 import OrganizerSettings from "./Components/OrganizerSettings";
 import usePageTracking from "./hooks/usePageTracking";
 import { initializeSecurity } from "./utils/security";
@@ -872,6 +873,7 @@ function App() {
               <Route path="events/all" element={<EventsAllView />} />
               <Route path="events/active" element={<EventsActiveView />} />
               <Route path="events/draft" element={<EventsDraftView />} />
+              <Route path="events/archived" element={<EventsArchivedView />} />
               <Route path="analytics" element={<OrganizerAnalytics />} />
               <Route path="settings" element={<OrganizerSettings />} />
               <Route path="event/:eventId/setup" element={<EventSetup />} />

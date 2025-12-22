@@ -1,17 +1,15 @@
-// src/Components/EventsActiveView.jsx
+// src/Components/EventsArchivedView.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
-import CreateEventModal from './CreateEventModal';
 import './EventsView.css';
 
-function EventsActiveView() {
+function EventsArchivedView() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('grid');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -27,19 +25,15 @@ function EventsActiveView() {
       (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          const activeEvents = Object.keys(data)
-            .filter((key) =>
-              data[key]?.organizerId === currentUser.uid &&
-              data[key]?.status === 'published' &&
-              data[key]?.status !== 'archived' // Extra safety, though published shouldn't be archived
-            )
+          const archivedEvents = Object.keys(data)
+            .filter((key) => data[key]?.organizerId === currentUser.uid && data[key]?.status === 'archived')
             .map((key) => ({ id: key, ...data[key] }))
             .sort((a, b) => {
-              const dateA = new Date(a.date || 0);
-              const dateB = new Date(b.date || 0);
-              return dateB - dateA;
+              const dateA = new Date(a.archivedAt || a.createdAt || 0);
+              const dateB = new Date(b.archivedAt || b.createdAt || 0);
+              return dateB - dateA; // Most recently archived first
             });
-          setEvents(activeEvents);
+          setEvents(archivedEvents);
         } else {
           setEvents([]);
         }
@@ -69,12 +63,22 @@ function EventsActiveView() {
     return 'Date TBA';
   };
 
+  const getArchivedDate = (event) => {
+    if (!event.archivedAt) return null;
+    try {
+      const date = new Date(event.archivedAt);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch (e) {
+      return null;
+    }
+  };
+
   if (loading) {
     return (
       <div className="events-view">
         <div className="events-loading">
           <div className="spinner"></div>
-          <p>Loading active events...</p>
+          <p>Loading archived events...</p>
         </div>
       </div>
     );
@@ -85,8 +89,8 @@ function EventsActiveView() {
       {/* Page Header */}
       <div className="events-header">
         <div>
-          <h1 className="events-title">Active Events</h1>
-          <p className="events-subtitle">Currently published and live events</p>
+          <h1 className="events-title">Archived Events</h1>
+          <p className="events-subtitle">Events you've archived - restore them anytime</p>
         </div>
         <div className="events-header-actions">
           <div className="view-mode-toggle">
@@ -125,13 +129,18 @@ function EventsActiveView() {
               <div className="event-card-content">
                 <div className="event-card-header">
                   <h3 className="event-card-title">{event.title}</h3>
-                  <span className="event-status-badge status-published">
-                    <i className="fas fa-circle"></i> Active
+                  <span className="event-status-badge status-archived">
+                    <i className="fas fa-archive"></i> Archived
                   </span>
                 </div>
                 <p className="event-card-date">
                   <i className="far fa-calendar"></i> {getEventDisplayDate(event)}
                 </p>
+                {getArchivedDate(event) && (
+                  <p className="event-card-archived">
+                    <i className="fas fa-box"></i> Archived on {getArchivedDate(event)}
+                  </p>
+                )}
                 <div className="event-card-stats">
                   <div className="stat-item">
                     <i className="fas fa-question-circle"></i>
@@ -148,19 +157,16 @@ function EventsActiveView() {
         </div>
       ) : (
         <div className="events-empty">
-          <i className="fas fa-calendar-check"></i>
-          <h3>No Active Events</h3>
-          <p>Publish an event to see it here</p>
+          <i className="fas fa-archive"></i>
+          <h3>No Archived Events</h3>
+          <p>Events you archive will appear here</p>
           <button className="btn btn-secondary" onClick={() => navigate('/organizer/events/all')}>
             <i className="fas fa-list"></i> View All Events
           </button>
         </div>
       )}
-
-      {/* Create Event Modal */}
-      <CreateEventModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }
 
-export default EventsActiveView;
+export default EventsArchivedView;
