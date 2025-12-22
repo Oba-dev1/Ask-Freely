@@ -20,26 +20,7 @@
 .container {
   max-width: 1160px;
   margin: 0 auto;
-  padding: 7rem 1.5rem 3rem;
-}
-
-/* Back button row */
-.event-header-section {
-  margin-bottom: 1rem;
-}
-.back-btn-simple {
-  background: #FFFFFF;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  color: #404040;
-  padding: .6rem .9rem;
-  border-radius: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: .2s ease;
-}
-.back-btn-simple:hover {
-  background: rgba(255, 107, 53, 0.05);
-  border-color: rgba(255, 107, 53, 0.3);
+  padding: 2rem 1.5rem 3rem;
 }
 
 /* ============== HEADER ============== */

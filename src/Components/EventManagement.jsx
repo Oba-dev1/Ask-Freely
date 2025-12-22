@@ -264,15 +264,6 @@ function EventManagement() {
   // ---- UI ----
   return (
     <div className="container">
-      <div className="event-header-section">
-        <button
-          onClick={() => navigate("/organizer/dashboard")}
-          className="back-btn-simple"
-        >
-          ← Back to Dashboard
-        </button>
-      </div>
-
       <header className="header">
         <h1>
           {event.title}{" "}
