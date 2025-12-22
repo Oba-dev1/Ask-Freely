@@ -261,9 +261,26 @@ function EventManagement() {
     );
   }
 
+  // Determine back navigation based on event status
+  const handleBackNavigation = () => {
+    if (event.status === 'published') {
+      navigate('/organizer/events/active');
+    } else {
+      navigate('/organizer/events/all');
+    }
+  };
+
   // ---- UI ----
   return (
     <div className="container">
+      {/* Back Button */}
+      <button
+        onClick={handleBackNavigation}
+        className="back-btn-simple"
+      >
+        <i className="fas fa-arrow-left"></i> Back to {event.status === 'published' ? 'Active Events' : 'All Events'}
+      </button>
+
       <header className="header">
         <h1>
           {event.title}{" "}
