@@ -3,16 +3,19 @@ import React from 'react';
 import './BrandingPreview.css';
 
 function BrandingPreview({ event }) {
-  const branding = event?.branding || {};
-  const hasLogo = branding?.logoUrl;
-  const hasFlyer = branding?.flyerUrl;
-  const hasBranding = hasLogo || hasFlyer || branding?.organizationName || branding?.tagline;
+  // Support both nested branding object and root-level fields
+  const branding = event?.branding || event || {};
+  const hasLogo = event?.logoUrl || branding?.logoUrl;
+  const hasFlyer = event?.flyerUrl || branding?.flyerUrl;
+  const organizationName = event?.organizerName || branding?.organizationName;
+  const tagline = event?.tagline || branding?.tagline;
+  const hasBranding = hasLogo || hasFlyer || organizationName || tagline;
 
   if (!hasBranding) {
     return null; // Don't show if no branding
   }
 
-  const brandColor = branding?.primaryColor || '#FF6B35';
+  const brandColor = event?.brandColor || branding?.primaryColor || '#FF6B35';
   const brandStyles = {
     '--preview-brand-color': brandColor,
     '--preview-brand-color-light': `${brandColor}20`
@@ -38,7 +41,7 @@ function BrandingPreview({ event }) {
           <div className="preview-card-content">
             {hasLogo && (
               <div className="preview-logo-wrapper">
-                <img src={branding.logoUrl} alt="Logo" className="preview-logo" />
+                <img src={hasLogo} alt="Logo" className="preview-logo" />
               </div>
             )}
 
@@ -50,20 +53,20 @@ function BrandingPreview({ event }) {
                   {event.date}{event?.time ? ` • ${event.time}` : ''}
                 </p>
               )}
-              {branding.organizationName && (
+              {organizationName && (
                 <p className="preview-org-badge">
                   <i className="fas fa-building"></i>
-                  {branding.organizationName}
+                  {organizationName}
                 </p>
               )}
-              {branding.tagline && (
-                <p className="preview-tagline">{branding.tagline}</p>
+              {tagline && (
+                <p className="preview-tagline">{tagline}</p>
               )}
             </div>
 
             {hasFlyer && (
               <div className="preview-flyer-wrapper">
-                <img src={branding.flyerUrl} alt="Event flyer" className="preview-flyer" />
+                <img src={hasFlyer} alt="Event flyer" className="preview-flyer" />
               </div>
             )}
           </div>
