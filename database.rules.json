@@ -30,10 +30,12 @@
     // EVENTS - Organizer owns, participants can read
     // ============================================
     "events": {
+      // Allow authenticated users to list all events (filtering happens client-side)
+      ".read": "auth != null",
+
       "$eventId": {
-        // Organizers can read their own events
-        // Participants can read if event is published or unlisted
-        ".read": "auth != null && (data.child('organizerId').val() === auth.uid || data.child('status').val() === 'published' || data.child('status').val() === 'unlisted')",
+        // Individual event read permission (for unauthenticated access to published events)
+        ".read": "data.child('status').val() === 'published' || data.child('status').val() === 'unlisted'",
 
         // Only event organizer can write
         ".write": "auth != null && (
@@ -61,6 +63,12 @@
         },
         "status": {
           ".validate": "newData.isString() && (newData.val() === 'draft' || newData.val() === 'published' || newData.val() === 'unlisted' || newData.val() === 'archived')"
+        },
+        "date": {
+          ".validate": "newData.isString()"
+        },
+        "time": {
+          ".validate": "newData.isString()"
         },
         "dateTime": {
           ".validate": "newData.isString()"
@@ -100,38 +108,59 @@
     // ============================================
     "questions": {
       "$eventId": {
+        ".read": "
+          root.child('events/' + $eventId + '/status').val() === 'published' ||
+          root.child('events/' + $eventId + '/status').val() === 'unlisted' ||
+          (auth != null && root.child('events/' + $eventId + '/organizerId').val() === auth.uid)
+        ",
+        ".write": "auth != null && root.child('events/' + $eventId + '/organizerId').val() === auth.uid",
+
         "$questionId": {
-          // Organizer can read all questions
-          // Participants can read approved/answered questions
-          ".read": "auth != null && (
-            root.child('events/' + $eventId + '/organizerId').val() === auth.uid ||
-            (data.child('status').val() === 'approved' || data.child('status').val() === 'answered')
-          )",
+          ".write": "
+            auth != null && (
+              !data.exists() && root.child('events/' + $eventId + '/enableQuestionSubmission').val() === true ||
+              data.exists() && root.child('events/' + $eventId + '/organizerId').val() === auth.uid
+            )
+          ",
 
-          // Participants can create (if submissions enabled)
-          // Organizer can update (status, response, upvotes, etc.)
-          ".write": "auth != null && (
-            !data.exists() && root.child('events/' + $eventId + '/enableQuestionSubmission').val() === true ||
-            data.exists() && root.child('events/' + $eventId + '/organizerId').val() === auth.uid
-          )",
-
-          "questionText": {
+          "question": {
             ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
           },
-          "authorName": {
+          "author": {
             ".validate": "newData.isString() && newData.val().length <= 100"
+          },
+          "source": {
+            ".validate": "newData.isString() && (newData.val() === 'organizer' || newData.val() === 'audience' || newData.val() === 'anonymous' || newData.val() === 'mc')"
           },
           "status": {
             ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'approved' || newData.val() === 'rejected' || newData.val() === 'answered')"
           },
-          "response": {
-            ".validate": "newData.isString() && newData.val().length <= 2000"
+          "timestamp": {
+            ".validate": "newData.isString()"
+          },
+          "createdAt": {
+            ".validate": "newData.isString()"
           },
           "upvotes": {
             ".validate": "newData.isNumber() && newData.val() >= 0"
           },
-          "createdAt": {
-            ".validate": "newData.isString()"
+          "answered": {
+            ".validate": "newData.isBoolean()"
+          },
+          "deleted": {
+            ".validate": "newData.isBoolean()"
+          },
+          "priority": {
+            ".validate": "newData.isString() && (newData.val() === 'high' || newData.val() === 'medium' || newData.val() === 'low')"
+          },
+          "category": {
+            ".validate": "newData.isString() && newData.val().length <= 100"
+          },
+          "notes": {
+            ".validate": "newData.isString() && newData.val().length <= 500"
+          },
+          "response": {
+            ".validate": "newData.isString() && newData.val().length <= 2000"
           },
           "answeredAt": {
             ".validate": "newData.isString()"

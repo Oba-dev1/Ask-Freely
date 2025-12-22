@@ -263,6 +263,8 @@ function CreateEventModal({ isOpen, onClose }) {
       const eventPayload = {
         title: eventData.title,
         description: eventData.description || '',
+        date: eventData.date,
+        time: eventData.time || '',
         dateTime: dateTime,
         slug,
         organizerId: currentUser.uid,
@@ -289,11 +291,17 @@ function CreateEventModal({ isOpen, onClose }) {
         for (const q of strategicQuestions) {
           const qRef = push(questionsRef);
           await set(qRef, {
-            questionText: q.text,
-            authorName: organizerName,
+            question: q.text,
+            author: organizerName,
+            source: 'organizer',
             status: 'approved',
+            timestamp: new Date().toISOString(),
             createdAt: new Date().toISOString(),
-            upvotes: 0
+            upvotes: 0,
+            answered: false,
+            ...(q.priority && { priority: q.priority }),
+            ...(q.category && { category: q.category }),
+            ...(q.notes && { notes: q.notes })
           });
         }
       }
