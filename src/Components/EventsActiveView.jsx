@@ -78,6 +78,14 @@ function EventsActiveView() {
 
   return (
     <div className="events-view">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate('/organizer/dashboard')}
+        className="back-btn-simple"
+      >
+        <i className="fas fa-arrow-left"></i> Back to Dashboard
+      </button>
+
       {/* Page Header */}
       <div className="events-header">
         <div>
