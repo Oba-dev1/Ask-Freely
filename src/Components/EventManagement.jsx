@@ -66,6 +66,7 @@ function EventManagement() {
 
   // ---- Derived ----
   const isActive = event?.status === "published";
+  const isArchived = event?.status === "archived";
   const hasSlug = !!event?.slug;
   const accepting = event?.enableQuestionSubmission !== false; // default true if undefined
   const canShareParticipant = isActive && hasSlug;
@@ -123,6 +124,58 @@ function EventManagement() {
       await update(ref(database, `events/${eventId}`), {
         enableQuestionSubmission: next,
       });
+    } finally {
+      setSaving(false);
+    }
+  }, [event, eventId]);
+
+  const handleArchive = useCallback(async () => {
+    if (!event) return;
+    const confirmMessage =
+      `Archive "${event.title}"?\n\n` +
+      `This will:\n` +
+      `• Hide the event from your active and draft lists\n` +
+      `• Disable participant access to the event page\n` +
+      `• Preserve all questions and analytics data\n` +
+      `• Allow you to restore it later from Archived Events\n\n` +
+      `Continue?`;
+
+    if (!window.confirm(confirmMessage)) return;
+
+    try {
+      setSaving(true);
+      await update(ref(database, `events/${eventId}`), {
+        status: "archived",
+        archivedAt: new Date().toISOString(),
+        enableQuestionSubmission: false,
+      });
+      // Navigate back to all events after archiving
+      navigate('/organizer/events/all');
+    } catch (err) {
+      console.error("Error archiving event:", err);
+      alert("Failed to archive event. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  }, [event, eventId, navigate]);
+
+  const handleRestore = useCallback(async () => {
+    if (!event) return;
+    const confirmMessage =
+      `Restore "${event.title}"?\n\n` +
+      `This will move it back to your drafts. You can publish it again when ready.`;
+
+    if (!window.confirm(confirmMessage)) return;
+
+    try {
+      setSaving(true);
+      await update(ref(database, `events/${eventId}`), {
+        status: "draft",
+        restoredAt: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("Error restoring event:", err);
+      alert("Failed to restore event. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -270,6 +323,13 @@ function EventManagement() {
     }
   };
 
+  const getBackButtonText = () => {
+    if (event.status === 'published') {
+      return 'Back to Active Events';
+    }
+    return 'Back to All Events';
+  };
+
   // ---- UI ----
   return (
     <div className="container">
@@ -278,7 +338,7 @@ function EventManagement() {
         onClick={handleBackNavigation}
         className="back-btn-simple"
       >
-        <i className="fas fa-arrow-left"></i> Back to {event.status === 'published' ? 'Active Events' : 'All Events'}
+        <i className="fas fa-arrow-left"></i> {getBackButtonText()}
       </button>
 
       <header className="header">
@@ -455,6 +515,61 @@ function EventManagement() {
           </div>
         </div>
       </div>
+
+      {/* Archive/Restore Section */}
+      {isArchived ? (
+        <div className="archive-section">
+          <div className="archive-banner">
+            <div className="archive-banner-icon">
+              <i className="fas fa-archive"></i>
+            </div>
+            <div className="archive-banner-content">
+              <h3 className="archive-banner-title">
+                <i className="fas fa-info-circle"></i> This Event is Archived
+              </h3>
+              <p className="archive-banner-description">
+                This event is hidden from participants and your active lists. All questions and data are preserved.
+              </p>
+            </div>
+            <button
+              className="btn btn-primary"
+              onClick={handleRestore}
+              disabled={saving}
+            >
+              <i className="fas fa-undo"></i>
+              {saving ? 'Restoring...' : 'Restore Event'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="danger-zone-section">
+          <div className="section-header">
+            <h2 className="section-title">
+              <i className="fas fa-exclamation-triangle"></i> Archive Event
+            </h2>
+            <p className="section-description">
+              Archive this event to remove it from your active lists while preserving all data
+            </p>
+          </div>
+          <div className="danger-zone-card">
+            <div className="danger-zone-content">
+              <h3 className="danger-zone-title">Archive this event</h3>
+              <p className="danger-zone-description">
+                Archiving will hide this event from participants and move it to your archived events.
+                You can restore it anytime. All questions and analytics will be preserved.
+              </p>
+            </div>
+            <button
+              className="btn btn-danger"
+              onClick={handleArchive}
+              disabled={saving}
+            >
+              <i className="fas fa-archive"></i>
+              {saving ? 'Archiving...' : 'Archive Event'}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Branding Preview */}
       <BrandingPreview event={event} />

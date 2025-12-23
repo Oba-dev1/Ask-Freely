@@ -159,10 +159,10 @@ function Signup() {
                   <span className="logo-icon"><i className="fas fa-comments"></i></span>
                   <span className="logo-text">Ask Freely</span>
                 </div>
-                <p className="brand-tagline">Real-time Q&amp;A for engaging events</p>
+                <p className="brand-tagline">Create Safe Spaces for Honest Conversations</p>
               </div>
               <div className="visual-caption">
-                <p>"Start better conversations with your audience."</p>
+                <p>"Transform your Q&amp;A sessions from awkward silences to meaningful dialogue."</p>
               </div>
             </div>
           </div>
@@ -173,8 +173,8 @@ function Signup() {
             <div className="auth-card">
               <header className="auth-header">
                 <span className="logo-icon"><i className="fas fa-comments"></i></span>
-                <h1>Create an account</h1>
-                <p className="subtitle">Access your tasks, notes, and projects anytime, anywhere - and keep everything flowing in one place.</p>
+                <h1>Start Hosting Better Conversations</h1>
+                <p className="subtitle">Create your free account and launch your first anonymous Q&amp;A session in under 3 minutes. No credit card required.</p>
               </header>
 
               {error && <div className="error-banner" role="alert">{error}</div>}
@@ -184,26 +184,26 @@ function Signup() {
                   <div className="success-icon">
                     <i className="fas fa-envelope-circle-check"></i>
                   </div>
-                  <h3>Check Your Email!</h3>
+                  <h3>Verify Your Email to Get Started</h3>
                   <p>
                     We've sent a verification link to <strong>{formData.email}</strong>
                   </p>
                   <p>
-                    Please check your inbox and click the verification link to activate your account.
+                    Click the link in the email to activate your account and start creating your first Q&amp;A session.
                   </p>
                   <p className="help-text">
-                    Didn't receive the email? Check your spam folder.
+                    Can't find the email? Check your spam/junk folder or promotions tab.
                   </p>
                   <div style={{ marginTop: '2rem', textAlign: 'center' }}>
                     <Link to="/login" className="btn btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>
-                      Go to Login
+                      Return to Login
                     </Link>
                   </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="auth-form" noValidate>
                 <div className="form-group">
-                  <label htmlFor="email">Your email</label>
+                  <label htmlFor="email">Work Email Address</label>
                   <input
                     type="email"
                     id="email"
@@ -213,17 +213,17 @@ function Signup() {
                     onBlur={() => setTouched((t) => ({ ...t, email: true }))}
                     required
                     autoComplete="email"
-                    placeholder="farazshahid9@gmail.com"
+                    placeholder="you@organization.com"
                     aria-invalid={touched.email && !emailValid}
                     aria-describedby={touched.email && !emailValid ? 'email-error' : undefined}
                   />
                   {touched.email && !emailValid && (
-                    <small id="email-error" className="input-error">Enter a valid email address.</small>
+                    <small id="email-error" className="input-error">Please enter a valid email address</small>
                   )}
                 </div>
 
                 <div className="form-group password-field">
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">Create Password</label>
                   <div className="password-input-wrap">
                     <input
                       type={showPw ? 'text' : 'password'}
@@ -235,7 +235,7 @@ function Signup() {
                       required
                       autoComplete="new-password"
                       minLength="6"
-                      placeholder="••••••••"
+                      placeholder="At least 6 characters"
                       aria-invalid={touched.password && !passwordValid}
                       aria-describedby={touched.password && !passwordValid ? 'password-error' : undefined}
                     />
@@ -265,7 +265,7 @@ function Signup() {
                     </div>
                   )}
                   {touched.password && !passwordValid && (
-                    <small id="password-error" className="input-error">Minimum 6 characters.</small>
+                    <small id="password-error" className="input-error">Password must be at least 6 characters long</small>
                   )}
                 </div>
 
@@ -295,7 +295,7 @@ function Signup() {
                     </button>
                   </div>
                   {touched.confirmPassword && !confirmValid && (
-                    <small id="confirm-error" className="input-error">Passwords must match.</small>
+                    <small id="confirm-error" className="input-error">Passwords must match</small>
                   )}
                 </div>
 
@@ -304,14 +304,14 @@ function Signup() {
                   className="btn btn-primary"
                   disabled={loading || !formValid}
                 >
-                  {loading ? 'Creating Account...' : 'Get Started'}
+                  {loading ? 'Creating Your Account...' : 'Create Free Account'}
                 </button>
               </form>
               )}
 
               {!signupSuccess && (
                 <>
-                  <div className="auth-divider"><span>Or continue with</span></div>
+                  <div className="auth-divider"><span>Or sign up with</span></div>
 
               {/* Google Sign-Up */}
                   <button
@@ -321,10 +321,11 @@ function Signup() {
                     disabled={loading}
                   >
                     <span className="g-icon"><i className="fa-brands fa-google"></i></span>
+                    Continue with Google
                   </button>
 
                   <div className="auth-links">
-                    <p>Already have an account? <Link to="/login">Sign in</Link></p>
+                    <p>Already have an account? <Link to="/login">Log in</Link></p>
                   </div>
                 </>
               )}

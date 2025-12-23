@@ -28,7 +28,10 @@ function EventsAllView() {
         const data = snapshot.val();
         if (data) {
           const userEvents = Object.keys(data)
-            .filter((key) => data[key]?.organizerId === currentUser.uid)
+            .filter((key) =>
+              data[key]?.organizerId === currentUser.uid &&
+              data[key]?.status !== 'archived' // Exclude archived events
+            )
             .map((key) => ({ id: key, ...data[key] }))
             .sort((a, b) => {
               const dateA = new Date(a.date || 0);

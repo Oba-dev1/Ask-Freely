@@ -1180,3 +1180,139 @@
     width: 100%;
   }
 }
+
+/* ============== ARCHIVE SECTION ============== */
+.archive-section {
+  margin: 2rem 0;
+}
+
+.archive-banner {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.04) 100%);
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+}
+
+.archive-banner-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(245, 158, 11, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #F59E0B;
+  flex-shrink: 0;
+}
+
+.archive-banner-content {
+  flex: 1;
+}
+
+.archive-banner-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: #D97706;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.archive-banner-description {
+  margin: 0;
+  color: #92400E;
+  font-size: 0.95rem;
+}
+
+/* ============== DANGER ZONE ============== */
+.danger-zone-section {
+  margin: 2rem 0;
+}
+
+.danger-zone-card {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.03) 0%, rgba(239, 68, 68, 0.01) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.danger-zone-content {
+  flex: 1;
+}
+
+.danger-zone-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: #DC2626;
+}
+
+.danger-zone-description {
+  margin: 0;
+  color: #991B1B;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.btn-danger {
+  background: #EF4444;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #DC2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments for archive section */
+@media (max-width: 768px) {
+  .archive-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .archive-banner .btn {
+    width: 100%;
+  }
+
+  .danger-zone-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .danger-zone-card .btn-danger {
+    width: 100%;
+  }
+}

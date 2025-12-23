@@ -118,6 +118,16 @@ function DashboardSidebar({ isOpen, onClose }) {
                       <span className="nav-text">Drafts</span>
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink
+                      to="/organizer/events/archived"
+                      className={({ isActive }) => `nav-subitem ${isActive ? 'active' : ''}`}
+                      onClick={closeSidebarOnMobile}
+                    >
+                      <i className="fas fa-archive nav-subicon" style={{ color: '#6B7280' }}></i>
+                      <span className="nav-text">Archived</span>
+                    </NavLink>
+                  </li>
                 </ul>
               )}
             </li>
