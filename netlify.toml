@@ -76,6 +76,8 @@
         https://www.google.com
         https://www.googletagmanager.com
         https://www.google-analytics.com
+        https://www.recaptcha.net
+        https://www.gstatic.cn
         https://*.cloudflareinsights.com
         https://*.sentry.io
         https://*.ingest.us.sentry.io;
@@ -88,10 +90,13 @@
       img-src 'self' data: blob:
         https:
         https://res.cloudinary.com
-        https://*.googleusercontent.com;
+        https://*.googleusercontent.com
+        https://www.gstatic.com;
       connect-src 'self'
         https://*.firebaseio.com
         https://*.googleapis.com
+        https://www.google.com
+        https://www.recaptcha.net
         https://*.cloudflareinsights.com
         https://*.cloudfunctions.net
         https://www.google-analytics.com
@@ -100,7 +105,9 @@
         https://*.ingest.us.sentry.io
         wss://*.firebaseio.com;
       frame-src 'self'
-        https://www.google.com;
+        https://www.google.com
+        https://www.recaptcha.net
+        https://recaptcha.google.com;
       object-src 'none';
       base-uri 'self';
       form-action 'self';
