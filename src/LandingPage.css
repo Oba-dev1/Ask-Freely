@@ -1380,6 +1380,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     align-items: center;
     justify-content: center;
     grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
     z-index: 100;
   }
 
@@ -1401,6 +1403,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     opacity: 0;
     transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 50;
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 
   /* Show nav when mobile menu is open */
