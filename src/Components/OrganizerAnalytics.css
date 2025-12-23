@@ -2,9 +2,16 @@
    ORGANIZER ANALYTICS STYLES
    ============================================ */
 
+.analytics-view * {
+  box-sizing: border-box;
+}
+
 .analytics-view {
   animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   padding-bottom: 3rem;
+  max-width: 100%;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Loading & Empty States */
@@ -62,6 +69,7 @@
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2.5rem;
+  max-width: 100%;
 }
 
 .metric-card {
@@ -179,6 +187,8 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   display: flex !important;
   flex-direction: column !important;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .section-title {
@@ -543,6 +553,8 @@
 @media (max-width: 768px) {
   .analytics-view {
     padding-bottom: 2rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .analytics-header {
@@ -561,6 +573,7 @@
     grid-template-columns: 1fr;
     gap: 1rem;
     margin-bottom: 2rem;
+    width: 100%;
   }
 
   .metric-card {
@@ -639,11 +652,13 @@
     -webkit-overflow-scrolling: touch;
     margin: 0 -1.5rem;
     padding: 0 1.5rem;
+    max-width: calc(100vw - 2rem);
   }
 
   .events-table-analytics {
     font-size: 0.8rem;
     min-width: 600px;
+    width: 100%;
   }
 
   .events-table-analytics th,
@@ -788,10 +803,12 @@
   .events-table-container {
     margin: 0 -1.25rem;
     padding: 0 1.25rem;
+    max-width: calc(100vw - 2rem);
   }
 
   .events-table-analytics {
     font-size: 0.75rem;
+    width: 100%;
   }
 
   .events-table-analytics th,
