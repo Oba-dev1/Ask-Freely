@@ -167,8 +167,8 @@ function DashboardOverview() {
       {/* Page Header */}
       <div className="overview-header">
         <div>
-          <h1 className="overview-title">Overview</h1>
-          <p className="overview-subtitle">Welcome back! Here's what's happening with your events</p>
+          <h1 className="overview-title">Dashboard Overview</h1>
+          <p className="overview-subtitle">Track engagement, monitor activity, and manage all your events in one place</p>
         </div>
       </div>
 

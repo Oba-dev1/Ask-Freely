@@ -203,18 +203,18 @@ function TopBar() {
         </button>
 
         <nav className={`main-nav ${mobileMenuOpen ? 'mobile-open' : ''}`} aria-label="Primary navigation">
-          <a href="#values" onClick={(e) => handleNavClick(e, 'values')}>Community</a>
+          <a href="#values" onClick={(e) => handleNavClick(e, 'values')}>Why Ask Freely</a>
           <a href="#how-it-works" onClick={(e) => handleNavClick(e, 'how-it-works')}>How It Works</a>
           <a href="#why" onClick={(e) => handleNavClick(e, 'why')}>Features</a>
-          <a href="#stories" onClick={(e) => handleNavClick(e, 'stories')}>Stories</a>
+          <a href="#stories" onClick={(e) => handleNavClick(e, 'stories')}>Reviews</a>
         </nav>
 
         <div className="actions">
           <button className="ghost" onClick={() => navigate("/login")}>
-            Sign in
+            Log In
           </button>
           <button className="solid" onClick={() => navigate("/signup")}>
-            Join the community
+            Get Started Free
           </button>
         </div>
       </div>
@@ -279,21 +279,20 @@ function HeroSection() {
       <div className="lp-container hero-grid">
         <div className="hero-copy">
           <div className="hero-chip">
-            <span className="dot" /> Powered by real people
+            <span className="dot" /> Trusted by organizers worldwide
           </div>
-          <h1 id="hero-heading">A community space for honest Q&amp;A.</h1>
+          <h1 id="hero-heading">Turn Tough Questions Into Breakthrough Conversations</h1>
           <p className="lede">
-            Ask Freely helps gatherings collect questions safely, vote on what
-            matters, and respond with care.
+            The anonymous Q&amp;A platform that helps event organizers create psychologically safe spaces where every voice matters. Collect, prioritize, and address questions with confidence—no awkward silences, just honest dialogue.
           </p>
 
           <div className="hero-actions">
             <button className="solid" onClick={() => navigate("/signup")}>
-              Create an event{" "}
+              Start Free - Create Your Event{" "}
               <i className="fas fa-arrow-right" aria-hidden="true" />
             </button>
             <button className="ghost" onClick={() => navigate("/participate")}>
-              Try the participant view
+              See How It Works
             </button>
           </div>
         </div>
@@ -335,24 +334,24 @@ function LiveStatsSection({ liveStats }) {
     <section className="lp-live-stats" aria-labelledby="stats-heading">
       <div className="lp-container">
         <div className="stats-header">
-          <h3 id="stats-heading" className="stats-title">Join thousands already asking freely</h3>
-          <p className="stats-subtitle">Real conversations happening right now across communities</p>
+          <h3 id="stats-heading" className="stats-title">Join Thousands Making Every Voice Count</h3>
+          <p className="stats-subtitle">Real conversations happening right now in communities worldwide</p>
         </div>
         <div className="stats-row">
           <StatItem
             icon="fa-solid fa-circle-question"
             num={formatNumber(liveQuestions)}
-            label="Questions asked"
+            label="Questions Answered"
           />
           <StatItem
             icon="fa-solid fa-calendar-days"
             num={formatNumber(liveEvents)}
-            label="Events created"
+            label="Events Hosted"
           />
           <StatItem
             icon="fa-solid fa-user-group"
             num={formatNumber(liveParticipants)}
-            label="Voices represented"
+            label="People Heard"
           />
         </div>
       </div>
@@ -510,17 +509,16 @@ function ValuesSection() {
   return (
     <section id="values" className="lp-values">
       <div className="lp-container values-grid">
-        <h3 className="section-heading">Community values</h3>
+        <h3 className="section-heading">Built on Values That Matter</h3>
       </div>
       <div className="lp-container values-grid">
         <div className="val">
           <div className="val-icon">
             <i className="fa-solid fa-hand-holding-heart" aria-hidden="true" />
           </div>
-          <h3>Belonging first</h3>
+          <h3>Safety First, Always</h3>
           <p>
-            Anonymous by choice, kind by default. We design for safety so
-            harder questions can surface.
+            Optional anonymity with built-in moderation tools. Create spaces where the toughest questions can finally be asked—without fear or judgment.
           </p>
         </div>
 
@@ -528,10 +526,9 @@ function ValuesSection() {
           <div className="val-icon">
             <i className="fa-solid fa-people-arrows" aria-hidden="true" />
           </div>
-          <h3>Shared agency</h3>
+          <h3>Community-Driven Prioritization</h3>
           <p>
-            Let the room vote on what matters. Hosts get clarity without
-            losing compassion.
+            Let your audience upvote what truly matters to them. Stop guessing what people care about—let them show you through democratic engagement.
           </p>
         </div>
 
@@ -539,10 +536,9 @@ function ValuesSection() {
           <div className="val-icon">
             <i className="fa-solid fa-palette" aria-hidden="true" />
           </div>
-          <h3>Make it yours</h3>
+          <h3>Your Brand, Your Voice</h3>
           <p>
-            Customization for your context—branding, tone, and links that feel
-            like home.
+            Full white-label customization. Add your logo, colors, and messaging so participants feel right at home—not on a generic platform.
           </p>
         </div>
       </div>
@@ -555,24 +551,24 @@ function StoriesSection() {
     <section id="stories" className="lp-stories" aria-labelledby="stories-heading">
       <div className="lp-container stories-wrap">
         <h3 id="stories-heading" className="section-heading">
-          Stories from the community
+          Hear From Organizers Like You
         </h3>
 
         <div className="stories-grid">
           <Story
-            quote="Ask Freely turned our Q&A from a tense segment into the highlight. People felt heard."
+            quote="Ask Freely transformed our Q&A from an awkward silence to the most engaging part of our event. For the first time, people actually felt heard."
             avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1718105160/pexels-emmy-e-1252107-2381069_ncpcqb.jpg"
             name="Ada"
             role="Youth Leader, Wuye"
           />
           <Story
-            quote="We used it at our campus forum—the tough questions finally came out. Best turnout yet."
+            quote="We used it at our campus town hall and finally got the tough questions we needed. Anonymity changed everything—highest participation we've ever seen."
             avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1706346802/AjoVault%20App/pexels-christina-morillo-1181686_irzuti.jpg"
             name="Seyi"
             role="Campus Coordinator"
           />
           <Story
-            quote="The MC dashboard is clean, and the community vibe is real. It respects our culture."
+            quote="The facilitator dashboard is incredibly clean and intuitive. But what impressed me most is how well it respects our cultural context and community values."
             avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1719833077/IMG_2571_wsh2ef.jpg"
             name="Chidi"
             role="Community Organizer"
@@ -587,8 +583,8 @@ function HowItWorksSection() {
   return (
     <section id="how-it-works" className="lp-how-it-works">
       <div className="lp-container">
-        <h3 className="section-heading">How it works</h3>
-        <p className="how-subtitle">Three simple steps to better conversations</p>
+        <h3 className="section-heading">Simple to Start, Powerful in Practice</h3>
+        <p className="how-subtitle">Go from idea to engagement in under 3 minutes</p>
 
         <div className="how-timeline">
           <div className="timeline-line"></div>
@@ -601,8 +597,8 @@ function HowItWorksSection() {
               <div className="step-icon">
                 <i className="fa-solid fa-calendar-plus" />
               </div>
-              <h4>Create your event</h4>
-              <p>Set up your Q&A session in seconds. Customize branding, add prompts, and get a shareable link.</p>
+              <h4>Create Your Event in Seconds</h4>
+              <p>No credit card required. Set up your Q&amp;A session, customize your branding, add strategic prompts, and get a shareable link instantly.</p>
             </div>
           </div>
 
@@ -614,8 +610,8 @@ function HowItWorksSection() {
               <div className="step-icon">
                 <i className="fa-solid fa-comments" />
               </div>
-              <h4>Invite your people</h4>
-              <p>Share the link. Participants submit and upvote questions anonymously—no sign-up needed.</p>
+              <h4>Share & Watch Engagement Soar</h4>
+              <p>One link, zero friction. Participants ask and upvote questions anonymously—no account creation, no downloads, no barriers to participation.</p>
             </div>
           </div>
 
@@ -627,8 +623,8 @@ function HowItWorksSection() {
               <div className="step-icon">
                 <i className="fa-solid fa-microphone"/>
               </div>
-              <h4>Host with confidence</h4>
-              <p>See top questions live, respond thoughtfully, and export insights for your team afterward.</p>
+              <h4>Facilitate Like a Pro</h4>
+              <p>See top questions ranked by community votes in real-time. Moderate with empathy, respond with confidence, and export insights for follow-up.</p>
             </div>
           </div>
         </div>
@@ -641,39 +637,39 @@ function WhySection() {
   return (
     <section id="why" className="lp-why">
       <div className="lp-container why-grid">
-        <h3 className="section-heading">Why people use Ask Freely</h3>
+        <h3 className="section-heading">Everything You Need to Host Meaningful Conversations</h3>
 
         <div className="why-cards-wrapper">
           <div className="why-card">
             <div className="why-icon">
               <i className="fa-solid fa-bullseye" />
             </div>
-            <h4>Strategic prompts</h4>
-            <p>Seed the conversation with questions that matter to your people.</p>
+            <h4>Strategic Question Seeding</h4>
+            <p>Pre-populate thoughtful prompts to guide the conversation and ensure important topics get covered—even if the room is shy at first.</p>
           </div>
 
           <div className="why-card">
             <div className="why-icon">
               <i className="fa-solid fa-user-shield" />
             </div>
-            <h4>Privacy that protects</h4>
-            <p>Keep identities safe. Moderate with empathy and clear boundaries.</p>
+            <h4>Privacy-First by Design</h4>
+            <p>Optional anonymity, robust moderation controls, and respectful boundaries. Build trust so people share what they actually think.</p>
           </div>
 
           <div className="why-card">
             <div className="why-icon">
               <i className="fa-solid fa-chart-line" />
             </div>
-            <h4>Community insights</h4>
-            <p>See themes, participation trends, and share learnings with your team.</p>
+            <h4>Actionable Insights & Analytics</h4>
+            <p>Track participation patterns, identify trending themes, and export data to share with stakeholders. Turn feedback into action plans.</p>
           </div>
 
           <div className="why-card">
             <div className="why-icon">
               <i className="fa-solid fa-sliders" />
             </div>
-            <h4>Customization</h4>
-            <p>Match your brand and language. Make the space unmistakably yours.</p>
+            <h4>Complete White-Label Control</h4>
+            <p>Custom branding, personalized messaging, and your own domain. Deliver a seamless experience that reinforces your organization's identity.</p>
           </div>
         </div>
       </div>
@@ -687,15 +683,15 @@ function CTASection() {
   return (
     <section id="cta" className="lp-cta" aria-labelledby="cta-heading">
       <div className="lp-container cta-box">
-        <h3 id="cta-heading">Ready to hold braver conversations?</h3>
-        <p>Start with a free event. Invite your people. Listen together.</p>
+        <h3 id="cta-heading">Ready to Transform Your Next Q&amp;A Session?</h3>
+        <p>Join organizers creating safer, more engaging conversations. Set up your first event free—no credit card required.</p>
         <div className="cta-actions">
           <button className="solid" onClick={() => navigate("/signup")}>
-            Create a free event{" "}
+            Start Free - Create Your Event{" "}
             <i className="fas fa-arrow-right" aria-hidden="true" />
           </button>
           <button className="ghost" onClick={() => navigate("/participate")}>
-            See a demo
+            Try the Demo First
           </button>
         </div>
       </div>
