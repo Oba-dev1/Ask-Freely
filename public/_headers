@@ -1,80 +1,15 @@
-# ============================================
-# Security Headers for Netlify
-# Protects against XSS, clickjacking, and other attacks
-# ============================================
+# Netlify _headers file
+# This provides an alternative/backup to netlify.toml headers
 
 /*
-  # Prevent clickjacking attacks
-  X-Frame-Options: DENY
-
-  # Enable XSS protection in browsers
+  X-Frame-Options: SAMEORIGIN
   X-XSS-Protection: 1; mode=block
-
-  # Prevent MIME type sniffing
   X-Content-Type-Options: nosniff
-
-  # Referrer policy - only send referrer to same origin
   Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
 
-  # Permissions policy - restrict browser features
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
-
-  # Content Security Policy - prevent XSS and injection attacks
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.google.com https://www.googletagmanager.com https://googletagmanager.com https://*.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.cloudfunctions.net https://www.google-analytics.com https://www.googletagmanager.com https://*.cloudflare.com wss://*.firebaseio.com; frame-src 'self' https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;
-
-  # HSTS - Force HTTPS (max-age = 2 years)
-  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-
-  # Cache control for security-sensitive pages
-  Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
-  Pragma: no-cache
-  Expires: 0
-
-# Static assets - allow caching
 /static/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Images - allow caching (using proper Netlify path format)
-/:splat.jpg
-  Cache-Control: public, max-age=31536000, immutable
-
-/:splat.png
-  Cache-Control: public, max-age=31536000, immutable
-
-/:splat.gif
-  Cache-Control: public, max-age=31536000, immutable
-
-/:splat.webp
-  Cache-Control: public, max-age=31536000, immutable
-
-/:splat.svg
-  Cache-Control: public, max-age=31536000, immutable
-
-# Fonts - allow caching
-/:splat.woff2
-  Cache-Control: public, max-age=31536000, immutable
-
-/:splat.woff
-  Cache-Control: public, max-age=31536000, immutable
-
-/:splat.ttf
-  Cache-Control: public, max-age=31536000, immutable
-
-# JavaScript and CSS - allow caching with revalidation
-/:splat.js
-  Cache-Control: public, max-age=604800, must-revalidate
-
-/:splat.css
-  Cache-Control: public, max-age=604800, must-revalidate
-
-# HTML files - no caching for main pages
-/*.html
-  Cache-Control: no-store, no-cache, must-revalidate
-  Pragma: no-cache
-  Expires: 0
-
-# API routes - no caching
-/api/*
-  Cache-Control: no-store, no-cache, must-revalidate
-  Pragma: no-cache
-  Expires: 0
+/service-worker.js
+  Cache-Control: public, max-age=0, must-revalidate
