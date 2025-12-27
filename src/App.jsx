@@ -149,23 +149,38 @@ const formatNumber = (n) =>
 
 function StatItem({ icon, num, label }) {
   return (
-    <div className="live-item" role="group" aria-label={label}>
-      <i className={`stat-icon ${icon}`} aria-hidden="true" />
-      <div className="n">{num}</div>
-      <div className="l">{label}</div>
+    <div className="text-center p-6" role="group" aria-label={label}>
+      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center">
+        <i className={`${icon} text-3xl text-primary`} aria-hidden="true" />
+      </div>
+      <div className="text-4xl md:text-5xl font-bold text-ink mb-2 font-['Space_Grotesk']">
+        {num}
+      </div>
+      <div className="text-neutral-600 font-medium text-sm md:text-base">
+        {label}
+      </div>
     </div>
   );
 }
 
 function Story({ quote, avatar, name, role }) {
   return (
-    <article className="story" tabIndex={0}>
-      <blockquote>{quote}</blockquote>
-      <div className="byline">
-        <img src={avatar} alt={`${name} avatar`} />
+    <article className="group p-8 bg-white rounded-2xl border border-neutral-200 hover:border-primary/30 hover:shadow-xl transition-all duration-300" tabIndex={0}>
+      <div className="mb-6">
+        <i className="fas fa-quote-left text-3xl text-primary/20 mb-4 block" aria-hidden="true" />
+        <blockquote className="text-neutral-700 leading-relaxed text-base md:text-lg italic">
+          {quote}
+        </blockquote>
+      </div>
+      <div className="flex items-center gap-4 pt-4 border-t border-neutral-100">
+        <img
+          src={avatar}
+          alt={`${name} avatar`}
+          className="w-14 h-14 rounded-full object-cover border-2 border-primary/20"
+        />
         <div>
-          <strong>{name}</strong>
-          <span>{role}</span>
+          <strong className="block text-ink font-bold text-base">{name}</strong>
+          <span className="text-neutral-600 text-sm">{role}</span>
         </div>
       </div>
     </article>
@@ -439,13 +454,20 @@ function LiveStatsSection({ liveStats }) {
   const { liveEvents, liveQuestions, liveParticipants } = liveStats;
 
   return (
-    <section className="lp-live-stats" aria-labelledby="stats-heading">
-      <div className="lp-container">
-        <div className="stats-header">
-          <h3 id="stats-heading" className="stats-title">Join Thousands Making Every Voice Count</h3>
-          <p className="stats-subtitle">Real conversations happening right now in communities worldwide</p>
+    <section className="py-20 md:py-28 bg-gradient-to-br from-primary/5 via-white to-primary/5" aria-labelledby="stats-heading">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Stats Header */}
+        <div className="text-center mb-16">
+          <h3 id="stats-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-ink mb-4 font-['Space_Grotesk']">
+            Join Thousands Making Every Voice Count
+          </h3>
+          <p className="text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto">
+            Real conversations happening right now in communities worldwide
+          </p>
         </div>
-        <div className="stats-row">
+
+        {/* Stats Grid */}
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <StatItem
             icon="fa-solid fa-circle-question"
             num={formatNumber(liveQuestions)}
@@ -508,13 +530,13 @@ function ActivityTicker({ recentEvents }) {
 
   if (recentEvents.length === 0) {
     return (
-      <section id="happening" className="lp-events" aria-labelledby="events-heading">
-        <div className="lp-container">
-          <h3 id="events-heading" className="events-heading">
-            <i className="fa-solid fa-bolt" /> Live Events
+      <section id="happening" className="py-20 md:py-28 bg-neutral-50" aria-labelledby="events-heading">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 id="events-heading" className="text-3xl md:text-4xl font-bold text-ink mb-8 flex items-center justify-center gap-3 font-['Space_Grotesk']">
+            <i className="fa-solid fa-bolt text-primary" /> Live Events
           </h3>
-          <div className="events-empty">
-            <p>Your community event could be featured here. Create one today!</p>
+          <div className="text-center p-12 bg-white rounded-2xl border-2 border-dashed border-neutral-300">
+            <p className="text-neutral-600 text-lg">Your community event could be featured here. Create one today!</p>
           </div>
         </div>
       </section>
@@ -524,16 +546,16 @@ function ActivityTicker({ recentEvents }) {
   const showNavigation = recentEvents.length > cardsPerView;
 
   return (
-    <section id="happening" className="lp-events" aria-labelledby="events-heading">
-      <div className="lp-container">
-        <h3 id="events-heading" className="events-heading">
-          <i className="fa-solid fa-bolt" /> Live Events
+    <section id="happening" className="py-20 md:py-28 bg-neutral-50" aria-labelledby="events-heading">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h3 id="events-heading" className="text-3xl md:text-4xl font-bold text-ink mb-12 flex items-center justify-center gap-3 font-['Space_Grotesk']">
+          <i className="fa-solid fa-bolt text-primary" /> Live Events
         </h3>
 
-        <div className="events-carousel-wrapper">
+        <div className="relative">
           {showNavigation && (
             <button
-              className="carousel-nav carousel-nav-prev"
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 flex items-center justify-center text-neutral-700"
               onClick={handlePrev}
               aria-label="Previous events"
             >
@@ -541,9 +563,9 @@ function ActivityTicker({ recentEvents }) {
             </button>
           )}
 
-          <div className="events-carousel">
+          <div className="overflow-hidden">
             <div
-              className="events-track"
+              className="flex transition-transform duration-500 ease-in-out"
               style={{
                 transform: `translateX(-${currentIndex * (100 / cardsPerView)}%)`,
               }}
@@ -556,24 +578,27 @@ function ActivityTicker({ recentEvents }) {
                 return (
                   <div
                     key={event.id}
-                    className="event-card"
+                    className="flex-shrink-0 px-3"
+                    style={{ width: `${100 / cardsPerView}%` }}
                   >
-                    <div className="event-card-header">
-                      <span className="event-status">
-                        <i className="fa-solid fa-circle"></i> Live now
-                      </span>
-                      <span className="event-activity">
-                        <i className="fa-solid fa-fire"></i> {questionCount} questions
-                      </span>
+                    <div className="bg-white rounded-xl border border-neutral-200 hover:border-primary/30 hover:shadow-lg transition-all duration-300 p-6 h-full">
+                      <div className="flex items-center justify-between mb-4 text-sm">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 rounded-full font-semibold">
+                          <i className="fa-solid fa-circle text-xs"></i> Live now
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 text-primary font-semibold">
+                          <i className="fa-solid fa-fire"></i> {questionCount} questions
+                        </span>
+                      </div>
+
+                      <h4 className="text-lg font-bold text-ink mb-3 line-clamp-2">{event.title}</h4>
+
+                      {event.org && (
+                        <p className="text-neutral-600 text-sm flex items-center gap-2">
+                          <i className="fa-solid fa-building"></i> {event.org}
+                        </p>
+                      )}
                     </div>
-
-                    <h4 className="event-card-title">{event.title}</h4>
-
-                    {event.org && (
-                      <p className="event-card-org">
-                        <i className="fa-solid fa-building"></i> {event.org}
-                      </p>
-                    )}
                   </div>
                 );
               })}
@@ -582,7 +607,7 @@ function ActivityTicker({ recentEvents }) {
 
           {showNavigation && (
             <button
-              className="carousel-nav carousel-nav-next"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 flex items-center justify-center text-neutral-700"
               onClick={handleNext}
               aria-label="Next events"
             >
@@ -593,11 +618,15 @@ function ActivityTicker({ recentEvents }) {
 
         {/* Carousel dots */}
         {showNavigation && (
-          <div className="carousel-dots">
+          <div className="flex justify-center gap-2 mt-8">
             {Array.from({ length: recentEvents.length - cardsPerView + 1 }).map((_, index) => (
               <button
                 key={index}
-                className={`dot ${index === currentIndex ? 'active' : ''}`}
+                className={`w-3 h-3 rounded-full transition-all duration-300 border-0 cursor-pointer ${
+                  index === currentIndex
+                    ? 'bg-primary w-8'
+                    : 'bg-neutral-300 hover:bg-neutral-400'
+                }`}
                 onClick={() => {
                   setCurrentIndex(index);
                   setIsAutoScrolling(false);
@@ -670,13 +699,15 @@ function ValuesSection() {
 
 function StoriesSection() {
   return (
-    <section id="stories" className="lp-stories" aria-labelledby="stories-heading">
-      <div className="lp-container stories-wrap">
-        <h3 id="stories-heading" className="section-heading">
+    <section id="stories" className="py-20 md:py-28 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="stories-heading">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <h3 id="stories-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-ink mb-16 font-['Space_Grotesk']">
           Hear From Organizers Like You
         </h3>
 
-        <div className="stories-grid">
+        {/* Testimonials Grid */}
+        <div className="grid md:grid-cols-3 gap-8">
           <Story
             quote="Ask Freely transformed our Q&A from an awkward silence to the most engaging part of our event. For the first time, people actually felt heard."
             avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1718105160/pexels-emmy-e-1252107-2381069_ncpcqb.jpg"
@@ -703,50 +734,87 @@ function StoriesSection() {
 
 function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="lp-how-it-works">
-      <div className="lp-container">
-        <h3 className="section-heading">Simple to Start, Powerful in Practice</h3>
-        <p className="how-subtitle">Go from idea to engagement in under 3 minutes</p>
+    <section id="how-it-works" className="py-20 md:py-28 bg-gradient-to-b from-neutral-50 to-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-ink mb-4 font-['Space_Grotesk']">
+          Simple to Start, Powerful in Practice
+        </h3>
+        <p className="text-lg md:text-xl text-neutral-600 text-center mb-16 max-w-3xl mx-auto">
+          Go from idea to engagement in under 3 minutes
+        </p>
 
-        <div className="how-timeline">
-          <div className="timeline-line"></div>
+        {/* Timeline */}
+        <div className="relative max-w-4xl mx-auto">
+          {/* Connecting Line */}
+          <div className="hidden md:block absolute top-20 left-0 right-0 h-1 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20"
+               style={{ top: '4rem' }} />
 
-          <div className="how-step" data-step="1">
-            <div className="step-marker">
-              <div className="step-number">1</div>
-            </div>
-            <div className="step-content">
-              <div className="step-icon">
-                <i className="fa-solid fa-calendar-plus" />
+          <div className="space-y-12 md:space-y-0">
+            {/* Step 1 */}
+            <div className="relative md:grid md:grid-cols-3 md:gap-8 items-start">
+              <div className="md:col-span-1 flex justify-center mb-6 md:mb-0">
+                <div className="relative z-10">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg">
+                    1
+                  </div>
+                </div>
               </div>
-              <h4>Create Your Event in Seconds</h4>
-              <p>No credit card required. Set up your Q&amp;A session, customize your branding, add strategic prompts, and get a shareable link instantly.</p>
-            </div>
-          </div>
-
-          <div className="how-step" data-step="2">
-            <div className="step-marker">
-              <div className="step-number">2</div>
-            </div>
-            <div className="step-content">
-              <div className="step-icon">
-                <i className="fa-solid fa-comments" />
+              <div className="md:col-span-2 text-center md:text-left">
+                <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl mb-4">
+                  <i className="fa-solid fa-calendar-plus text-2xl text-primary" />
+                </div>
+                <h4 className="text-xl md:text-2xl font-bold text-ink mb-3">
+                  Create Your Event in Seconds
+                </h4>
+                <p className="text-neutral-600 leading-relaxed">
+                  No credit card required. Set up your Q&amp;A session, customize your branding, add strategic prompts, and get a shareable link instantly.
+                </p>
               </div>
-              <h4>Share & Watch Engagement Soar</h4>
-              <p>One link, zero friction. Participants ask and upvote questions anonymously—no account creation, no downloads, no barriers to participation.</p>
             </div>
-          </div>
 
-          <div className="how-step" data-step="3">
-            <div className="step-marker">
-              <div className="step-number">3</div>
-            </div>
-            <div className="step-content">
-              <div className="step-icon">
-                <i className="fa-solid fa-microphone"/>
+            {/* Step 2 */}
+            <div className="relative md:grid md:grid-cols-3 md:gap-8 items-start">
+              <div className="md:col-span-1 flex justify-center mb-6 md:mb-0">
+                <div className="relative z-10">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg">
+                    2
+                  </div>
+                </div>
               </div>
-              <h4>Facilitate Like a Pro</h4>
-              <p>See top questions ranked by community votes in real-time. Moderate with empathy, respond with confidence, and export insights for follow-up.</p>
+              <div className="md:col-span-2 text-center md:text-left">
+                <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-xl mb-4">
+                  <i className="fa-solid fa-comments text-2xl text-blue-500" />
+                </div>
+                <h4 className="text-xl md:text-2xl font-bold text-ink mb-3">
+                  Share & Watch Engagement Soar
+                </h4>
+                <p className="text-neutral-600 leading-relaxed">
+                  One link, zero friction. Participants ask and upvote questions anonymously—no account creation, no downloads, no barriers to participation.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="relative md:grid md:grid-cols-3 md:gap-8 items-start">
+              <div className="md:col-span-1 flex justify-center mb-6 md:mb-0">
+                <div className="relative z-10">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg">
+                    3
+                  </div>
+                </div>
+              </div>
+              <div className="md:col-span-2 text-center md:text-left">
+                <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-xl mb-4">
+                  <i className="fa-solid fa-microphone text-2xl text-purple-500" />
+                </div>
+                <h4 className="text-xl md:text-2xl font-bold text-ink mb-3">
+                  Facilitate Like a Pro
+                </h4>
+                <p className="text-neutral-600 leading-relaxed">
+                  See top questions ranked by community votes in real-time. Moderate with empathy, respond with confidence, and export insights for follow-up.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -757,41 +825,65 @@ function HowItWorksSection() {
 
 function WhySection() {
   return (
-    <section id="why" className="lp-why">
-      <div className="lp-container why-grid">
-        <h3 className="section-heading">Everything You Need to Host Meaningful Conversations</h3>
+    <section id="why" className="py-20 md:py-28 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-ink mb-16 font-['Space_Grotesk'] max-w-4xl mx-auto">
+          Everything You Need to Host Meaningful Conversations
+        </h3>
 
-        <div className="why-cards-wrapper">
-          <div className="why-card">
-            <div className="why-icon">
-              <i className="fa-solid fa-bullseye" />
+        {/* Features Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+          {/* Feature 1: Strategic Question Seeding */}
+          <div className="group p-6 rounded-2xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-primary/30 hover:shadow-lg transition-all duration-300">
+            <div className="w-14 h-14 mb-5 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <i className="fa-solid fa-bullseye text-2xl text-primary" />
             </div>
-            <h4>Strategic Question Seeding</h4>
-            <p>Pre-populate thoughtful prompts to guide the conversation and ensure important topics get covered—even if the room is shy at first.</p>
+            <h4 className="text-lg md:text-xl font-bold text-ink mb-3">
+              Strategic Question Seeding
+            </h4>
+            <p className="text-neutral-600 leading-relaxed text-sm">
+              Pre-populate thoughtful prompts to guide the conversation and ensure important topics get covered—even if the room is shy at first.
+            </p>
           </div>
 
-          <div className="why-card">
-            <div className="why-icon">
-              <i className="fa-solid fa-user-shield" />
+          {/* Feature 2: Privacy-First by Design */}
+          <div className="group p-6 rounded-2xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-blue-500/30 hover:shadow-lg transition-all duration-300">
+            <div className="w-14 h-14 mb-5 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <i className="fa-solid fa-user-shield text-2xl text-blue-500" />
             </div>
-            <h4>Privacy-First by Design</h4>
-            <p>Optional anonymity, robust moderation controls, and respectful boundaries. Build trust so people share what they actually think.</p>
+            <h4 className="text-lg md:text-xl font-bold text-ink mb-3">
+              Privacy-First by Design
+            </h4>
+            <p className="text-neutral-600 leading-relaxed text-sm">
+              Optional anonymity, robust moderation controls, and respectful boundaries. Build trust so people share what they actually think.
+            </p>
           </div>
 
-          <div className="why-card">
-            <div className="why-icon">
-              <i className="fa-solid fa-chart-line" />
+          {/* Feature 3: Actionable Insights & Analytics */}
+          <div className="group p-6 rounded-2xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-green-500/30 hover:shadow-lg transition-all duration-300">
+            <div className="w-14 h-14 mb-5 bg-gradient-to-br from-green-500/20 to-green-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <i className="fa-solid fa-chart-line text-2xl text-green-500" />
             </div>
-            <h4>Actionable Insights & Analytics</h4>
-            <p>Track participation patterns, identify trending themes, and export data to share with stakeholders. Turn feedback into action plans.</p>
+            <h4 className="text-lg md:text-xl font-bold text-ink mb-3">
+              Actionable Insights & Analytics
+            </h4>
+            <p className="text-neutral-600 leading-relaxed text-sm">
+              Track participation patterns, identify trending themes, and export data to share with stakeholders. Turn feedback into action plans.
+            </p>
           </div>
 
-          <div className="why-card">
-            <div className="why-icon">
-              <i className="fa-solid fa-sliders" />
+          {/* Feature 4: Complete White-Label Control */}
+          <div className="group p-6 rounded-2xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-purple-500/30 hover:shadow-lg transition-all duration-300">
+            <div className="w-14 h-14 mb-5 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <i className="fa-solid fa-sliders text-2xl text-purple-500" />
             </div>
-            <h4>Complete White-Label Control</h4>
-            <p>Custom branding, personalized messaging, and your own domain. Deliver a seamless experience that reinforces your organization's identity.</p>
+            <h4 className="text-lg md:text-xl font-bold text-ink mb-3">
+              Complete White-Label Control
+            </h4>
+            <p className="text-neutral-600 leading-relaxed text-sm">
+              Custom branding, personalized messaging, and your own domain. Deliver a seamless experience that reinforces your organization's identity.
+            </p>
           </div>
         </div>
       </div>
@@ -803,18 +895,37 @@ function CTASection() {
   const navigate = useNavigate();
 
   return (
-    <section id="cta" className="lp-cta" aria-labelledby="cta-heading">
-      <div className="lp-container cta-box">
-        <h3 id="cta-heading">Ready to Transform Your Next Q&amp;A Session?</h3>
-        <p>Join organizers creating safer, more engaging conversations. Set up your first event free—no credit card required.</p>
-        <div className="cta-actions">
-          <button className="solid" onClick={() => navigate("/signup")}>
-            Start Free - Create Your Event{" "}
-            <i className="fas fa-arrow-right" aria-hidden="true" />
-          </button>
-          <button className="ghost" onClick={() => navigate("/participate")}>
-            Try the Demo First
-          </button>
+    <section id="cta" className="py-20 md:py-28 bg-gradient-to-br from-primary/10 via-white to-primary/10" aria-labelledby="cta-heading">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-br from-primary to-primary-dark rounded-3xl p-8 md:p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+
+          <div className="relative z-10">
+            <h3 id="cta-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 font-['Space_Grotesk']">
+              Ready to Transform Your Next Q&amp;A Session?
+            </h3>
+            <p className="text-lg md:text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
+              Join organizers creating safer, more engaging conversations. Set up your first event free—no credit card required.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <button
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-primary font-bold rounded-xl hover:bg-neutral-50 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 text-lg border-0 cursor-pointer"
+                onClick={() => navigate("/signup")}
+              >
+                Start Free - Create Your Event
+                <i className="fas fa-arrow-right" aria-hidden="true" />
+              </button>
+              <button
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent text-white font-bold rounded-xl border-2 border-white hover:bg-white hover:text-primary transition-all duration-200 text-lg cursor-pointer"
+                onClick={() => navigate("/participate")}
+              >
+                Try the Demo First
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -825,53 +936,104 @@ function Footer() {
   const navigate = useNavigate();
 
   return (
-    <footer className="lp-footer" role="contentinfo">
-      <div className="lp-container foot-grid">
-        <div className="foot-brand">
-          <button className="brand" onClick={() => navigate("/")}>
-            <i className="fas fa-comments" aria-hidden="true" />
-            <span>Ask Freely</span>
-          </button>
-          <p className="foot-tagline">
-            Built with communities. Powered by your stories.
-          </p>
-        </div>
-        <div className="foot-cols">
-          <div className="foot-col">
-            <h4>Product</h4>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#demo">Demo</a>
+    <footer className="bg-ink text-white py-16" role="contentinfo">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main Footer Content */}
+        <div className="grid md:grid-cols-4 gap-12 mb-12">
+          {/* Brand Section */}
+          <div className="md:col-span-1">
+            <button
+              className="inline-flex items-center gap-2.5 font-bold text-xl text-white hover:opacity-80 transition-opacity bg-transparent border-0 cursor-pointer p-0 mb-4"
+              onClick={() => navigate("/")}
+            >
+              <i className="fas fa-comments text-primary text-2xl" aria-hidden="true" />
+              <span className="font-['Space_Grotesk']">Ask Freely</span>
+            </button>
+            <p className="text-neutral-400 leading-relaxed">
+              Built with communities. Powered by your stories.
+            </p>
           </div>
-          <div className="foot-col">
-            <h4>Community</h4>
-            <a href="#stories">Stories</a>
-            <a href="#events">Events</a>
-            <a href="#guide">Community Guide</a>
-          </div>
-          <div className="foot-col">
-            <h4>Support</h4>
-            <a href="#help">Help Center</a>
-            <a href="#docs">Documentation</a>
-            <a href="#status">Status</a>
-          </div>
-        </div>
-      </div>
 
-      <div className="lp-container foot-bottom">
-        <p>© {new Date().getFullYear()} Ask Freely</p>
-        <div className="foot-legal">
-          <button onClick={() => navigate("/help")} className="foot-legal-link">
-            Help
-          </button>
-          <span className="foot-separator">·</span>
-          <button onClick={() => navigate("/terms-of-service")} className="foot-legal-link">
-            Terms of Service
-          </button>
-          <span className="foot-separator">·</span>
-          <button onClick={() => navigate("/privacy-policy")} className="foot-legal-link">
-            Privacy Policy
-          </button>
+          {/* Footer Links */}
+          <div className="md:col-span-3 grid sm:grid-cols-3 gap-8">
+            {/* Product Column */}
+            <div>
+              <h4 className="text-white font-bold mb-4 text-lg">Product</h4>
+              <div className="flex flex-col gap-3">
+                <a href="#features" className="text-neutral-400 hover:text-primary transition-colors">
+                  Features
+                </a>
+                <a href="#pricing" className="text-neutral-400 hover:text-primary transition-colors">
+                  Pricing
+                </a>
+                <a href="#demo" className="text-neutral-400 hover:text-primary transition-colors">
+                  Demo
+                </a>
+              </div>
+            </div>
+
+            {/* Community Column */}
+            <div>
+              <h4 className="text-white font-bold mb-4 text-lg">Community</h4>
+              <div className="flex flex-col gap-3">
+                <a href="#stories" className="text-neutral-400 hover:text-primary transition-colors">
+                  Stories
+                </a>
+                <a href="#events" className="text-neutral-400 hover:text-primary transition-colors">
+                  Events
+                </a>
+                <a href="#guide" className="text-neutral-400 hover:text-primary transition-colors">
+                  Community Guide
+                </a>
+              </div>
+            </div>
+
+            {/* Support Column */}
+            <div>
+              <h4 className="text-white font-bold mb-4 text-lg">Support</h4>
+              <div className="flex flex-col gap-3">
+                <a href="#help" className="text-neutral-400 hover:text-primary transition-colors">
+                  Help Center
+                </a>
+                <a href="#docs" className="text-neutral-400 hover:text-primary transition-colors">
+                  Documentation
+                </a>
+                <a href="#status" className="text-neutral-400 hover:text-primary transition-colors">
+                  Status
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Bottom */}
+        <div className="pt-8 border-t border-neutral-700 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-neutral-400 text-sm">
+            © {new Date().getFullYear()} Ask Freely
+          </p>
+
+          <div className="flex items-center gap-2 text-sm">
+            <button
+              onClick={() => navigate("/help")}
+              className="text-neutral-400 hover:text-primary transition-colors bg-transparent border-0 cursor-pointer p-0"
+            >
+              Help
+            </button>
+            <span className="text-neutral-600">·</span>
+            <button
+              onClick={() => navigate("/terms-of-service")}
+              className="text-neutral-400 hover:text-primary transition-colors bg-transparent border-0 cursor-pointer p-0"
+            >
+              Terms of Service
+            </button>
+            <span className="text-neutral-600">·</span>
+            <button
+              onClick={() => navigate("/privacy-policy")}
+              className="text-neutral-400 hover:text-primary transition-colors bg-transparent border-0 cursor-pointer p-0"
+            >
+              Privacy Policy
+            </button>
+          </div>
         </div>
       </div>
     </footer>
