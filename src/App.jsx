@@ -780,86 +780,121 @@ function StoriesSection() {
 
 function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="py-20 md:py-28 bg-gradient-to-b from-neutral-50 to-white">
+    <section id="how-it-works" className="py-20 md:py-32 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-ink mb-4 font-['Space_Grotesk']">
-          Simple to Start, Powerful in Practice
-        </h3>
-        <p className="text-lg md:text-xl text-neutral-600 text-center mb-16 max-w-3xl mx-auto">
-          Go from idea to engagement in under 3 minutes
-        </p>
+        <div className="text-center mb-20 md:mb-32">
+          <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-ink mb-4 font-['Space_Grotesk']">
+            Simple to Start, Powerful in Practice
+          </h3>
+          <p className="text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto">
+            Go from idea to engagement in under 3 minutes
+          </p>
+        </div>
 
-        {/* Timeline */}
-        <div className="relative max-w-4xl mx-auto">
-          {/* Connecting Line */}
-          <div className="hidden md:block absolute top-20 left-0 right-0 h-1 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20"
-               style={{ top: '4rem' }} />
+        {/* Vertical Timeline */}
+        <div className="relative max-w-5xl mx-auto">
+          {/* Central Vertical Line - Desktop Only */}
+          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-primary/30 transform -translate-x-1/2" style={{ zIndex: 0 }} />
 
-          <div className="space-y-12 md:space-y-0">
-            {/* Step 1 */}
-            <div className="relative md:grid md:grid-cols-3 md:gap-8 items-start">
-              <div className="md:col-span-1 flex justify-center mb-6 md:mb-0">
-                <div className="relative z-10">
-                  <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg">
-                    1
-                  </div>
+          {/* Numbered Badges on the Line - Desktop Only */}
+          <div className="hidden lg:block">
+            {/* Badge 1 - At start of Step 1 */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl" style={{ top: '0', zIndex: 10 }}>
+              1
+            </div>
+            {/* Badge 2 - At start of Step 2 (roughly 1/3 down) */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl" style={{ top: 'calc(33.33% + 2rem)', zIndex: 10 }}>
+              2
+            </div>
+            {/* Badge 3 - At start of Step 3 (roughly 2/3 down) */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl" style={{ top: 'calc(66.66% + 4rem)', zIndex: 10 }}>
+              3
+            </div>
+          </div>
+
+          <div className="relative" style={{ zIndex: 1 }}>
+            {/* Step 1 - Card on Left */}
+            <div className="relative mb-16 lg:mb-24 pt-0 lg:pt-0">
+              {/* Mobile Badge */}
+              <div className="lg:hidden flex justify-center mb-8">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                  1
                 </div>
               </div>
-              <div className="md:col-span-2 text-center md:text-left">
-                <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl mb-4">
-                  <i className="fa-solid fa-calendar-plus text-2xl text-primary" />
+
+              {/* Card */}
+              <div className="lg:w-1/2 lg:pr-16">
+                <div className="group bg-white rounded-3xl shadow-lg border border-neutral-100 p-8 md:p-10 hover:shadow-2xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-sm lg:ml-auto w-full cursor-pointer">
+                  {/* Icon */}
+                  <div className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-primary rounded-full mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <i className="fa-solid fa-calendar-plus text-2xl md:text-3xl text-white" />
+                  </div>
+
+                  {/* Content */}
+                  <h4 className="text-xl md:text-2xl font-bold text-ink mb-3 text-center font-['Space_Grotesk']">
+                    Create Your Event in Seconds
+                  </h4>
+                  <p className="text-neutral-600 text-center leading-relaxed text-sm md:text-base">
+                    No credit card required. Set up your Q&amp;A session, customize your branding, add strategic prompts, and get a shareable link instantly.
+                  </p>
                 </div>
-                <h4 className="text-xl md:text-2xl font-bold text-ink mb-3">
-                  Create Your Event in Seconds
-                </h4>
-                <p className="text-neutral-600 leading-relaxed">
-                  No credit card required. Set up your Q&amp;A session, customize your branding, add strategic prompts, and get a shareable link instantly.
-                </p>
               </div>
             </div>
 
-            {/* Step 2 */}
-            <div className="relative md:grid md:grid-cols-3 md:gap-8 items-start">
-              <div className="md:col-span-1 flex justify-center mb-6 md:mb-0">
-                <div className="relative z-10">
-                  <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg">
-                    2
-                  </div>
+            {/* Step 2 - Card on Right */}
+            <div className="relative mb-16 lg:mb-24">
+              {/* Mobile Badge */}
+              <div className="lg:hidden flex justify-center mb-8">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                  2
                 </div>
               </div>
-              <div className="md:col-span-2 text-center md:text-left">
-                <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-xl mb-4">
-                  <i className="fa-solid fa-comments text-2xl text-blue-500" />
+
+              {/* Card */}
+              <div className="lg:w-1/2 lg:ml-auto lg:pl-16">
+                <div className="group bg-white rounded-3xl shadow-lg border border-neutral-100 p-8 md:p-10 hover:shadow-2xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-sm w-full cursor-pointer">
+                  {/* Icon */}
+                  <div className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-primary rounded-full mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <i className="fa-solid fa-comments text-2xl md:text-3xl text-white" />
+                  </div>
+
+                  {/* Content */}
+                  <h4 className="text-xl md:text-2xl font-bold text-ink mb-3 text-center font-['Space_Grotesk']">
+                    Share & Watch Engagement Soar
+                  </h4>
+                  <p className="text-neutral-600 text-center leading-relaxed text-sm md:text-base">
+                    One link, zero friction. Participants ask and upvote questions anonymously—no account creation, no downloads, no barriers to participation.
+                  </p>
                 </div>
-                <h4 className="text-xl md:text-2xl font-bold text-ink mb-3">
-                  Share & Watch Engagement Soar
-                </h4>
-                <p className="text-neutral-600 leading-relaxed">
-                  One link, zero friction. Participants ask and upvote questions anonymously—no account creation, no downloads, no barriers to participation.
-                </p>
               </div>
             </div>
 
-            {/* Step 3 */}
-            <div className="relative md:grid md:grid-cols-3 md:gap-8 items-start">
-              <div className="md:col-span-1 flex justify-center mb-6 md:mb-0">
-                <div className="relative z-10">
-                  <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg">
-                    3
-                  </div>
+            {/* Step 3 - Card on Left */}
+            <div className="relative">
+              {/* Mobile Badge */}
+              <div className="lg:hidden flex justify-center mb-8">
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl">
+                  3
                 </div>
               </div>
-              <div className="md:col-span-2 text-center md:text-left">
-                <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-xl mb-4">
-                  <i className="fa-solid fa-microphone text-2xl text-purple-500" />
+
+              {/* Card */}
+              <div className="lg:w-1/2 lg:pr-16">
+                <div className="group bg-white rounded-3xl shadow-lg border border-neutral-100 p-8 md:p-10 hover:shadow-2xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-sm lg:ml-auto w-full cursor-pointer">
+                  {/* Icon */}
+                  <div className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-primary rounded-full mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <i className="fa-solid fa-microphone text-2xl md:text-3xl text-white" />
+                  </div>
+
+                  {/* Content */}
+                  <h4 className="text-xl md:text-2xl font-bold text-ink mb-3 text-center font-['Space_Grotesk']">
+                    Facilitate Like a Pro
+                  </h4>
+                  <p className="text-neutral-600 text-center leading-relaxed text-sm md:text-base">
+                    See top questions ranked by community votes in real-time. Moderate with empathy, respond with confidence, and export insights for follow-up.
+                  </p>
                 </div>
-                <h4 className="text-xl md:text-2xl font-bold text-ink mb-3">
-                  Facilitate Like a Pro
-                </h4>
-                <p className="text-neutral-600 leading-relaxed">
-                  See top questions ranked by community votes in real-time. Moderate with empathy, respond with confidence, and export insights for follow-up.
-                </p>
               </div>
             </div>
           </div>
