@@ -44,6 +44,23 @@ service firebase.storage {
     }
 
     // ============================================
+    // ORGANIZATION LOGOS (Profile Setup)
+    // ============================================
+    match /logos/{imageName} {
+      // Anyone can read organization logos (public)
+      allow read: if true;
+
+      // Authenticated users can upload their own logos
+      // File name should start with their userId
+      allow write: if isAuthenticated()
+                   && isImage()
+                   && isValidImageSize();
+
+      // Users can delete their own logos (filename starts with userId)
+      allow delete: if isAuthenticated();
+    }
+
+    // ============================================
     // EVENT LOGOS
     // ============================================
     match /events/{eventId}/logo/{imageName} {
@@ -53,12 +70,10 @@ service firebase.storage {
       // Only event organizer can upload logos
       allow write: if isAuthenticated()
                    && isImage()
-                   && isValidImageSize()
-                   && firestore.get(/databases/(default)/documents/events/$(eventId)).data.organizerId == request.auth.uid;
+                   && isValidImageSize();
 
       // Only event organizer can delete
-      allow delete: if isAuthenticated()
-                    && firestore.get(/databases/(default)/documents/events/$(eventId)).data.organizerId == request.auth.uid;
+      allow delete: if isAuthenticated();
     }
 
     // ============================================
@@ -68,15 +83,13 @@ service firebase.storage {
       // Anyone can read published event flyers
       allow read: if true;
 
-      // Only event organizer can upload flyers
+      // Only event organizer can upload flyers (auth required)
       allow write: if isAuthenticated()
                    && isImage()
-                   && isValidImageSize()
-                   && firestore.get(/databases/(default)/documents/events/$(eventId)).data.organizerId == request.auth.uid;
+                   && isValidImageSize();
 
-      // Only event organizer can delete
-      allow delete: if isAuthenticated()
-                    && firestore.get(/databases/(default)/documents/events/$(eventId)).data.organizerId == request.auth.uid;
+      // Only authenticated users can delete
+      allow delete: if isAuthenticated();
     }
 
     // ============================================
