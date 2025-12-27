@@ -369,9 +369,9 @@ function HeroSection() {
   return (
     <section id="hero" className="pt-24 md:pt-32 pb-16 md:pb-24 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="hero-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Hero Copy */}
-          <div className="order-2 lg:order-1">
+          <div className="order-2 lg:order-1 text-center lg:text-left flex flex-col items-center lg:items-start">
             {/* Trust Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-6 animate-fade-in">
               <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
@@ -392,7 +392,7 @@ function HeroSection() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto sm:justify-center lg:justify-start">
               <button
                 className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border-0 cursor-pointer"
                 onClick={() => navigate("/signup")}
@@ -407,11 +407,10 @@ function HeroSection() {
                 See How It Works
               </button>
             </div>
-            </div>
           </div>
 
           {/* Hero Carousel */}
-          <aside className="order-1 lg:order-2 relative" aria-hidden="true">
+          <aside className="order-1 lg:order-2 relative w-full" aria-hidden="true">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-neutral-100">
               <div
                 className="flex transition-transform duration-700 ease-in-out h-full"
@@ -445,6 +444,7 @@ function HeroSection() {
               ))}
             </div>
           </aside>
+        </div>
       </div>
     </section>
   );
