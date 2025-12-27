@@ -34,7 +34,6 @@ import usePageTracking from "./hooks/usePageTracking";
 import { initializeSecurity } from "./utils/security";
 
 import "./App.css";
-import "./LandingPage.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 // Create Sentry-enhanced Router
@@ -408,6 +407,7 @@ function HeroSection() {
                 See How It Works
               </button>
             </div>
+            </div>
           </div>
 
           {/* Hero Carousel */}
@@ -492,7 +492,25 @@ function LiveStatsSection({ liveStats }) {
 function ActivityTicker({ recentEvents }) {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = React.useState(true);
-  const cardsPerView = 4; // Show 4 cards at a time on desktop
+
+  // Responsive cards per view
+  const [cardsPerView, setCardsPerView] = React.useState(4);
+
+  React.useEffect(() => {
+    const updateCardsPerView = () => {
+      if (window.innerWidth < 640) {
+        setCardsPerView(1); // Mobile: 1 card
+      } else if (window.innerWidth < 1024) {
+        setCardsPerView(2); // Tablet: 2 cards
+      } else {
+        setCardsPerView(4); // Desktop: 4 cards
+      }
+    };
+
+    updateCardsPerView();
+    window.addEventListener('resize', updateCardsPerView);
+    return () => window.removeEventListener('resize', updateCardsPerView);
+  }, []);
 
   // Auto-scroll every 5 seconds
   React.useEffect(() => {
@@ -506,7 +524,7 @@ function ActivityTicker({ recentEvents }) {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isAutoScrolling, recentEvents.length]);
+  }, [isAutoScrolling, recentEvents.length, cardsPerView]);
 
   // Calculate how many questions for each event (mock data for now)
   const getQuestionCount = (event) => {
@@ -552,14 +570,25 @@ function ActivityTicker({ recentEvents }) {
           <i className="fa-solid fa-bolt text-primary" /> Live Events
         </h3>
 
-        <div className="relative">
+        <div className="relative px-12 sm:px-14 lg:px-0">
           {showNavigation && (
             <button
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 flex items-center justify-center text-neutral-700"
+              className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 lg:-translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 items-center justify-center text-neutral-700"
               onClick={handlePrev}
               aria-label="Previous events"
             >
               <i className="fa-solid fa-chevron-left"></i>
+            </button>
+          )}
+
+          {/* Mobile navigation buttons */}
+          {showNavigation && (
+            <button
+              className="lg:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 flex items-center justify-center text-neutral-700"
+              onClick={handlePrev}
+              aria-label="Previous events"
+            >
+              <i className="fa-solid fa-chevron-left text-sm"></i>
             </button>
           )}
 
@@ -578,24 +607,25 @@ function ActivityTicker({ recentEvents }) {
                 return (
                   <div
                     key={event.id}
-                    className="flex-shrink-0 px-3"
+                    className="flex-shrink-0 px-2 sm:px-3"
                     style={{ width: `${100 / cardsPerView}%` }}
                   >
-                    <div className="bg-white rounded-xl border border-neutral-200 hover:border-primary/30 hover:shadow-lg transition-all duration-300 p-6 h-full">
-                      <div className="flex items-center justify-between mb-4 text-sm">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 rounded-full font-semibold">
-                          <i className="fa-solid fa-circle text-xs"></i> Live now
+                    <div className="bg-white rounded-xl border border-neutral-200 hover:border-primary/30 hover:shadow-lg transition-all duration-300 p-4 sm:p-6 h-full">
+                      <div className="flex items-center justify-between mb-4 text-xs sm:text-sm flex-wrap gap-2">
+                        <span className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-green-100 text-green-700 rounded-full font-semibold">
+                          <i className="fa-solid fa-circle text-xs"></i> <span className="hidden sm:inline">Live now</span><span className="sm:hidden">Live</span>
                         </span>
                         <span className="inline-flex items-center gap-1.5 text-primary font-semibold">
-                          <i className="fa-solid fa-fire"></i> {questionCount} questions
+                          <i className="fa-solid fa-fire"></i> {questionCount}
                         </span>
                       </div>
 
-                      <h4 className="text-lg font-bold text-ink mb-3 line-clamp-2">{event.title}</h4>
+                      <h4 className="text-base sm:text-lg font-bold text-ink mb-3 line-clamp-2">{event.title}</h4>
 
                       {event.org && (
-                        <p className="text-neutral-600 text-sm flex items-center gap-2">
-                          <i className="fa-solid fa-building"></i> {event.org}
+                        <p className="text-neutral-600 text-xs sm:text-sm flex items-center gap-2 truncate">
+                          <i className="fa-solid fa-building flex-shrink-0"></i>
+                          <span className="truncate">{event.org}</span>
                         </p>
                       )}
                     </div>
@@ -607,11 +637,22 @@ function ActivityTicker({ recentEvents }) {
 
           {showNavigation && (
             <button
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 flex items-center justify-center text-neutral-700"
+              className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 lg:translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 items-center justify-center text-neutral-700"
               onClick={handleNext}
               aria-label="Next events"
             >
               <i className="fa-solid fa-chevron-right"></i>
+            </button>
+          )}
+
+          {/* Mobile navigation buttons */}
+          {showNavigation && (
+            <button
+              className="lg:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 flex items-center justify-center text-neutral-700"
+              onClick={handleNext}
+              aria-label="Next events"
+            >
+              <i className="fa-solid fa-chevron-right text-sm"></i>
             </button>
           )}
         </div>
