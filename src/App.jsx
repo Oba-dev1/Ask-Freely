@@ -369,9 +369,9 @@ function HeroSection() {
   return (
     <section id="hero" className="pt-24 md:pt-32 pb-16 md:pb-24 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="hero-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Hero Copy */}
-          <div className="order-2 lg:order-1 text-center lg:text-left flex flex-col items-center lg:items-start">
+        <div className="flex flex-col items-center gap-12">
+          {/* Hero Copy - Centered */}
+          <div className="text-center flex flex-col items-center max-w-4xl">
             {/* Trust Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-6 animate-fade-in">
               <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
@@ -387,12 +387,12 @@ function HeroSection() {
             </h1>
 
             {/* Description */}
-            <p className="text-lg sm:text-xl text-neutral-600 leading-relaxed mb-8 max-w-2xl">
+            <p className="text-lg sm:text-xl text-neutral-600 leading-relaxed mb-8 max-w-3xl">
               The anonymous Q&amp;A platform that helps event organizers create psychologically safe spaces where every voice matters. Collect, prioritize, and address questions with confidence—no awkward silences, just honest dialogue.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto sm:justify-center lg:justify-start">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border-0 cursor-pointer"
                 onClick={() => navigate("/signup")}
@@ -409,8 +409,8 @@ function HeroSection() {
             </div>
           </div>
 
-          {/* Hero Carousel */}
-          <aside className="order-1 lg:order-2 relative w-full" aria-hidden="true">
+          {/* Hero Carousel - Below content */}
+          <aside className="relative w-full max-w-5xl" aria-hidden="true">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-neutral-100">
               <div
                 className="flex transition-transform duration-700 ease-in-out h-full"
