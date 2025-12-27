@@ -186,37 +186,115 @@ function TopBar() {
   };
 
   return (
-    <header className="lp-topbar" role="banner">
-      <div className="lp-container topbar-row">
-        <button className="brand" onClick={() => navigate("/")}>
-          <i className="fas fa-comments" aria-hidden="true" />
-          <span>Ask Freely</span>
-        </button>
-
-        <button
-          className="nav-toggle"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle navigation menu"
-          aria-expanded={mobileMenuOpen}
-        >
-          <i className={mobileMenuOpen ? "fas fa-times" : "fas fa-bars"} />
-        </button>
-
-        <nav className={`main-nav ${mobileMenuOpen ? 'mobile-open' : ''}`} aria-label="Primary navigation">
-          <a href="#values" onClick={(e) => handleNavClick(e, 'values')}>Why Ask Freely</a>
-          <a href="#how-it-works" onClick={(e) => handleNavClick(e, 'how-it-works')}>How It Works</a>
-          <a href="#why" onClick={(e) => handleNavClick(e, 'why')}>Features</a>
-          <a href="#stories" onClick={(e) => handleNavClick(e, 'stories')}>Reviews</a>
-        </nav>
-
-        <div className="actions">
-          <button className="ghost" onClick={() => navigate("/login")}>
-            Log In
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/98 backdrop-blur-lg border-b border-gray-200 shadow-sm" role="banner">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          {/* Logo/Brand */}
+          <button
+            className="inline-flex items-center gap-2.5 font-bold text-lg md:text-xl text-ink hover:opacity-80 transition-opacity bg-transparent border-0 cursor-pointer p-1"
+            onClick={() => navigate("/")}
+          >
+            <i className="fas fa-comments text-primary text-xl md:text-2xl" aria-hidden="true" />
+            <span className="font-['Space_Grotesk']">Ask Freely</span>
           </button>
-          <button className="solid" onClick={() => navigate("/signup")}>
-            Get Started Free
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-ink hover:bg-primary/10 transition-all z-50 border-0 bg-transparent cursor-pointer text-xl"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            <i className={mobileMenuOpen ? "fas fa-times" : "fas fa-bars"} />
           </button>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-6" aria-label="Primary navigation">
+            <a
+              href="#values"
+              onClick={(e) => handleNavClick(e, 'values')}
+              className="text-neutral-700 font-semibold hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+            >
+              Why Ask Freely
+            </a>
+            <a
+              href="#how-it-works"
+              onClick={(e) => handleNavClick(e, 'how-it-works')}
+              className="text-neutral-700 font-semibold hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+            >
+              How It Works
+            </a>
+            <a
+              href="#why"
+              onClick={(e) => handleNavClick(e, 'why')}
+              className="text-neutral-700 font-semibold hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+            >
+              Features
+            </a>
+            <a
+              href="#stories"
+              onClick={(e) => handleNavClick(e, 'stories')}
+              className="text-neutral-700 font-semibold hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+            >
+              Reviews
+            </a>
+          </nav>
+
+          {/* Desktop Action Buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            <button
+              className="px-4 py-2.5 rounded-lg font-bold border border-gray-300 bg-white text-neutral-700 hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer"
+              onClick={() => navigate("/login")}
+            >
+              Log In
+            </button>
+            <button
+              className="px-4 py-2.5 rounded-lg font-bold bg-primary text-white hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer border-0"
+              onClick={() => navigate("/signup")}
+            >
+              Get Started Free
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        <nav
+          className={`md:hidden fixed top-16 left-0 right-0 bg-white border-t border-gray-200 shadow-lg transition-all duration-300 ${
+            mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+          }`}
+          aria-label="Mobile navigation"
+        >
+          <div className="flex flex-col p-4">
+            <a
+              href="#values"
+              onClick={(e) => handleNavClick(e, 'values')}
+              className="text-neutral-700 font-semibold hover:text-primary hover:bg-primary/5 transition-colors px-4 py-3 rounded-lg border-b border-gray-100"
+            >
+              Why Ask Freely
+            </a>
+            <a
+              href="#how-it-works"
+              onClick={(e) => handleNavClick(e, 'how-it-works')}
+              className="text-neutral-700 font-semibold hover:text-primary hover:bg-primary/5 transition-colors px-4 py-3 rounded-lg border-b border-gray-100"
+            >
+              How It Works
+            </a>
+            <a
+              href="#why"
+              onClick={(e) => handleNavClick(e, 'why')}
+              className="text-neutral-700 font-semibold hover:text-primary hover:bg-primary/5 transition-colors px-4 py-3 rounded-lg border-b border-gray-100"
+            >
+              Features
+            </a>
+            <a
+              href="#stories"
+              onClick={(e) => handleNavClick(e, 'stories')}
+              className="text-neutral-700 font-semibold hover:text-primary hover:bg-primary/5 transition-colors px-4 py-3 rounded-lg"
+            >
+              Reviews
+            </a>
+          </div>
+        </nav>
       </div>
     </header>
   );
