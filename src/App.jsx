@@ -148,15 +148,20 @@ const formatNumber = (n) =>
 
 function StatItem({ icon, num, label }) {
   return (
-    <div className="text-center p-6" role="group" aria-label={label}>
-      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center">
-        <i className={`${icon} text-3xl text-primary`} aria-hidden="true" />
+    <div className="group flex items-center gap-4 sm:gap-6 p-6 sm:p-8 bg-white rounded-2xl border border-neutral-200 hover:border-primary/30 hover:shadow-lg transition-all duration-300" role="group" aria-label={label}>
+      {/* Icon */}
+      <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary to-primary-dark rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+        <i className={`${icon} text-2xl sm:text-3xl text-white`} aria-hidden="true" />
       </div>
-      <div className="text-4xl md:text-5xl font-bold text-ink mb-2 font-['Space_Grotesk']">
-        {num}
-      </div>
-      <div className="text-neutral-600 font-medium text-sm md:text-base">
-        {label}
+
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink mb-1 font-['Space_Grotesk'] leading-none">
+          {num}
+        </div>
+        <div className="text-neutral-600 font-semibold text-sm sm:text-base">
+          {label}
+        </div>
       </div>
     </div>
   );
@@ -454,20 +459,20 @@ function LiveStatsSection({ liveStats }) {
   const { liveEvents, liveQuestions, liveParticipants } = liveStats;
 
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-br from-primary/5 via-white to-primary/5" aria-labelledby="stats-heading">
+    <section className="py-20 md:py-28 bg-white" aria-labelledby="stats-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Stats Header */}
-        <div className="text-center mb-16">
-          <h3 id="stats-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-ink mb-4 font-['Space_Grotesk']">
+        <div className="text-center mb-12 sm:mb-16">
+          <h3 id="stats-heading" className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink mb-3 sm:mb-4 font-['Space_Grotesk']">
             Join Thousands Making Every Voice Count
           </h3>
-          <p className="text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto">
             Real conversations happening right now in communities worldwide
           </p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
           <StatItem
             icon="fa-solid fa-circle-question"
             num={formatNumber(liveQuestions)}
