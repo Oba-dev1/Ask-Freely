@@ -353,53 +353,83 @@ function HeroSection() {
   };
 
   return (
-    <section id="hero" className="lp-hero" aria-labelledby="hero-heading">
-      <div className="lp-container hero-grid">
-        <div className="hero-copy">
-          <div className="hero-chip">
-            <span className="dot" /> Trusted by organizers worldwide
-          </div>
-          <h1 id="hero-heading">Turn Tough Questions Into Breakthrough Conversations</h1>
-          <p className="lede">
-            The anonymous Q&amp;A platform that helps event organizers create psychologically safe spaces where every voice matters. Collect, prioritize, and address questions with confidence—no awkward silences, just honest dialogue.
-          </p>
+    <section id="hero" className="pt-24 md:pt-32 pb-16 md:pb-24 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="hero-heading">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Hero Copy */}
+          <div className="order-2 lg:order-1">
+            {/* Trust Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-6 animate-fade-in">
+              <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+              Trusted by organizers worldwide
+            </div>
 
-          <div className="hero-actions">
-            <button className="solid" onClick={() => navigate("/signup")}>
-              Start Free - Create Your Event{" "}
-              <i className="fas fa-arrow-right" aria-hidden="true" />
-            </button>
-            <button className="ghost" onClick={() => navigate("/participate")}>
-              See How It Works
-            </button>
-          </div>
-        </div>
-
-        <aside className="hero-carousel" aria-hidden="true">
-          <div className="carousel-container">
-            <div
-              className="carousel-track"
-              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            {/* Headline */}
+            <h1
+              id="hero-heading"
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-ink leading-tight mb-6 font-['Space_Grotesk'] animate-slide-up"
             >
-              {slides.map((slide, index) => (
-                <div key={index} className="carousel-slide">
-                  <img src={slide.src} alt={slide.alt} />
-                </div>
-              ))}
+              Turn Tough Questions Into Breakthrough Conversations
+            </h1>
+
+            {/* Description */}
+            <p className="text-lg sm:text-xl text-neutral-600 leading-relaxed mb-8 max-w-2xl">
+              The anonymous Q&amp;A platform that helps event organizers create psychologically safe spaces where every voice matters. Collect, prioritize, and address questions with confidence—no awkward silences, just honest dialogue.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border-0 cursor-pointer"
+                onClick={() => navigate("/signup")}
+              >
+                Start Free - Create Your Event
+                <i className="fas fa-arrow-right" aria-hidden="true" />
+              </button>
+              <button
+                className="inline-flex items-center justify-center px-6 py-4 bg-white text-neutral-700 font-bold rounded-xl border-2 border-neutral-300 hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 cursor-pointer"
+                onClick={() => navigate("/participate")}
+              >
+                See How It Works
+              </button>
             </div>
           </div>
 
-          <div className="carousel-dots">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                className={`carousel-dot ${index === currentSlide ? 'active' : ''}`}
-                onClick={() => goToSlide(index)}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
-        </aside>
+          {/* Hero Carousel */}
+          <aside className="order-1 lg:order-2 relative" aria-hidden="true">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-neutral-100">
+              <div
+                className="flex transition-transform duration-700 ease-in-out h-full"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {slides.map((slide, index) => (
+                  <div key={index} className="min-w-full h-full">
+                    <img
+                      src={slide.src}
+                      alt={slide.alt}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Carousel Dots */}
+            <div className="flex justify-center gap-2 mt-6">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 border-0 cursor-pointer ${
+                    index === currentSlide
+                      ? 'bg-primary w-8'
+                      : 'bg-neutral-300 hover:bg-neutral-400'
+                  }`}
+                  onClick={() => goToSlide(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </aside>
       </div>
     </section>
   );
@@ -585,39 +615,53 @@ function ActivityTicker({ recentEvents }) {
 
 function ValuesSection() {
   return (
-    <section id="values" className="lp-values">
-      <div className="lp-container values-grid">
-        <h3 className="section-heading">Built on Values That Matter</h3>
-      </div>
-      <div className="lp-container values-grid">
-        <div className="val">
-          <div className="val-icon">
-            <i className="fa-solid fa-hand-holding-heart" aria-hidden="true" />
-          </div>
-          <h3>Safety First, Always</h3>
-          <p>
-            Optional anonymity with built-in moderation tools. Create spaces where the toughest questions can finally be asked—without fear or judgment.
-          </p>
-        </div>
+    <section id="values" className="py-20 md:py-28 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-ink mb-16 font-['Space_Grotesk']">
+          Built on Values That Matter
+        </h2>
 
-        <div className="val">
-          <div className="val-icon">
-            <i className="fa-solid fa-people-arrows" aria-hidden="true" />
+        {/* Values Grid */}
+        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+          {/* Value 1: Safety */}
+          <div className="group text-center">
+            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+              <i className="fa-solid fa-hand-holding-heart text-3xl text-primary" aria-hidden="true" />
+            </div>
+            <h3 className="text-xl md:text-2xl font-bold text-ink mb-4">
+              Safety First, Always
+            </h3>
+            <p className="text-neutral-600 leading-relaxed">
+              Optional anonymity with built-in moderation tools. Create spaces where the toughest questions can finally be asked—without fear or judgment.
+            </p>
           </div>
-          <h3>Community-Driven Prioritization</h3>
-          <p>
-            Let your audience upvote what truly matters to them. Stop guessing what people care about—let them show you through democratic engagement.
-          </p>
-        </div>
 
-        <div className="val">
-          <div className="val-icon">
-            <i className="fa-solid fa-palette" aria-hidden="true" />
+          {/* Value 2: Community-Driven */}
+          <div className="group text-center">
+            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+              <i className="fa-solid fa-people-arrows text-3xl text-blue-500" aria-hidden="true" />
+            </div>
+            <h3 className="text-xl md:text-2xl font-bold text-ink mb-4">
+              Community-Driven Prioritization
+            </h3>
+            <p className="text-neutral-600 leading-relaxed">
+              Let your audience upvote what truly matters to them. Stop guessing what people care about—let them show you through democratic engagement.
+            </p>
           </div>
-          <h3>Your Brand, Your Voice</h3>
-          <p>
-            Full white-label customization. Add your logo, colors, and messaging so participants feel right at home—not on a generic platform.
-          </p>
+
+          {/* Value 3: Customization */}
+          <div className="group text-center">
+            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
+              <i className="fa-solid fa-palette text-3xl text-purple-500" aria-hidden="true" />
+            </div>
+            <h3 className="text-xl md:text-2xl font-bold text-ink mb-4">
+              Your Brand, Your Voice
+            </h3>
+            <p className="text-neutral-600 leading-relaxed">
+              Full white-label customization. Add your logo, colors, and messaging so participants feel right at home—not on a generic platform.
+            </p>
+          </div>
         </div>
       </div>
     </section>
