@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../Firebase/config';
-import './Auth.css';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -23,8 +22,6 @@ function ForgotPassword() {
 
     try {
       setLoading(true);
-      // Configure action code settings for password reset redirect
-      // Since localhost is now authorized in Firebase, we can use it directly
       const actionCodeSettings = {
         url: `${window.location.origin}/login?resetSuccess=true`,
         handleCodeInApp: false
@@ -52,90 +49,106 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="page-wrapper">
-      <div className="auth-layout-centered">
-        <div className="auth-container">
-          <div className="auth-card">
-              <header className="auth-header">
-                <div className="logo-icon">
-                  <i className="fas fa-key"></i>
+    <div className="min-h-screen bg-white text-ink font-sans">
+      <div className="flex items-center justify-center min-h-screen p-6">
+        <div className="w-full max-w-md">
+          <div className="bg-white rounded-2xl shadow-lg shadow-black/5 p-8">
+            <header className="text-center mb-6">
+              <div className="text-2xl text-primary mb-4 inline-block">
+                <i className="fas fa-key"></i>
+              </div>
+              <h1 className="text-xl md:text-2xl font-bold text-ink mb-2 tracking-tight leading-tight">
+                Forgot Password?
+              </h1>
+              <p className="text-neutral-500 text-sm font-normal leading-relaxed">
+                No worries! Enter your email and we'll send you reset instructions
+              </p>
+            </header>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-600 px-3 py-2.5 rounded-lg mb-4 text-sm font-medium flex items-center gap-2" role="alert">
+                <i className="fas fa-exclamation-circle"></i>
+                {error}
+              </div>
+            )}
+
+            {success ? (
+              <div className="text-center py-6 px-4">
+                <div className="text-5xl text-emerald-500 mb-5">
+                  <i className="fas fa-check-circle"></i>
                 </div>
-                <h1>Forgot Password?</h1>
-                <p className="subtitle">
-                  No worries! Enter your email and we'll send you reset instructions
+                <h3 className="text-lg font-bold text-ink mb-3">
+                  Check Your Email
+                </h3>
+                <p className="text-neutral-500 mb-3 leading-relaxed text-sm">
+                  We've sent password reset instructions to <strong className="text-ink">{email}</strong>
                 </p>
-              </header>
-
-              {error && (
-                <div className="error-banner" role="alert">
-                  <i className="fas fa-exclamation-circle"></i> {error}
-                </div>
-              )}
-
-              {success ? (
-                <div className="success-message">
-                  <div className="success-icon">
-                    <i className="fas fa-check-circle"></i>
-                  </div>
-                  <h3>Check Your Email</h3>
-                  <p>
-                    We've sent password reset instructions to <strong>{email}</strong>
-                  </p>
-                  <p className="help-text">
-                    Didn't receive the email? Check your spam folder or{' '}
-                    <button
-                      onClick={() => setSuccess(false)}
-                      className="link-button"
-                    >
-                      try again
-                    </button>
-                  </p>
-                  <div className="auth-links">
-                    <Link to="/login">
-                      <i className="fas fa-arrow-left"></i> Back to Login
-                    </Link>
-                  </div>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="auth-form">
-                  <div className="form-group">
-                    <label htmlFor="email">Email Address</label>
-                    <input
-                      type="email"
-                      id="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email"
-                      disabled={loading}
-                      autoFocus
-                      required
-                    />
-                  </div>
-
+                <p className="text-sm text-neutral-400 mt-5 pt-5 border-t border-neutral-200">
+                  Didn't receive the email? Check your spam folder or{' '}
                   <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={loading || !email.trim()}
+                    onClick={() => setSuccess(false)}
+                    className="text-primary hover:text-primary/80 underline font-semibold bg-transparent border-none cursor-pointer p-0"
                   >
-                    {loading ? (
-                      <>
-                        <i className="fas fa-spinner fa-spin"></i> Sending...
-                      </>
-                    ) : (
-                      <>
-                        <i className="fas fa-paper-plane"></i> Send Reset Link
-                      </>
-                    )}
+                    try again
                   </button>
+                </p>
+                <div className="mt-5">
+                  <Link
+                    to="/login"
+                    className="text-primary font-semibold hover:text-primary/80 hover:underline transition-all inline-flex items-center gap-2 text-sm"
+                  >
+                    <i className="fas fa-arrow-left"></i>
+                    Back to Login
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="mt-6">
+                <div className="mb-4">
+                  <label htmlFor="email" className="block mb-1.5 font-medium text-neutral-700 text-sm">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    disabled={loading}
+                    autoFocus
+                    required
+                    className="w-full px-3 py-2.5 rounded-lg border-[1.5px] border-neutral-200 bg-neutral-50 text-ink text-sm transition-all placeholder:text-neutral-400 hover:border-neutral-300 hover:bg-white focus:border-primary focus:outline-none focus:bg-white focus:ring-[3px] focus:ring-primary/10 disabled:opacity-60 disabled:cursor-not-allowed"
+                  />
+                </div>
 
-                  <div className="auth-links">
-                    <p>
-                      Remember your password?{' '}
-                      <Link to="/login">Sign in</Link>
-                    </p>
-                  </div>
-                </form>
-              )}
+                <button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-4 rounded-lg text-sm mt-2 shadow-md shadow-primary/20 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none inline-flex items-center justify-center gap-2"
+                  disabled={loading || !email.trim()}
+                >
+                  {loading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin"></i>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-paper-plane"></i>
+                      Send Reset Link
+                    </>
+                  )}
+                </button>
+
+                <div className="mt-5 text-center">
+                  <p className="text-neutral-500 text-sm">
+                    Remember your password?{' '}
+                    <Link to="/login" className="text-primary font-semibold hover:text-primary/80 hover:underline transition-all">
+                      Sign in
+                    </Link>
+                  </p>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </div>

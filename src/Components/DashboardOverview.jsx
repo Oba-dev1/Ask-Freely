@@ -1,11 +1,10 @@
 // src/Components/DashboardOverview.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
 import CreateEventModal from './CreateEventModal';
-import './DashboardOverview.css';
 
 function DashboardOverview() {
   const [events, setEvents] = useState([]);
@@ -31,66 +30,78 @@ function DashboardOverview() {
       return;
     }
 
-    // Load all user's events
     const eventsRef = ref(database, 'events');
     const unsubscribeEvents = onValue(
       eventsRef,
       (snapshot) => {
         const data = snapshot.val();
 
-      if (data) {
-        const userEvents = Object.keys(data)
-          .filter((key) => data[key]?.organizerId === currentUser.uid)
-          .map((key) => ({ id: key, ...data[key] }));
+        if (data) {
+          const userEvents = Object.keys(data)
+            .filter((key) => data[key]?.organizerId === currentUser.uid)
+            .map((key) => ({ id: key, ...data[key] }));
 
-        setEvents(userEvents);
+          setEvents(userEvents);
 
-        // Calculate stats inline
-        const totalEvents = userEvents.length;
-        const activeEvents = userEvents.filter(e => e.status === 'published').length;
-        const draftEvents = userEvents.filter(e => e.status === 'draft').length;
+          const totalEvents = userEvents.length;
+          const activeEvents = userEvents.filter(e => e.status === 'published').length;
+          const draftEvents = userEvents.filter(e => e.status === 'draft').length;
 
-        let totalQuestions = 0;
-        let answeredQuestions = 0;
-        let pendingQuestions = 0;
-        const recentActivity = [];
+          let totalQuestions = 0;
+          let answeredQuestions = 0;
+          let pendingQuestions = 0;
+          const recentActivity = [];
 
-        userEvents.forEach(event => {
-          const eventQuestions = event.questionCount || 0;
-          const eventAnswered = event.answeredCount || 0;
+          userEvents.forEach(event => {
+            const eventQuestions = event.questionCount || 0;
+            const eventAnswered = event.answeredCount || 0;
 
-          totalQuestions += eventQuestions;
-          answeredQuestions += eventAnswered;
-          pendingQuestions += (eventQuestions - eventAnswered);
+            totalQuestions += eventQuestions;
+            answeredQuestions += eventAnswered;
+            pendingQuestions += (eventQuestions - eventAnswered);
 
-          // Add to recent activity
-          recentActivity.push({
-            type: 'event',
-            title: event.title,
-            date: event.date || new Date().toISOString(),
-            status: event.status,
-            id: event.id
+            recentActivity.push({
+              type: 'event',
+              title: event.title,
+              date: event.date || new Date().toISOString(),
+              status: event.status,
+              id: event.id
+            });
           });
-        });
 
-        // Sort recent activity by date
-        recentActivity.sort((a, b) => new Date(b.date) - new Date(a.date));
+          recentActivity.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        const totalEngagement = totalQuestions > 0
-          ? Math.round((answeredQuestions / totalQuestions) * 100)
-          : 0;
+          const totalEngagement = totalQuestions > 0
+            ? Math.round((answeredQuestions / totalQuestions) * 100)
+            : 0;
 
-        setStats({
-          totalEvents,
-          activeEvents,
-          draftEvents,
-          totalQuestions,
-          answeredQuestions,
-          pendingQuestions,
-          totalEngagement,
-          recentActivity: recentActivity.slice(0, 5)
-        });
-      } else {
+          setStats({
+            totalEvents,
+            activeEvents,
+            draftEvents,
+            totalQuestions,
+            answeredQuestions,
+            pendingQuestions,
+            totalEngagement,
+            recentActivity: recentActivity.slice(0, 5)
+          });
+        } else {
+          setEvents([]);
+          setStats({
+            totalEvents: 0,
+            activeEvents: 0,
+            draftEvents: 0,
+            totalQuestions: 0,
+            answeredQuestions: 0,
+            pendingQuestions: 0,
+            totalEngagement: 0,
+            recentActivity: []
+          });
+        }
+        setLoading(false);
+      },
+      (error) => {
+        setLoading(false);
         setEvents([]);
         setStats({
           totalEvents: 0,
@@ -103,23 +114,7 @@ function DashboardOverview() {
           recentActivity: []
         });
       }
-      setLoading(false);
-    },
-    (error) => {
-      // Handle Firebase errors gracefully
-      setLoading(false);
-      setEvents([]);
-      setStats({
-        totalEvents: 0,
-        activeEvents: 0,
-        draftEvents: 0,
-        totalQuestions: 0,
-        answeredQuestions: 0,
-        pendingQuestions: 0,
-        totalEngagement: 0,
-        recentActivity: []
-      });
-    });
+    );
 
     return () => unsubscribeEvents();
   }, [currentUser]);
@@ -155,135 +150,145 @@ function DashboardOverview() {
 
   if (loading) {
     return (
-      <div className="overview-loading">
-        <div className="spinner"></div>
-        <p>Loading your dashboard...</p>
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-10 h-10 border-4 border-neutral-200 border-t-primary rounded-full animate-spin"></div>
+        <p className="text-neutral-500 text-sm">Loading your dashboard...</p>
       </div>
     );
   }
 
   return (
-    <div className="dashboard-overview">
+    <div className="animate-fade-in">
       {/* Page Header */}
-      <div className="overview-header">
+      <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
         <div>
-          <h1 className="overview-title">Dashboard Overview</h1>
-          <p className="overview-subtitle">Track engagement, monitor activity, and manage all your events in one place</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-ink mb-1 tracking-tight">Dashboard Overview</h1>
+          <p className="text-sm text-neutral-500">Track engagement, monitor activity, and manage all your events in one place</p>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="stats-grid">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {/* Total Events */}
-        <div className="stat-card stat-card-blue">
-          <div className="stat-icon">
+        <div className="bg-white rounded-xl p-5 flex items-center gap-4 shadow-soft border border-black/[0.04] hover:-translate-y-0.5 hover:shadow-medium hover:border-primary/10 transition-all group">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-xl flex-shrink-0">
             <i className="fas fa-calendar-alt"></i>
           </div>
-          <div className="stat-content">
-            <p className="stat-label">Total Events</p>
-            <h3 className="stat-value">{stats.totalEvents}</h3>
-            <p className="stat-detail">
-              <span className="stat-badge stat-badge-success">{stats.activeEvents} Active</span>
-              <span className="stat-badge stat-badge-warning">{stats.draftEvents} Drafts</span>
-            </p>
+          <div className="flex-1">
+            <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider mb-1">Total Events</p>
+            <h3 className="text-2xl font-bold text-ink leading-none mb-1.5">{stats.totalEvents}</h3>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-500/10 text-emerald-600">{stats.activeEvents} Active</span>
+              <span className="px-2 py-0.5 rounded text-xs font-semibold bg-amber-500/10 text-amber-600">{stats.draftEvents} Drafts</span>
+            </div>
           </div>
         </div>
 
         {/* Total Questions */}
-        <div className="stat-card stat-card-purple">
-          <div className="stat-icon">
+        <div className="bg-white rounded-xl p-5 flex items-center gap-4 shadow-soft border border-black/[0.04] hover:-translate-y-0.5 hover:shadow-medium hover:border-primary/10 transition-all group">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-violet-700 flex items-center justify-center text-white text-xl flex-shrink-0">
             <i className="fas fa-question-circle"></i>
           </div>
-          <div className="stat-content">
-            <p className="stat-label">Total Questions</p>
-            <h3 className="stat-value">{stats.totalQuestions}</h3>
-            <p className="stat-detail">
-              Across all events
-            </p>
+          <div className="flex-1">
+            <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider mb-1">Total Questions</p>
+            <h3 className="text-2xl font-bold text-ink leading-none mb-1.5">{stats.totalQuestions}</h3>
+            <p className="text-xs text-neutral-500">Across all events</p>
           </div>
         </div>
 
         {/* Answered Questions */}
-        <div className="stat-card stat-card-green">
-          <div className="stat-icon">
+        <div className="bg-white rounded-xl p-5 flex items-center gap-4 shadow-soft border border-black/[0.04] hover:-translate-y-0.5 hover:shadow-medium hover:border-primary/10 transition-all group">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white text-xl flex-shrink-0">
             <i className="fas fa-check-circle"></i>
           </div>
-          <div className="stat-content">
-            <p className="stat-label">Answered</p>
-            <h3 className="stat-value">{stats.answeredQuestions}</h3>
-            <p className="stat-detail">
-              <span className="stat-badge stat-badge-warning">{stats.pendingQuestions} Pending</span>
-            </p>
+          <div className="flex-1">
+            <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider mb-1">Answered</p>
+            <h3 className="text-2xl font-bold text-ink leading-none mb-1.5">{stats.answeredQuestions}</h3>
+            <div className="flex items-center gap-1.5">
+              <span className="px-2 py-0.5 rounded text-xs font-semibold bg-amber-500/10 text-amber-600">{stats.pendingQuestions} Pending</span>
+            </div>
           </div>
         </div>
 
         {/* Engagement Rate */}
-        <div className="stat-card stat-card-orange">
-          <div className="stat-icon">
+        <div className="bg-white rounded-xl p-5 flex items-center gap-4 shadow-soft border border-black/[0.04] hover:-translate-y-0.5 hover:shadow-medium hover:border-primary/10 transition-all group">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-orange-500 flex items-center justify-center text-white text-xl flex-shrink-0">
             <i className="fas fa-chart-line"></i>
           </div>
-          <div className="stat-content">
-            <p className="stat-label">Engagement Rate</p>
-            <h3 className="stat-value">{stats.totalEngagement}%</h3>
-            <p className="stat-detail">
-              Questions answered
-            </p>
+          <div className="flex-1">
+            <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider mb-1">Engagement Rate</p>
+            <h3 className="text-2xl font-bold text-ink leading-none mb-1.5">{stats.totalEngagement}%</h3>
+            <p className="text-xs text-neutral-500">Questions answered</p>
           </div>
         </div>
       </div>
 
       {/* Content Grid */}
-      <div className="overview-content-grid">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
         {/* Recent Events */}
-        <div className="overview-card">
-          <div className="card-header">
-            <h2 className="card-title">
-              <i className="fas fa-clock"></i> Recent Events
+        <div className="bg-white rounded-xl shadow-soft border border-black/[0.04] overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-200 bg-gradient-to-b from-white to-neutral-50">
+            <h2 className="text-base font-bold text-ink flex items-center gap-2">
+              <i className="fas fa-clock text-primary text-lg"></i> Recent Events
             </h2>
-            <Link to="/organizer/events/all" className="card-link">
-              View All <i className="fas fa-arrow-right"></i>
+            <Link
+              to="/organizer/events/all"
+              className="text-sm text-primary font-semibold flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-primary/10 hover:gap-2 transition-all"
+            >
+              View All <i className="fas fa-arrow-right text-xs"></i>
             </Link>
           </div>
-          <div className="card-body">
+          <div className="p-5">
             {getRecentEvents().length > 0 ? (
-              <div className="event-list">
+              <div className="flex flex-col gap-3">
                 {getRecentEvents().map((event) => (
                   <div
                     key={event.id}
-                    className="event-item"
+                    className="flex items-center gap-3 p-3 bg-neutral-50 border border-neutral-200 rounded-xl cursor-pointer hover:bg-white hover:border-primary hover:shadow-soft hover:translate-x-1 transition-all"
                     onClick={() => navigate(`/organizer/event/${event.id}`)}
                   >
-                    <div className="event-item-icon">
+                    <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-gradient-to-br from-primary to-orange-500 flex items-center justify-center text-white text-lg">
                       {event.flyerUrl ? (
-                        <img src={event.flyerUrl} alt={event.title} />
+                        <img src={event.flyerUrl} alt={event.title} className="w-full h-full object-cover" />
                       ) : (
                         <i className="fas fa-calendar"></i>
                       )}
                     </div>
-                    <div className="event-item-content">
-                      <h4 className="event-item-title">{event.title}</h4>
-                      <p className="event-item-meta">
-                        <span className={`status-badge status-${event.status}`}>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-semibold text-ink mb-1 line-clamp-1">{event.title}</h4>
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                          event.status === 'published'
+                            ? 'bg-emerald-500/10 text-emerald-600'
+                            : 'bg-amber-500/10 text-amber-600'
+                        }`}>
                           {event.status === 'published' ? 'Active' : event.status === 'draft' ? 'Draft' : event.status}
                         </span>
-                        <span className="event-item-date">{getEventDisplayDate(event)}</span>
-                      </p>
-                      <p className="event-item-stats">
-                        <span><i className="fas fa-question"></i> {event.questionCount || 0} questions</span>
-                        <span><i className="fas fa-check"></i> {event.answeredCount || 0} answered</span>
-                      </p>
+                        <span className="text-xs text-neutral-500">{getEventDisplayDate(event)}</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-xs text-neutral-500">
+                        <span className="flex items-center gap-1">
+                          <i className="fas fa-question text-[10px]"></i> {event.questionCount || 0} questions
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <i className="fas fa-check text-[10px]"></i> {event.answeredCount || 0} answered
+                        </span>
+                      </div>
                     </div>
-                    <div className="event-item-arrow">
+                    <div className="text-neutral-400 text-sm">
                       <i className="fas fa-chevron-right"></i>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="empty-state">
-                <i className="fas fa-calendar-plus"></i>
-                <p>No events yet</p>
-                <button className="btn btn-secondary" onClick={() => setIsModalOpen(true)}>
+              <div className="flex flex-col items-center justify-center py-10 text-center">
+                <i className="fas fa-calendar-plus text-4xl text-neutral-300 mb-3"></i>
+                <p className="text-neutral-500 text-sm mb-4">No events yet</p>
+                <button
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white border-[1.5px] border-neutral-200 text-neutral-700 rounded-lg text-sm font-semibold hover:bg-neutral-50 hover:border-neutral-300 hover:-translate-y-0.5 hover:shadow-soft transition-all"
+                  onClick={() => setIsModalOpen(true)}
+                >
                   Create Your First Event
                 </button>
               </div>
@@ -292,74 +297,76 @@ function DashboardOverview() {
         </div>
 
         {/* Quick Actions */}
-        <div className="overview-card">
-          <div className="card-header">
-            <h2 className="card-title">
-              <i className="fas fa-bolt"></i> Quick Actions
+        <div className="bg-white rounded-xl shadow-soft border border-black/[0.04] overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-200 bg-gradient-to-b from-white to-neutral-50">
+            <h2 className="text-base font-bold text-ink flex items-center gap-2">
+              <i className="fas fa-bolt text-primary text-lg"></i> Quick Actions
             </h2>
           </div>
-          <div className="card-body">
-            <div className="quick-actions-grid">
+          <div className="p-5">
+            <div className="grid grid-cols-2 gap-3">
               <button
-                className="quick-action-btn"
+                className="flex flex-col items-center gap-3 p-5 bg-white border-[1.5px] border-neutral-200 rounded-xl cursor-pointer hover:border-primary hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(255,107,53,0.15)] transition-all group"
                 onClick={() => setIsModalOpen(true)}
               >
-                <div className="quick-action-icon quick-action-icon-primary">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-orange-500 flex items-center justify-center text-white text-lg shadow-md">
                   <i className="fas fa-plus"></i>
                 </div>
-                <span>Create Event</span>
+                <span className="text-sm font-semibold text-ink">Create Event</span>
               </button>
 
               <button
-                className="quick-action-btn"
+                className="flex flex-col items-center gap-3 p-5 bg-white border-[1.5px] border-neutral-200 rounded-xl cursor-pointer hover:border-primary hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(255,107,53,0.15)] transition-all group"
                 onClick={() => navigate('/organizer/events/all')}
               >
-                <div className="quick-action-icon quick-action-icon-blue">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-lg shadow-md">
                   <i className="fas fa-list"></i>
                 </div>
-                <span>View All Events</span>
+                <span className="text-sm font-semibold text-ink">View All Events</span>
               </button>
 
               <button
-                className="quick-action-btn"
+                className="flex flex-col items-center gap-3 p-5 bg-white border-[1.5px] border-neutral-200 rounded-xl cursor-pointer hover:border-primary hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(255,107,53,0.15)] transition-all group"
                 onClick={() => navigate('/organizer/analytics')}
               >
-                <div className="quick-action-icon quick-action-icon-purple">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500 to-violet-700 flex items-center justify-center text-white text-lg shadow-md">
                   <i className="fas fa-chart-bar"></i>
                 </div>
-                <span>View Analytics</span>
+                <span className="text-sm font-semibold text-ink">View Analytics</span>
               </button>
 
               <button
-                className="quick-action-btn"
+                className="flex flex-col items-center gap-3 p-5 bg-white border-[1.5px] border-neutral-200 rounded-xl cursor-pointer hover:border-primary hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(255,107,53,0.15)] transition-all group"
                 onClick={() => navigate('/organizer/settings')}
               >
-                <div className="quick-action-icon quick-action-icon-gray">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-neutral-500 to-neutral-700 flex items-center justify-center text-white text-lg shadow-md">
                   <i className="fas fa-cog"></i>
                 </div>
-                <span>Settings</span>
+                <span className="text-sm font-semibold text-ink">Settings</span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Activity Feed (if time permits) */}
+      {/* Activity Feed */}
       {stats.recentActivity.length > 0 && (
-        <div className="overview-card overview-card-full">
-          <div className="card-header">
-            <h2 className="card-title">
-              <i className="fas fa-history"></i> Recent Activity
+        <div className="bg-white rounded-xl shadow-soft border border-black/[0.04] overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-200 bg-gradient-to-b from-white to-neutral-50">
+            <h2 className="text-base font-bold text-ink flex items-center gap-2">
+              <i className="fas fa-history text-primary text-lg"></i> Recent Activity
             </h2>
           </div>
-          <div className="card-body">
-            <div className="activity-feed">
+          <div className="p-5">
+            <div className="flex flex-col gap-3">
               {stats.recentActivity.map((activity, index) => (
-                <div key={index} className="activity-item">
-                  <div className={`activity-dot activity-dot-${activity.status}`}></div>
-                  <div className="activity-content">
-                    <p className="activity-title">{activity.title}</p>
-                    <p className="activity-meta">{formatDate(activity.date)}</p>
+                <div key={index} className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg">
+                  <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                    activity.status === 'published' ? 'bg-emerald-500' : 'bg-amber-500'
+                  }`}></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-ink mb-0.5">{activity.title}</p>
+                    <p className="text-xs text-neutral-500">{formatDate(activity.date)}</p>
                   </div>
                 </div>
               ))}
