@@ -4,7 +4,6 @@ import { ref, onValue } from "firebase/database";
 import { database } from "../Firebase/config";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "./OrganizerAnalytics.css";
 
 function OrganizerAnalytics() {
   const { currentUser } = useAuth();
@@ -155,10 +154,10 @@ function OrganizerAnalytics() {
 
   if (loading) {
     return (
-      <div className="analytics-view">
-        <div className="analytics-loading">
-          <div className="spinner"></div>
-          <p>Loading analytics...</p>
+      <div className="animate-fade-in pb-12 max-w-full overflow-x-hidden w-full">
+        <div className="flex flex-col items-center justify-center min-h-[400px] gap-6">
+          <div className="w-12 h-12 border-4 border-neutral-200 border-t-primary rounded-full animate-spin"></div>
+          <p className="text-neutral-500">Loading analytics...</p>
         </div>
       </div>
     );
@@ -166,12 +165,15 @@ function OrganizerAnalytics() {
 
   if (events.length === 0) {
     return (
-      <div className="analytics-view">
-        <div className="analytics-empty">
-          <i className="fas fa-chart-bar"></i>
-          <h2>No Analytics Yet</h2>
-          <p>Create your first event to start seeing analytics</p>
-          <button className="btn btn-primary" onClick={() => navigate('/organizer/events/all')}>
+      <div className="animate-fade-in pb-12 max-w-full overflow-x-hidden w-full">
+        <div className="flex flex-col items-center justify-center min-h-[400px] gap-6">
+          <i className="fas fa-chart-bar text-7xl text-neutral-200"></i>
+          <h2 className="text-2xl font-bold text-neutral-700 m-0">No Analytics Yet</h2>
+          <p className="text-neutral-500 m-0">Create your first event to start seeing analytics</p>
+          <button
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[10px] text-sm font-semibold cursor-pointer transition-all bg-gradient-to-br from-primary to-orange-500 text-white shadow-[0_2px_8px_rgba(255,107,53,0.2)] hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(255,107,53,0.3)]"
+            onClick={() => navigate('/organizer/events/all')}
+          >
             <i className="fas fa-plus"></i> Create Event
           </button>
         </div>
@@ -180,124 +182,116 @@ function OrganizerAnalytics() {
   }
 
   return (
-    <div className="analytics-view">
+    <div className="animate-fade-in pb-12 max-w-full overflow-x-hidden w-full">
       {/* Page Header */}
-      <header className="analytics-header">
-        <div>
-          <h1 className="analytics-title">Analytics Overview</h1>
-          <p className="analytics-subtitle">Performance metrics across all your events</p>
-        </div>
+      <header className="mb-10">
+        <h1 className="text-4xl font-bold text-neutral-900 mb-1.5 tracking-tight">Analytics Overview</h1>
+        <p className="text-base text-neutral-500">Performance metrics across all your events</p>
       </header>
 
       {/* Key Metrics Grid */}
-      <div className="metrics-grid">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6 mb-10 max-w-full">
         {/* Total Events */}
-        <div className="metric-card">
-          <div className="metric-icon metric-icon-primary">
+        <div className="bg-white border border-black/[0.06] rounded-2xl p-7 flex items-start gap-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all hover:shadow-medium hover:-translate-y-0.5">
+          <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0 bg-gradient-to-br from-primary/15 to-primary/[0.08] text-primary">
             <i className="fas fa-calendar-alt"></i>
           </div>
-          <div className="metric-content">
-            <p className="metric-label">Total Events</p>
-            <h2 className="metric-value">{stats.totalEvents}</h2>
-            <p className="metric-detail">
-              <span className="metric-badge badge-success">{stats.activeEvents} Active</span>
-              <span className="metric-badge badge-warning">{stats.draftEvents} Drafts</span>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-2">Total Events</p>
+            <h2 className="text-4xl font-bold text-neutral-900 mb-2 leading-none">{stats.totalEvents}</h2>
+            <p className="text-sm text-neutral-500 flex flex-wrap gap-2">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-md font-semibold text-xs bg-emerald-500/10 text-emerald-700">{stats.activeEvents} Active</span>
+              <span className="inline-flex items-center px-2.5 py-1 rounded-md font-semibold text-xs bg-amber-500/10 text-amber-700">{stats.draftEvents} Drafts</span>
               {stats.archivedEvents > 0 && (
-                <span className="metric-badge badge-muted">{stats.archivedEvents} Archived</span>
+                <span className="inline-flex items-center px-2.5 py-1 rounded-md font-semibold text-xs bg-neutral-500/10 text-neutral-600">{stats.archivedEvents} Archived</span>
               )}
             </p>
           </div>
         </div>
 
         {/* Total Questions */}
-        <div className="metric-card">
-          <div className="metric-icon metric-icon-info">
+        <div className="bg-white border border-black/[0.06] rounded-2xl p-7 flex items-start gap-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all hover:shadow-medium hover:-translate-y-0.5">
+          <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0 bg-gradient-to-br from-blue-500/15 to-blue-500/[0.08] text-blue-500">
             <i className="fas fa-question-circle"></i>
           </div>
-          <div className="metric-content">
-            <p className="metric-label">Total Questions</p>
-            <h2 className="metric-value">{stats.totalQuestions}</h2>
-            <p className="metric-detail">
-              {stats.avgQuestionsPerEvent.toFixed(1)} avg per event
-            </p>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-2">Total Questions</p>
+            <h2 className="text-4xl font-bold text-neutral-900 mb-2 leading-none">{stats.totalQuestions}</h2>
+            <p className="text-sm text-neutral-500">{stats.avgQuestionsPerEvent.toFixed(1)} avg per event</p>
           </div>
         </div>
 
         {/* Answer Rate */}
-        <div className="metric-card">
-          <div className="metric-icon metric-icon-success">
+        <div className="bg-white border border-black/[0.06] rounded-2xl p-7 flex items-start gap-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all hover:shadow-medium hover:-translate-y-0.5">
+          <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0 bg-gradient-to-br from-emerald-500/15 to-emerald-500/[0.08] text-emerald-500">
             <i className="fas fa-check-circle"></i>
           </div>
-          <div className="metric-content">
-            <p className="metric-label">Answer Rate</p>
-            <h2 className="metric-value">{stats.answerRate.toFixed(1)}%</h2>
-            <p className="metric-detail">
-              {stats.totalAnswered} of {stats.totalQuestions} answered
-            </p>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-2">Answer Rate</p>
+            <h2 className="text-4xl font-bold text-neutral-900 mb-2 leading-none">{stats.answerRate.toFixed(1)}%</h2>
+            <p className="text-sm text-neutral-500">{stats.totalAnswered} of {stats.totalQuestions} answered</p>
           </div>
         </div>
 
         {/* Anonymous Rate */}
-        <div className="metric-card">
-          <div className="metric-icon metric-icon-purple">
+        <div className="bg-white border border-black/[0.06] rounded-2xl p-7 flex items-start gap-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all hover:shadow-medium hover:-translate-y-0.5">
+          <div className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0 bg-gradient-to-br from-violet-500/15 to-violet-500/[0.08] text-violet-500">
             <i className="fas fa-user-secret"></i>
           </div>
-          <div className="metric-content">
-            <p className="metric-label">Anonymous Questions</p>
-            <h2 className="metric-value">{stats.anonymousRate.toFixed(1)}%</h2>
-            <p className="metric-detail">
-              {stats.totalAnonymous} of {stats.totalQuestions} questions
-            </p>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-2">Anonymous Questions</p>
+            <h2 className="text-4xl font-bold text-neutral-900 mb-2 leading-none">{stats.anonymousRate.toFixed(1)}%</h2>
+            <p className="text-sm text-neutral-500">{stats.totalAnonymous} of {stats.totalQuestions} questions</p>
           </div>
         </div>
       </div>
 
       {/* Question Sources Breakdown */}
-      <div className="analytics-section">
-        <h3 className="section-title">
-          <i className="fas fa-users"></i> Question Sources
+      <div className="bg-white border border-black/[0.06] rounded-2xl p-8 mb-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col max-w-full overflow-hidden">
+        <h3 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2.5">
+          <i className="fas fa-users text-primary"></i> Question Sources
         </h3>
-        <div className="source-breakdown">
-          <div className="source-item">
-            <div className="source-bar">
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2.5">
+            <div className="h-8 bg-neutral-100 rounded-lg overflow-hidden relative">
               <div
-                className="source-fill source-fill-organizer"
+                className="h-full rounded-lg transition-all duration-500 bg-gradient-to-r from-primary to-orange-500"
                 style={{ width: `${stats.totalQuestions > 0 ? (stats.totalOrganizer / stats.totalQuestions) * 100 : 0}%` }}
               ></div>
             </div>
-            <div className="source-info">
-              <span className="source-label">
-                <i className="fas fa-star"></i> Strategic (Organizer)
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-neutral-700 text-sm flex items-center gap-2">
+                <i className="fas fa-star w-5 text-center text-base"></i> Strategic (Organizer)
               </span>
-              <span className="source-count">{stats.totalOrganizer}</span>
+              <span className="font-bold text-lg text-neutral-900">{stats.totalOrganizer}</span>
             </div>
           </div>
-          <div className="source-item">
-            <div className="source-bar">
+          <div className="flex flex-col gap-2.5">
+            <div className="h-8 bg-neutral-100 rounded-lg overflow-hidden relative">
               <div
-                className="source-fill source-fill-audience"
+                className="h-full rounded-lg transition-all duration-500 bg-gradient-to-r from-blue-500 to-blue-600"
                 style={{ width: `${stats.totalQuestions > 0 ? (stats.totalAudience / stats.totalQuestions) * 100 : 0}%` }}
               ></div>
             </div>
-            <div className="source-info">
-              <span className="source-label">
-                <i className="fas fa-users"></i> Audience
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-neutral-700 text-sm flex items-center gap-2">
+                <i className="fas fa-users w-5 text-center text-base"></i> Audience
               </span>
-              <span className="source-count">{stats.totalAudience}</span>
+              <span className="font-bold text-lg text-neutral-900">{stats.totalAudience}</span>
             </div>
           </div>
-          <div className="source-item">
-            <div className="source-bar">
+          <div className="flex flex-col gap-2.5">
+            <div className="h-8 bg-neutral-100 rounded-lg overflow-hidden relative">
               <div
-                className="source-fill source-fill-anonymous"
+                className="h-full rounded-lg transition-all duration-500 bg-gradient-to-r from-violet-500 to-purple-600"
                 style={{ width: `${stats.totalQuestions > 0 ? (stats.totalAnonymous / stats.totalQuestions) * 100 : 0}%` }}
               ></div>
             </div>
-            <div className="source-info">
-              <span className="source-label">
-                <i className="fas fa-user-secret"></i> Anonymous
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-neutral-700 text-sm flex items-center gap-2">
+                <i className="fas fa-user-secret w-5 text-center text-base"></i> Anonymous
               </span>
-              <span className="source-count">{stats.totalAnonymous}</span>
+              <span className="font-bold text-lg text-neutral-900">{stats.totalAnonymous}</span>
             </div>
           </div>
         </div>
@@ -305,31 +299,41 @@ function OrganizerAnalytics() {
 
       {/* Top Performing Events */}
       {topEvents.length > 0 && (
-        <div className="analytics-section">
-          <h3 className="section-title">
-            <i className="fas fa-trophy"></i> Top Performing Events
+        <div className="bg-white border border-black/[0.06] rounded-2xl p-8 mb-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col max-w-full overflow-hidden">
+          <h3 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2.5">
+            <i className="fas fa-trophy text-primary"></i> Top Performing Events
           </h3>
-          <div className="top-events-grid">
+          <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
             {topEvents.map((event, index) => (
               <div
                 key={event.id}
-                className="event-card-analytics"
+                className="bg-gradient-to-br from-neutral-50 to-white border border-black/[0.06] rounded-xl p-6 cursor-pointer transition-all relative hover:shadow-medium hover:-translate-y-0.5 hover:border-primary/30"
                 onClick={() => navigate(`/organizer/event/${event.id}`)}
               >
-                <div className="event-rank">#{index + 1}</div>
-                <div className="event-info">
-                  <h4 className="event-title-analytics">{event.title}</h4>
-                  <span className={`event-status-badge-small status-${event.status}`}>
+                <div className="absolute top-4 right-4 w-8 h-8 bg-gradient-to-br from-primary to-orange-500 rounded-full flex items-center justify-center font-bold text-sm text-white">
+                  #{index + 1}
+                </div>
+                <div className="mb-4 pr-10">
+                  <h4 className="text-lg font-bold text-neutral-900 mb-2 leading-tight">{event.title}</h4>
+                  <span
+                    className={`inline-block px-2.5 py-1 rounded-md text-xs font-semibold capitalize ${
+                      event.status === 'published'
+                        ? 'bg-emerald-500/10 text-emerald-700'
+                        : event.status === 'draft'
+                        ? 'bg-amber-500/10 text-amber-700'
+                        : 'bg-neutral-500/10 text-neutral-600'
+                    }`}
+                  >
                     {event.status}
                   </span>
                 </div>
-                <div className="event-metrics-small">
-                  <div className="event-metric-item">
-                    <i className="fas fa-question-circle"></i>
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2 text-sm text-neutral-500">
+                    <i className="fas fa-question-circle text-primary w-4"></i>
                     <span>{event.totalQuestions} Questions</span>
                   </div>
-                  <div className="event-metric-item">
-                    <i className="fas fa-check-circle"></i>
+                  <div className="flex items-center gap-2 text-sm text-neutral-500">
+                    <i className="fas fa-check-circle text-primary w-4"></i>
                     <span>{event.answerRate.toFixed(0)}% Answered</span>
                   </div>
                 </div>
@@ -340,67 +344,79 @@ function OrganizerAnalytics() {
       )}
 
       {/* All Events Table */}
-      <div className="analytics-section">
-        <h3 className="section-title">
-          <i className="fas fa-list"></i> All Events Performance
+      <div className="bg-white border border-black/[0.06] rounded-2xl p-8 mb-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col max-w-full overflow-hidden">
+        <h3 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2.5">
+          <i className="fas fa-list text-primary"></i> All Events Performance
         </h3>
-        <div className="events-table-container">
-          <table className="events-table-analytics">
-            <thead>
+        <div className="overflow-x-auto rounded-lg -mx-2 md:mx-0">
+          <table className="w-full border-collapse text-sm min-w-[600px]">
+            <thead className="bg-gradient-to-br from-neutral-50 to-neutral-100 border-b-2 border-neutral-200">
               <tr>
-                <th>Event</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th className="text-center">Questions</th>
-                <th className="text-center">Answered</th>
-                <th className="text-center">Answer Rate</th>
-                <th className="text-center">Anonymous</th>
-                <th></th>
+                <th className="p-4 text-left font-bold text-neutral-700 text-xs uppercase tracking-wider">Event</th>
+                <th className="p-4 text-left font-bold text-neutral-700 text-xs uppercase tracking-wider">Status</th>
+                <th className="p-4 text-left font-bold text-neutral-700 text-xs uppercase tracking-wider hidden md:table-cell">Date</th>
+                <th className="p-4 text-center font-bold text-neutral-700 text-xs uppercase tracking-wider">Questions</th>
+                <th className="p-4 text-center font-bold text-neutral-700 text-xs uppercase tracking-wider">Answered</th>
+                <th className="p-4 text-center font-bold text-neutral-700 text-xs uppercase tracking-wider">Answer Rate</th>
+                <th className="p-4 text-center font-bold text-neutral-700 text-xs uppercase tracking-wider">Anonymous</th>
+                <th className="p-4"></th>
               </tr>
             </thead>
             <tbody>
               {eventAnalytics.map(event => (
-                <tr key={event.id} onClick={() => navigate(`/organizer/event/${event.id}`)} className="clickable-row">
-                  <td>
-                    <div className="event-title-cell">
-                      <span className="event-title-text">{event.title}</span>
+                <tr
+                  key={event.id}
+                  onClick={() => navigate(`/organizer/event/${event.id}`)}
+                  className="border-b border-neutral-100 cursor-pointer transition-all hover:bg-gradient-to-r hover:from-primary/[0.03] hover:to-primary/[0.01]"
+                >
+                  <td className="p-5 text-neutral-700">
+                    <div className="max-w-[300px]">
+                      <span className="font-semibold text-neutral-900 block">{event.title}</span>
                     </div>
                   </td>
-                  <td>
-                    <span className={`status-badge-analytics status-${event.status}`}>
+                  <td className="p-5">
+                    <span
+                      className={`inline-block px-3 py-1.5 rounded-md text-xs font-semibold capitalize ${
+                        event.status === 'published'
+                          ? 'bg-emerald-500/10 text-emerald-700'
+                          : event.status === 'draft'
+                          ? 'bg-amber-500/10 text-amber-700'
+                          : 'bg-neutral-500/10 text-neutral-600'
+                      }`}
+                    >
                       {event.status === 'published' ? 'Active' : event.status}
                     </span>
                   </td>
-                  <td className="date-cell">
+                  <td className="p-5 text-neutral-500 text-sm hidden md:table-cell">
                     {event.date ? new Date(event.date).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
                       year: 'numeric'
                     }) : 'TBA'}
                   </td>
-                  <td className="text-center metric-cell">
+                  <td className="p-5 text-center font-semibold text-neutral-900">
                     <strong>{event.totalQuestions}</strong>
                   </td>
-                  <td className="text-center metric-cell">
-                    <span className="answered-count">{event.answered}</span>
-                    <span className="unanswered-count">/ {event.totalQuestions}</span>
+                  <td className="p-5 text-center font-semibold">
+                    <span className="text-emerald-500 font-bold">{event.answered}</span>
+                    <span className="text-neutral-400 font-medium ml-0.5">/ {event.totalQuestions}</span>
                   </td>
-                  <td className="text-center">
-                    <div className="progress-cell">
-                      <div className="progress-bar-mini">
+                  <td className="p-5 text-center">
+                    <div className="flex items-center gap-3 justify-center">
+                      <div className="w-20 h-2 bg-neutral-100 rounded overflow-hidden">
                         <div
-                          className="progress-fill"
+                          className="h-full bg-gradient-to-r from-emerald-500 to-emerald-600 rounded transition-all"
                           style={{ width: `${event.answerRate}%` }}
                         ></div>
                       </div>
-                      <span className="progress-label">{event.answerRate.toFixed(0)}%</span>
+                      <span className="font-bold text-sm text-neutral-700 min-w-[42px]">{event.answerRate.toFixed(0)}%</span>
                     </div>
                   </td>
-                  <td className="text-center metric-cell">
+                  <td className="p-5 text-center font-semibold text-neutral-900">
                     {event.anonymous}
                   </td>
-                  <td className="action-cell">
-                    <button className="btn-view-details">
+                  <td className="p-5 text-right">
+                    <button className="bg-gradient-to-br from-primary/[0.08] to-primary/[0.04] border border-primary/20 text-primary w-9 h-9 rounded-lg inline-flex items-center justify-center cursor-pointer transition-all hover:bg-primary hover:text-white hover:translate-x-0.5">
                       <i className="fas fa-arrow-right"></i>
                     </button>
                   </td>

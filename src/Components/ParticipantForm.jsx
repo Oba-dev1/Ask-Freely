@@ -10,10 +10,9 @@ import {
   orderByChild,
   equalTo,
 } from "firebase/database";
-import { database } from "../Firebase/config"; // ← ensure lowercase folder
+import { database } from "../Firebase/config";
 import ParticipantProgramView from "./ParticipantProgramView";
 import BrandedEventHeader from "./BrandedEventHeader";
-import "./ParticipantForm.css";
 
 /**
  * Small utility: normalize strings → slug-safe form
@@ -250,13 +249,18 @@ export default function ParticipantForm() {
     [formData, questionsRef, validate, lastSubmitTime, RATE_LIMIT_COOLDOWN]
   );
 
+  // Get brand color for dynamic styling
+  const brandColor = event?.branding?.primaryColor || '#FF6B35';
+
   // Early return: resolving link
   if (resolving) {
     return (
-      <div className="container">
-        <p className="loading-text" role="status" aria-live="polite">
-          Loading event…
-        </p>
+      <div className="min-h-screen bg-white">
+        <div className="max-w-[760px] mx-auto pt-24 px-6 pb-12 md:pt-24 md:px-6 sm:pt-20 sm:px-4 sm:pb-10">
+          <p className="text-neutral-500 text-center py-16" role="status" aria-live="polite">
+            Loading event…
+          </p>
+        </div>
       </div>
     );
   }
@@ -264,10 +268,22 @@ export default function ParticipantForm() {
   // Early return: bad slug
   if (slug && resolveError) {
     return (
-      <div className="container">
-        <Link to="/" className="back-button">← Back to Home</Link>
-        <div className="form-card">
-          <p className="message error" role="alert">{resolveError}</p>
+      <div className="min-h-screen bg-white">
+        <div className="max-w-[760px] mx-auto pt-24 px-6 pb-12 md:pt-24 md:px-6 sm:pt-20 sm:px-4 sm:pb-10">
+          <Link
+            to="/"
+            className="inline-block mb-4 text-neutral-500 no-underline border border-black/[0.08] bg-transparent px-3.5 py-2 rounded-[10px] transition-all hover:text-neutral-700 hover:border-primary/40"
+          >
+            ← Back to Home
+          </Link>
+          <div className="bg-white border border-black/[0.08] rounded-[18px] p-7 shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
+            <p
+              className="mt-4 p-3 py-3.5 rounded-xl text-center font-bold animate-slideDown border bg-red-500/10 border-red-500/25 text-red-600"
+              role="alert"
+            >
+              {resolveError}
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -280,116 +296,133 @@ export default function ParticipantForm() {
     : "Event Q&A";
   const tagline = "Ask Your Questions ✨";
 
-  // Get brand color for dynamic styling
-  const brandColor = event?.branding?.primaryColor || '#FF6B35';
-  const brandStyles = {
-    '--brand-color': brandColor,
-    '--brand-color-light': `${brandColor}20`,
-    '--brand-color-hover': `${brandColor}dd`
-  };
-
   return (
-    <div className="participant-page" style={brandStyles}>
-    <div className="container">
-      <Link to="/" className="back-button">← Back to Home</Link>
+    <div className="min-h-screen bg-white" style={{ '--brand-color': brandColor }}>
+      <div className="max-w-[760px] mx-auto pt-24 px-6 pb-12 md:pt-24 md:px-6 sm:pt-20 sm:px-4 sm:pb-10">
+        <Link
+          to="/"
+          className="inline-block mb-4 text-neutral-500 no-underline border border-black/[0.08] bg-transparent px-3.5 py-2 rounded-[10px] transition-all hover:text-neutral-700 hover:border-primary/40"
+        >
+          ← Back to Home
+        </Link>
 
-      {/* Branded Header */}
-      {event ? (
-        <BrandedEventHeader event={event} />
-      ) : (
-        <header className="header">
-          <h1>{resolving ? "Loading…" : title}</h1>
-          <p className="subtitle">{subtitle}</p>
-          <p className="tagline">{tagline}</p>
-        </header>
-      )}
-
-      {/* Event Program */}
-      {eventId && <ParticipantProgramView eventId={eventId} />}
-
-      <div className="form-card">
-        {/* Status banners */}
-        {event && !eventIsLive && (
-          <div className="message info" role="status" style={{ marginBottom: "1rem" }}>
-            ⏳ This event isn’t live yet.
-          </div>
-        )}
-        {event && !acceptingQuestions && (
-          <div className="message info" role="status" style={{ marginBottom: "1rem" }}>
-            🔒 This event is currently not accepting questions. Please check back later.
-          </div>
+        {/* Branded Header */}
+        {event ? (
+          <BrandedEventHeader event={event} />
+        ) : (
+          <header className="text-center mb-7">
+            <h1 className="text-neutral-900 text-[clamp(1.6rem,2.5vw,2.2rem)] m-0 mb-2 font-bold">
+              {resolving ? "Loading…" : title}
+            </h1>
+            <p className="text-neutral-500 my-0.5">{subtitle}</p>
+            <p className="text-neutral-500 my-0.5">{tagline}</p>
+          </header>
         )}
 
-        <p className="intro-text">
-          Got questions for this session? Submit them here and the panel will address them during the event. 
-        </p>
+        {/* Event Program */}
+        {eventId && <ParticipantProgramView eventId={eventId} />}
 
-        <form onSubmit={handleSubmit} aria-busy={isSubmitting}>
-          <div className="form-group">
-            <label htmlFor="name">Your Name (Optional)</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Leave blank to remain anonymous"
-              autoComplete="off"
-              disabled={formData.anonymous || isSubmitting || !acceptingQuestions || !eventIsLive}
-            />
-          </div>
+        <div className="bg-white border border-black/[0.08] rounded-[18px] p-7 shadow-[0_4px_16px_rgba(0,0,0,0.08)] md:p-7 sm:p-5">
+          {/* Status banners */}
+          {event && !eventIsLive && (
+            <div
+              className="mb-4 p-3 py-3.5 rounded-xl text-center font-bold animate-slideDown border bg-primary/10 border-primary/25 text-primary"
+              role="status"
+            >
+              ⏳ This event isn't live yet.
+            </div>
+          )}
+          {event && !acceptingQuestions && (
+            <div
+              className="mb-4 p-3 py-3.5 rounded-xl text-center font-bold animate-slideDown border bg-primary/10 border-primary/25 text-primary"
+              role="status"
+            >
+              🔒 This event is currently not accepting questions. Please check back later.
+            </div>
+          )}
 
-          <div className="form-group">
-            <label htmlFor="question">Your Question *</label>
-            <textarea
-              id="question"
-              name="question"
-              value={formData.question}
-              onChange={handleChange}
-              rows="5"
-              placeholder={
-                acceptingQuestions && eventIsLive
-                  ? "Type your question here..."
-                  : "Event is not accepting questions right now."
-              }
-              required
+          <p className="text-center text-[1.05rem] text-neutral-500 mb-5 leading-relaxed">
+            Got questions for this session? Submit them here and the panel will address them during the event.
+          </p>
+
+          <form onSubmit={handleSubmit} aria-busy={isSubmitting}>
+            <div className="mb-4">
+              <label htmlFor="name" className="block font-semibold mb-2 text-neutral-600 text-[0.98rem]">
+                Your Name (Optional)
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Leave blank to remain anonymous"
+                autoComplete="off"
+                disabled={formData.anonymous || isSubmitting || !acceptingQuestions || !eventIsLive}
+                className="w-full px-3.5 py-3 border border-black/15 rounded-xl text-base font-sans text-neutral-600 bg-white transition-all placeholder:text-neutral-400 focus:outline-none focus:border-primary/40 focus:shadow-[0_0_0_3px_rgba(255,107,53,0.15)] disabled:opacity-70 disabled:cursor-not-allowed"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="question" className="block font-semibold mb-2 text-neutral-600 text-[0.98rem]">
+                Your Question *
+              </label>
+              <textarea
+                id="question"
+                name="question"
+                value={formData.question}
+                onChange={handleChange}
+                rows="5"
+                placeholder={
+                  acceptingQuestions && eventIsLive
+                    ? "Type your question here..."
+                    : "Event is not accepting questions right now."
+                }
+                required
+                disabled={isSubmitting || !acceptingQuestions || !eventIsLive}
+                className="w-full px-3.5 py-3 border border-black/15 rounded-xl text-base font-sans text-neutral-600 bg-white transition-all placeholder:text-neutral-400 focus:outline-none focus:border-primary/40 focus:shadow-[0_0_0_3px_rgba(255,107,53,0.15)] disabled:opacity-70 disabled:cursor-not-allowed resize-y min-h-[120px]"
+              />
+            </div>
+
+            <div className="flex items-center gap-2.5 my-3 mb-5 text-neutral-500">
+              <input
+                type="checkbox"
+                id="anonymous"
+                name="anonymous"
+                checked={formData.anonymous}
+                onChange={handleChange}
+                disabled={isSubmitting || !acceptingQuestions || !eventIsLive}
+                className="w-[18px] h-[18px] cursor-pointer accent-primary"
+              />
+              <label htmlFor="anonymous" className="cursor-pointer">Submit anonymously</label>
+            </div>
+
+            <button
+              type="submit"
               disabled={isSubmitting || !acceptingQuestions || !eventIsLive}
-            />
-          </div>
+              className="w-full px-4 py-3.5 border-none rounded-xl text-[1.05rem] font-bold cursor-pointer transition-all bg-primary text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)] hover:-translate-y-px hover:bg-orange-600 hover:shadow-[0_6px_16px_rgba(255,107,53,0.3)] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:transform-none"
+            >
+              {isSubmitting ? "Submitting..." : "Submit Question"}
+            </button>
+          </form>
 
-          <div className="checkbox-group">
-            <input
-              type="checkbox"
-              id="anonymous"
-              name="anonymous"
-              checked={formData.anonymous}
-              onChange={handleChange}
-              disabled={isSubmitting || !acceptingQuestions || !eventIsLive}
-            />
-            <label htmlFor="anonymous">Submit anonymously</label>
-          </div>
-
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={isSubmitting || !acceptingQuestions || !eventIsLive}
-          >
-            {isSubmitting ? "Submitting..." : "Submit Question"}
-          </button>
-        </form>
-
-        {notice.text && (
-          <div
-            className={`message ${notice.type}`}
-            role={notice.type === "error" ? "alert" : "status"}
-            aria-live="polite"
-            style={{ marginTop: "1rem" }}
-          >
-            {notice.text}
-          </div>
-        )}
+          {notice.text && (
+            <div
+              className={`mt-4 p-3 py-3.5 rounded-xl text-center font-bold animate-slideDown border ${
+                notice.type === 'success'
+                  ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-600'
+                  : notice.type === 'error'
+                  ? 'bg-red-500/10 border-red-500/25 text-red-600'
+                  : 'bg-primary/10 border-primary/25 text-primary'
+              }`}
+              role={notice.type === "error" ? "alert" : "status"}
+              aria-live="polite"
+            >
+              {notice.text}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </div>
   );
 }

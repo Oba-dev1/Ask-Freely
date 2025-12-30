@@ -47,13 +47,19 @@ module.exports = {
       },
       animation: {
         'fade-in': 'fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        'fadeIn': 'fadeInSimple 0.2s ease',
         'slide-up': 'slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
         'slide-down': 'slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        'slideDown': 'slideDownMenu 0.2s ease',
       },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeInSimple: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
         },
         slideUp: {
           '0%': { transform: 'translateY(20px)', opacity: '0' },
@@ -63,10 +69,12 @@ module.exports = {
           '0%': { transform: 'translateY(-10px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
+        slideDownMenu: {
+          '0%': { opacity: '0', transform: 'translateY(-10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/line-clamp'),
-  ],
+  plugins: [],
 }

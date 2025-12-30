@@ -148,18 +148,18 @@ const formatNumber = (n) =>
 
 function StatItem({ icon, num, label }) {
   return (
-    <div className="group flex items-center gap-4 sm:gap-6 p-6 sm:p-8 bg-white rounded-2xl border border-neutral-200 hover:border-primary/30 hover:shadow-lg transition-all duration-300" role="group" aria-label={label}>
+    <div className="group flex items-center gap-3 sm:gap-4 p-4 sm:p-6 bg-white rounded-xl border border-neutral-200 hover:border-primary/30 hover:shadow-lg transition-all duration-300" role="group" aria-label={label}>
       {/* Icon */}
-      <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-primary to-primary-dark rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-        <i className={`${icon} text-2xl sm:text-3xl text-white`} aria-hidden="true" />
+      <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+        <i className={`${icon} text-lg sm:text-xl text-white`} aria-hidden="true" />
       </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink mb-1 font-['Space_Grotesk'] leading-none">
+        <div className="text-2xl sm:text-3xl font-bold text-ink mb-0.5 font-['Space_Grotesk'] leading-none">
           {num}
         </div>
-        <div className="text-neutral-600 font-semibold text-sm sm:text-base">
+        <div className="text-neutral-600 font-medium text-xs sm:text-sm">
           {label}
         </div>
       </div>
@@ -169,22 +169,22 @@ function StatItem({ icon, num, label }) {
 
 function Story({ quote, avatar, name, role }) {
   return (
-    <article className="group p-8 bg-white rounded-2xl border border-neutral-200 hover:border-primary/30 hover:shadow-xl transition-all duration-300" tabIndex={0}>
-      <div className="mb-6">
-        <i className="fas fa-quote-left text-3xl text-primary/20 mb-4 block" aria-hidden="true" />
-        <blockquote className="text-neutral-700 leading-relaxed text-base md:text-lg italic">
+    <article className="group p-6 bg-white rounded-xl border border-neutral-200 hover:border-primary/30 hover:shadow-xl transition-all duration-300" tabIndex={0}>
+      <div className="mb-4">
+        <i className="fas fa-quote-left text-xl text-primary/20 mb-3 block" aria-hidden="true" />
+        <blockquote className="text-neutral-700 leading-relaxed text-sm italic">
           {quote}
         </blockquote>
       </div>
-      <div className="flex items-center gap-4 pt-4 border-t border-neutral-100">
+      <div className="flex items-center gap-3 pt-4 border-t border-neutral-100">
         <img
           src={avatar}
           alt={`${name} avatar`}
-          className="w-14 h-14 rounded-full object-cover border-2 border-primary/20"
+          className="w-10 h-10 rounded-full object-cover border-2 border-primary/20"
         />
         <div>
-          <strong className="block text-ink font-bold text-base">{name}</strong>
-          <span className="text-neutral-600 text-sm">{role}</span>
+          <strong className="block text-ink font-semibold text-sm">{name}</strong>
+          <span className="text-neutral-600 text-xs">{role}</span>
         </div>
       </div>
     </article>
@@ -207,19 +207,19 @@ function TopBar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/98 backdrop-blur-lg border-b border-gray-200 shadow-sm" role="banner">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-12 md:h-14">
           {/* Logo/Brand */}
           <button
-            className="inline-flex items-center gap-2.5 font-bold text-lg md:text-xl text-ink hover:opacity-80 transition-opacity bg-transparent border-0 cursor-pointer p-1"
+            className="inline-flex items-center gap-2 font-bold text-sm md:text-base text-ink hover:opacity-80 transition-opacity bg-transparent border-0 cursor-pointer p-1"
             onClick={() => navigate("/")}
           >
-            <i className="fas fa-comments text-primary text-xl md:text-2xl" aria-hidden="true" />
+            <i className="fas fa-comments text-primary text-base md:text-lg" aria-hidden="true" />
             <span className="font-['Space_Grotesk']">Ask Freely</span>
           </button>
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-ink hover:bg-primary/10 transition-all z-50 border-0 bg-transparent cursor-pointer text-xl"
+            className="md:hidden inline-flex items-center justify-center p-1.5 rounded-md text-ink hover:bg-primary/10 transition-all z-50 border-0 bg-transparent cursor-pointer text-base"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
             aria-expanded={mobileMenuOpen}
@@ -228,47 +228,47 @@ function TopBar() {
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6" aria-label="Primary navigation">
+          <nav className="hidden md:flex items-center gap-4" aria-label="Primary navigation">
             <a
               href="#values"
               onClick={(e) => handleNavClick(e, 'values')}
-              className="text-neutral-700 font-semibold hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+              className="text-neutral-700 font-medium text-sm hover:text-primary transition-colors px-2.5 py-1.5 rounded-md hover:bg-primary/5"
             >
               Why Ask Freely
             </a>
             <a
               href="#how-it-works"
               onClick={(e) => handleNavClick(e, 'how-it-works')}
-              className="text-neutral-700 font-semibold hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+              className="text-neutral-700 font-medium text-sm hover:text-primary transition-colors px-2.5 py-1.5 rounded-md hover:bg-primary/5"
             >
               How It Works
             </a>
             <a
               href="#why"
               onClick={(e) => handleNavClick(e, 'why')}
-              className="text-neutral-700 font-semibold hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+              className="text-neutral-700 font-medium text-sm hover:text-primary transition-colors px-2.5 py-1.5 rounded-md hover:bg-primary/5"
             >
               Features
             </a>
             <a
               href="#stories"
               onClick={(e) => handleNavClick(e, 'stories')}
-              className="text-neutral-700 font-semibold hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5"
+              className="text-neutral-700 font-medium text-sm hover:text-primary transition-colors px-2.5 py-1.5 rounded-md hover:bg-primary/5"
             >
               Reviews
             </a>
           </nav>
 
           {/* Desktop Action Buttons */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
             <button
-              className="px-4 py-2.5 rounded-lg font-bold border border-gray-300 bg-white text-neutral-700 hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer"
+              className="px-3 py-1.5 rounded-md font-medium text-sm border border-gray-300 bg-white text-neutral-700 hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer"
               onClick={() => navigate("/login")}
             >
               Log In
             </button>
             <button
-              className="px-4 py-2.5 rounded-lg font-bold bg-primary text-white hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer border-0"
+              className="px-3 py-1.5 rounded-md font-medium text-sm bg-primary text-white hover:bg-primary-dark hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer border-0"
               onClick={() => navigate("/signup")}
             >
               Get Started Free
@@ -278,37 +278,37 @@ function TopBar() {
 
         {/* Mobile Navigation Menu */}
         <nav
-          className={`md:hidden fixed top-16 left-0 right-0 bg-white border-t border-gray-200 shadow-lg transition-all duration-300 ${
-            mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+          className={`md:hidden fixed top-12 left-0 right-0 bg-white border-t border-gray-200 shadow-lg transition-all duration-300 ${
+            mobileMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
           }`}
           aria-label="Mobile navigation"
         >
-          <div className="flex flex-col p-4">
+          <div className="flex flex-col p-3">
             <a
               href="#values"
               onClick={(e) => handleNavClick(e, 'values')}
-              className="text-neutral-700 font-semibold hover:text-primary hover:bg-primary/5 transition-colors px-4 py-3 rounded-lg border-b border-gray-100"
+              className="text-neutral-700 font-medium text-sm hover:text-primary hover:bg-primary/5 transition-colors px-3 py-2.5 rounded-md border-b border-gray-100"
             >
               Why Ask Freely
             </a>
             <a
               href="#how-it-works"
               onClick={(e) => handleNavClick(e, 'how-it-works')}
-              className="text-neutral-700 font-semibold hover:text-primary hover:bg-primary/5 transition-colors px-4 py-3 rounded-lg border-b border-gray-100"
+              className="text-neutral-700 font-medium text-sm hover:text-primary hover:bg-primary/5 transition-colors px-3 py-2.5 rounded-md border-b border-gray-100"
             >
               How It Works
             </a>
             <a
               href="#why"
               onClick={(e) => handleNavClick(e, 'why')}
-              className="text-neutral-700 font-semibold hover:text-primary hover:bg-primary/5 transition-colors px-4 py-3 rounded-lg border-b border-gray-100"
+              className="text-neutral-700 font-medium text-sm hover:text-primary hover:bg-primary/5 transition-colors px-3 py-2.5 rounded-md border-b border-gray-100"
             >
               Features
             </a>
             <a
               href="#stories"
               onClick={(e) => handleNavClick(e, 'stories')}
-              className="text-neutral-700 font-semibold hover:text-primary hover:bg-primary/5 transition-colors px-4 py-3 rounded-lg"
+              className="text-neutral-700 font-medium text-sm hover:text-primary hover:bg-primary/5 transition-colors px-3 py-2.5 rounded-md"
             >
               Reviews
             </a>
@@ -372,41 +372,41 @@ function HeroSection() {
   };
 
   return (
-    <section id="hero" className="pt-24 md:pt-32 pb-16 md:pb-24 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="hero-heading">
+    <section id="hero" className="pt-20 md:pt-24 pb-12 md:pb-16 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="hero-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center gap-12">
+        <div className="flex flex-col items-center gap-8">
           {/* Hero Copy - Centered */}
-          <div className="text-center flex flex-col items-center max-w-4xl">
+          <div className="text-center flex flex-col items-center max-w-3xl">
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-6 animate-fade-in">
-              <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4 animate-fade-in">
+              <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
               Trusted by organizers worldwide
             </div>
 
             {/* Headline */}
             <h1
               id="hero-heading"
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-ink leading-tight mb-6 font-['Space_Grotesk'] animate-slide-up"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ink leading-tight mb-4 font-['Space_Grotesk'] animate-slide-up"
             >
               Turn Tough Questions Into Breakthrough Conversations
             </h1>
 
             {/* Description */}
-            <p className="text-lg sm:text-xl text-neutral-600 leading-relaxed mb-8 max-w-3xl">
+            <p className="text-sm sm:text-base text-neutral-600 leading-relaxed mb-6 max-w-2xl">
               The anonymous Q&amp;A platform that helps event organizers create psychologically safe spaces where every voice matters. Collect, prioritize, and address questions with confidence—no awkward silences, just honest dialogue.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
-                className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white font-semibold text-sm rounded-lg hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border-0 cursor-pointer"
                 onClick={() => navigate("/signup")}
               >
                 Start Free - Create Your Event
-                <i className="fas fa-arrow-right" aria-hidden="true" />
+                <i className="fas fa-arrow-right text-xs" aria-hidden="true" />
               </button>
               <button
-                className="inline-flex items-center justify-center px-6 py-4 bg-white text-neutral-700 font-bold rounded-xl border-2 border-neutral-300 hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 cursor-pointer"
+                className="inline-flex items-center justify-center px-5 py-2.5 bg-white text-neutral-700 font-semibold text-sm rounded-lg border border-neutral-300 hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 cursor-pointer"
                 onClick={() => navigate("/participate")}
               >
                 See How It Works
@@ -415,8 +415,8 @@ function HeroSection() {
           </div>
 
           {/* Hero Carousel - Below content */}
-          <aside className="relative w-full max-w-5xl" aria-hidden="true">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-neutral-100">
+          <aside className="relative w-full max-w-4xl" aria-hidden="true">
+            <div className="relative rounded-xl overflow-hidden shadow-xl aspect-[16/9] bg-neutral-100">
               <div
                 className="flex transition-transform duration-700 ease-in-out h-full"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -434,13 +434,13 @@ function HeroSection() {
             </div>
 
             {/* Carousel Dots */}
-            <div className="flex justify-center gap-2 mt-6">
+            <div className="flex justify-center gap-1.5 mt-4">
               {slides.map((_, index) => (
                 <button
                   key={index}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 border-0 cursor-pointer ${
+                  className={`w-2 h-2 rounded-full transition-all duration-300 border-0 cursor-pointer ${
                     index === currentSlide
-                      ? 'bg-primary w-8'
+                      ? 'bg-primary w-6'
                       : 'bg-neutral-300 hover:bg-neutral-400'
                   }`}
                   onClick={() => goToSlide(index)}
@@ -459,20 +459,20 @@ function LiveStatsSection({ liveStats }) {
   const { liveEvents, liveQuestions, liveParticipants } = liveStats;
 
   return (
-    <section className="py-20 md:py-28 bg-white" aria-labelledby="stats-heading">
+    <section className="py-12 md:py-16 bg-white" aria-labelledby="stats-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Stats Header */}
-        <div className="text-center mb-12 sm:mb-16">
-          <h3 id="stats-heading" className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink mb-3 sm:mb-4 font-['Space_Grotesk']">
+        <div className="text-center mb-8 sm:mb-10">
+          <h3 id="stats-heading" className="text-xl sm:text-2xl md:text-3xl font-bold text-ink mb-2 font-['Space_Grotesk']">
             Join Thousands Making Every Voice Count
           </h3>
-          <p className="text-base sm:text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base text-neutral-600 max-w-2xl mx-auto">
             Real conversations happening right now in communities worldwide
           </p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto">
           <StatItem
             icon="fa-solid fa-circle-question"
             num={formatNumber(liveQuestions)}
@@ -553,13 +553,13 @@ function ActivityTicker({ recentEvents }) {
 
   if (recentEvents.length === 0) {
     return (
-      <section id="happening" className="py-20 md:py-28 bg-neutral-50" aria-labelledby="events-heading">
+      <section id="happening" className="py-12 md:py-16 bg-neutral-50" aria-labelledby="events-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 id="events-heading" className="text-3xl md:text-4xl font-bold text-ink mb-8 flex items-center justify-center gap-3 font-['Space_Grotesk']">
-            <i className="fa-solid fa-bolt text-primary" /> Live Events
+          <h3 id="events-heading" className="text-xl md:text-2xl font-bold text-ink mb-6 flex items-center justify-center gap-2 font-['Space_Grotesk']">
+            <i className="fa-solid fa-bolt text-primary text-lg" /> Live Events
           </h3>
-          <div className="text-center p-12 bg-white rounded-2xl border-2 border-dashed border-neutral-300">
-            <p className="text-neutral-600 text-lg">Your community event could be featured here. Create one today!</p>
+          <div className="text-center p-8 bg-white rounded-xl border-2 border-dashed border-neutral-300">
+            <p className="text-neutral-600 text-sm">Your community event could be featured here. Create one today!</p>
           </div>
         </div>
       </section>
@@ -569,16 +569,16 @@ function ActivityTicker({ recentEvents }) {
   const showNavigation = recentEvents.length > cardsPerView;
 
   return (
-    <section id="happening" className="py-20 md:py-28 bg-neutral-50" aria-labelledby="events-heading">
+    <section id="happening" className="py-12 md:py-16 bg-neutral-50" aria-labelledby="events-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h3 id="events-heading" className="text-3xl md:text-4xl font-bold text-ink mb-12 flex items-center justify-center gap-3 font-['Space_Grotesk']">
-          <i className="fa-solid fa-bolt text-primary" /> Live Events
+        <h3 id="events-heading" className="text-xl md:text-2xl font-bold text-ink mb-8 flex items-center justify-center gap-2 font-['Space_Grotesk']">
+          <i className="fa-solid fa-bolt text-primary text-lg" /> Live Events
         </h3>
 
-        <div className="relative px-12 sm:px-14 lg:px-0">
+        <div className="relative px-10 sm:px-12 lg:px-0">
           {showNavigation && (
             <button
-              className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 lg:-translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 items-center justify-center text-neutral-700"
+              className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 lg:-translate-x-3 z-10 w-9 h-9 bg-white rounded-full shadow-md border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 items-center justify-center text-neutral-700 text-sm"
               onClick={handlePrev}
               aria-label="Previous events"
             >
@@ -589,11 +589,11 @@ function ActivityTicker({ recentEvents }) {
           {/* Mobile navigation buttons */}
           {showNavigation && (
             <button
-              className="lg:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 flex items-center justify-center text-neutral-700"
+              className="lg:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-full shadow-md border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 flex items-center justify-center text-neutral-700"
               onClick={handlePrev}
               aria-label="Previous events"
             >
-              <i className="fa-solid fa-chevron-left text-sm"></i>
+              <i className="fa-solid fa-chevron-left text-xs"></i>
             </button>
           )}
 
@@ -612,24 +612,24 @@ function ActivityTicker({ recentEvents }) {
                 return (
                   <div
                     key={event.id}
-                    className="flex-shrink-0 px-2 sm:px-3"
+                    className="flex-shrink-0 px-1.5 sm:px-2"
                     style={{ width: `${100 / cardsPerView}%` }}
                   >
-                    <div className="bg-white rounded-xl border border-neutral-200 hover:border-primary/30 hover:shadow-lg transition-all duration-300 p-4 sm:p-6 h-full">
-                      <div className="flex items-center justify-between mb-4 text-xs sm:text-sm flex-wrap gap-2">
-                        <span className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-green-100 text-green-700 rounded-full font-semibold">
-                          <i className="fa-solid fa-circle text-xs"></i> <span className="hidden sm:inline">Live now</span><span className="sm:hidden">Live</span>
+                    <div className="bg-white rounded-lg border border-neutral-200 hover:border-primary/30 hover:shadow-md transition-all duration-300 p-3 sm:p-4 h-full">
+                      <div className="flex items-center justify-between mb-3 text-xs flex-wrap gap-1.5">
+                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full font-medium">
+                          <i className="fa-solid fa-circle text-[8px]"></i> <span className="hidden sm:inline">Live now</span><span className="sm:hidden">Live</span>
                         </span>
-                        <span className="inline-flex items-center gap-1.5 text-primary font-semibold">
+                        <span className="inline-flex items-center gap-1 text-primary font-medium text-xs">
                           <i className="fa-solid fa-fire"></i> {questionCount}
                         </span>
                       </div>
 
-                      <h4 className="text-base sm:text-lg font-bold text-ink mb-3 line-clamp-2">{event.title}</h4>
+                      <h4 className="text-sm sm:text-base font-semibold text-ink mb-2 line-clamp-2">{event.title}</h4>
 
                       {event.org && (
-                        <p className="text-neutral-600 text-xs sm:text-sm flex items-center gap-2 truncate">
-                          <i className="fa-solid fa-building flex-shrink-0"></i>
+                        <p className="text-neutral-600 text-xs flex items-center gap-1.5 truncate">
+                          <i className="fa-solid fa-building flex-shrink-0 text-[10px]"></i>
                           <span className="truncate">{event.org}</span>
                         </p>
                       )}
@@ -642,7 +642,7 @@ function ActivityTicker({ recentEvents }) {
 
           {showNavigation && (
             <button
-              className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 lg:translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 items-center justify-center text-neutral-700"
+              className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 lg:translate-x-3 z-10 w-9 h-9 bg-white rounded-full shadow-md border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 items-center justify-center text-neutral-700 text-sm"
               onClick={handleNext}
               aria-label="Next events"
             >
@@ -653,24 +653,24 @@ function ActivityTicker({ recentEvents }) {
           {/* Mobile navigation buttons */}
           {showNavigation && (
             <button
-              className="lg:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 flex items-center justify-center text-neutral-700"
+              className="lg:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-full shadow-md border border-neutral-200 hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 flex items-center justify-center text-neutral-700"
               onClick={handleNext}
               aria-label="Next events"
             >
-              <i className="fa-solid fa-chevron-right text-sm"></i>
+              <i className="fa-solid fa-chevron-right text-xs"></i>
             </button>
           )}
         </div>
 
         {/* Carousel dots */}
         {showNavigation && (
-          <div className="flex justify-center gap-2 mt-8">
+          <div className="flex justify-center gap-1.5 mt-6">
             {Array.from({ length: recentEvents.length - cardsPerView + 1 }).map((_, index) => (
               <button
                 key={index}
-                className={`w-3 h-3 rounded-full transition-all duration-300 border-0 cursor-pointer ${
+                className={`w-2 h-2 rounded-full transition-all duration-300 border-0 cursor-pointer ${
                   index === currentIndex
-                    ? 'bg-primary w-8'
+                    ? 'bg-primary w-5'
                     : 'bg-neutral-300 hover:bg-neutral-400'
                 }`}
                 onClick={() => {
@@ -690,50 +690,50 @@ function ActivityTicker({ recentEvents }) {
 
 function ValuesSection() {
   return (
-    <section id="values" className="py-20 md:py-28 bg-white">
+    <section id="values" className="py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-ink mb-16 font-['Space_Grotesk']">
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-ink mb-10 font-['Space_Grotesk']">
           Built on Values That Matter
         </h2>
 
         {/* Values Grid */}
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {/* Value 1: Safety */}
           <div className="group text-center">
-            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-              <i className="fa-solid fa-hand-holding-heart text-3xl text-primary" aria-hidden="true" />
+            <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+              <i className="fa-solid fa-hand-holding-heart text-xl text-primary" aria-hidden="true" />
             </div>
-            <h3 className="text-xl md:text-2xl font-bold text-ink mb-4">
+            <h3 className="text-base md:text-lg font-bold text-ink mb-2">
               Safety First, Always
             </h3>
-            <p className="text-neutral-600 leading-relaxed">
+            <p className="text-neutral-600 leading-relaxed text-sm">
               Optional anonymity with built-in moderation tools. Create spaces where the toughest questions can finally be asked—without fear or judgment.
             </p>
           </div>
 
           {/* Value 2: Community-Driven */}
           <div className="group text-center">
-            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-              <i className="fa-solid fa-people-arrows text-3xl text-blue-500" aria-hidden="true" />
+            <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+              <i className="fa-solid fa-people-arrows text-xl text-blue-500" aria-hidden="true" />
             </div>
-            <h3 className="text-xl md:text-2xl font-bold text-ink mb-4">
+            <h3 className="text-base md:text-lg font-bold text-ink mb-2">
               Community-Driven Prioritization
             </h3>
-            <p className="text-neutral-600 leading-relaxed">
+            <p className="text-neutral-600 leading-relaxed text-sm">
               Let your audience upvote what truly matters to them. Stop guessing what people care about—let them show you through democratic engagement.
             </p>
           </div>
 
           {/* Value 3: Customization */}
           <div className="group text-center">
-            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-              <i className="fa-solid fa-palette text-3xl text-purple-500" aria-hidden="true" />
+            <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+              <i className="fa-solid fa-palette text-xl text-purple-500" aria-hidden="true" />
             </div>
-            <h3 className="text-xl md:text-2xl font-bold text-ink mb-4">
+            <h3 className="text-base md:text-lg font-bold text-ink mb-2">
               Your Brand, Your Voice
             </h3>
-            <p className="text-neutral-600 leading-relaxed">
+            <p className="text-neutral-600 leading-relaxed text-sm">
               Full white-label customization. Add your logo, colors, and messaging so participants feel right at home—not on a generic platform.
             </p>
           </div>
@@ -745,15 +745,15 @@ function ValuesSection() {
 
 function StoriesSection() {
   return (
-    <section id="stories" className="py-20 md:py-28 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="stories-heading">
+    <section id="stories" className="py-12 md:py-16 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="stories-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <h3 id="stories-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-ink mb-16 font-['Space_Grotesk']">
+        <h3 id="stories-heading" className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-ink mb-10 font-['Space_Grotesk']">
           Hear From Organizers Like You
         </h3>
 
         {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-4 md:gap-6">
           <Story
             quote="Ask Freely transformed our Q&A from an awkward silence to the most engaging part of our event. For the first time, people actually felt heard."
             avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1718105160/pexels-emmy-e-1252107-2381069_ncpcqb.jpg"
@@ -780,62 +780,62 @@ function StoriesSection() {
 
 function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="py-20 md:py-32 bg-white overflow-hidden">
+    <section id="how-it-works" className="py-12 md:py-16 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-20 md:mb-32">
-          <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-ink mb-4 font-['Space_Grotesk']">
+        <div className="text-center mb-12 md:mb-16">
+          <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-ink mb-2 font-['Space_Grotesk']">
             Simple to Start, Powerful in Practice
           </h3>
-          <p className="text-lg md:text-xl text-neutral-600 max-w-3xl mx-auto">
+          <p className="text-sm md:text-base text-neutral-600 max-w-2xl mx-auto">
             Go from idea to engagement in under 3 minutes
           </p>
         </div>
 
         {/* Vertical Timeline */}
-        <div className="relative max-w-5xl mx-auto">
+        <div className="relative max-w-4xl mx-auto">
           {/* Central Vertical Line - Desktop Only */}
           <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-primary/30 transform -translate-x-1/2" style={{ zIndex: 0 }} />
 
           {/* Numbered Badges on the Line - Desktop Only */}
           <div className="hidden lg:block">
             {/* Badge 1 - At start of Step 1 */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl" style={{ top: '0', zIndex: 10 }}>
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md transition-all duration-300 hover:scale-110 hover:shadow-lg" style={{ top: '0', zIndex: 10 }}>
               1
             </div>
             {/* Badge 2 - At start of Step 2 (roughly 1/3 down) */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl" style={{ top: 'calc(33.33% + 2rem)', zIndex: 10 }}>
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md transition-all duration-300 hover:scale-110 hover:shadow-lg" style={{ top: 'calc(33.33% + 1rem)', zIndex: 10 }}>
               2
             </div>
             {/* Badge 3 - At start of Step 3 (roughly 2/3 down) */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl" style={{ top: 'calc(66.66% + 4rem)', zIndex: 10 }}>
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md transition-all duration-300 hover:scale-110 hover:shadow-lg" style={{ top: 'calc(66.66% + 2rem)', zIndex: 10 }}>
               3
             </div>
           </div>
 
           <div className="relative" style={{ zIndex: 1 }}>
             {/* Step 1 - Card on Left */}
-            <div className="relative mb-16 lg:mb-24 pt-0 lg:pt-0">
+            <div className="relative mb-10 lg:mb-16 pt-0 lg:pt-0">
               {/* Mobile Badge */}
-              <div className="lg:hidden flex justify-center mb-8">
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl">
+              <div className="lg:hidden flex justify-center mb-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md transition-all duration-300 hover:scale-110 hover:shadow-lg">
                   1
                 </div>
               </div>
 
               {/* Card */}
-              <div className="lg:w-1/2 lg:pr-16">
-                <div className="group bg-white rounded-3xl shadow-lg border border-neutral-100 p-8 md:p-10 hover:shadow-2xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-sm lg:ml-auto w-full cursor-pointer">
+              <div className="lg:w-1/2 lg:pr-10">
+                <div className="group bg-white rounded-xl shadow-md border border-neutral-100 p-5 md:p-6 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-xs lg:ml-auto w-full cursor-pointer">
                   {/* Icon */}
-                  <div className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-primary rounded-full mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform duration-300">
-                    <i className="fa-solid fa-calendar-plus text-2xl md:text-3xl text-white" />
+                  <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-full mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <i className="fa-solid fa-calendar-plus text-lg text-white" />
                   </div>
 
                   {/* Content */}
-                  <h4 className="text-xl md:text-2xl font-bold text-ink mb-3 text-center font-['Space_Grotesk']">
+                  <h4 className="text-base md:text-lg font-bold text-ink mb-2 text-center font-['Space_Grotesk']">
                     Create Your Event in Seconds
                   </h4>
-                  <p className="text-neutral-600 text-center leading-relaxed text-sm md:text-base">
+                  <p className="text-neutral-600 text-center leading-relaxed text-xs md:text-sm">
                     No credit card required. Set up your Q&amp;A session, customize your branding, add strategic prompts, and get a shareable link instantly.
                   </p>
                 </div>
@@ -843,27 +843,27 @@ function HowItWorksSection() {
             </div>
 
             {/* Step 2 - Card on Right */}
-            <div className="relative mb-16 lg:mb-24">
+            <div className="relative mb-10 lg:mb-16">
               {/* Mobile Badge */}
-              <div className="lg:hidden flex justify-center mb-8">
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl">
+              <div className="lg:hidden flex justify-center mb-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md transition-all duration-300 hover:scale-110 hover:shadow-lg">
                   2
                 </div>
               </div>
 
               {/* Card */}
-              <div className="lg:w-1/2 lg:ml-auto lg:pl-16">
-                <div className="group bg-white rounded-3xl shadow-lg border border-neutral-100 p-8 md:p-10 hover:shadow-2xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-sm w-full cursor-pointer">
+              <div className="lg:w-1/2 lg:ml-auto lg:pl-10">
+                <div className="group bg-white rounded-xl shadow-md border border-neutral-100 p-5 md:p-6 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-xs w-full cursor-pointer">
                   {/* Icon */}
-                  <div className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-primary rounded-full mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform duration-300">
-                    <i className="fa-solid fa-comments text-2xl md:text-3xl text-white" />
+                  <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-full mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <i className="fa-solid fa-comments text-lg text-white" />
                   </div>
 
                   {/* Content */}
-                  <h4 className="text-xl md:text-2xl font-bold text-ink mb-3 text-center font-['Space_Grotesk']">
+                  <h4 className="text-base md:text-lg font-bold text-ink mb-2 text-center font-['Space_Grotesk']">
                     Share & Watch Engagement Soar
                   </h4>
-                  <p className="text-neutral-600 text-center leading-relaxed text-sm md:text-base">
+                  <p className="text-neutral-600 text-center leading-relaxed text-xs md:text-sm">
                     One link, zero friction. Participants ask and upvote questions anonymously—no account creation, no downloads, no barriers to participation.
                   </p>
                 </div>
@@ -873,25 +873,25 @@ function HowItWorksSection() {
             {/* Step 3 - Card on Left */}
             <div className="relative">
               {/* Mobile Badge */}
-              <div className="lg:hidden flex justify-center mb-8">
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-primary text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-bold shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl">
+              <div className="lg:hidden flex justify-center mb-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md transition-all duration-300 hover:scale-110 hover:shadow-lg">
                   3
                 </div>
               </div>
 
               {/* Card */}
-              <div className="lg:w-1/2 lg:pr-16">
-                <div className="group bg-white rounded-3xl shadow-lg border border-neutral-100 p-8 md:p-10 hover:shadow-2xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-sm lg:ml-auto w-full cursor-pointer">
+              <div className="lg:w-1/2 lg:pr-10">
+                <div className="group bg-white rounded-xl shadow-md border border-neutral-100 p-5 md:p-6 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-xs lg:ml-auto w-full cursor-pointer">
                   {/* Icon */}
-                  <div className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-primary rounded-full mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform duration-300">
-                    <i className="fa-solid fa-microphone text-2xl md:text-3xl text-white" />
+                  <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-full mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <i className="fa-solid fa-microphone text-lg text-white" />
                   </div>
 
                   {/* Content */}
-                  <h4 className="text-xl md:text-2xl font-bold text-ink mb-3 text-center font-['Space_Grotesk']">
+                  <h4 className="text-base md:text-lg font-bold text-ink mb-2 text-center font-['Space_Grotesk']">
                     Facilitate Like a Pro
                   </h4>
-                  <p className="text-neutral-600 text-center leading-relaxed text-sm md:text-base">
+                  <p className="text-neutral-600 text-center leading-relaxed text-xs md:text-sm">
                     See top questions ranked by community votes in real-time. Moderate with empathy, respond with confidence, and export insights for follow-up.
                   </p>
                 </div>
@@ -906,63 +906,63 @@ function HowItWorksSection() {
 
 function WhySection() {
   return (
-    <section id="why" className="py-20 md:py-28 bg-white">
+    <section id="why" className="py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-ink mb-16 font-['Space_Grotesk'] max-w-4xl mx-auto">
+        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-ink mb-10 font-['Space_Grotesk'] max-w-3xl mx-auto">
           Everything You Need to Host Meaningful Conversations
         </h3>
 
         {/* Features Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
           {/* Feature 1: Strategic Question Seeding */}
-          <div className="group p-6 rounded-2xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-primary/30 hover:shadow-lg transition-all duration-300">
-            <div className="w-14 h-14 mb-5 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <i className="fa-solid fa-bullseye text-2xl text-primary" />
+          <div className="group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-primary/30 hover:shadow-md transition-all duration-300">
+            <div className="w-10 h-10 mb-3 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <i className="fa-solid fa-bullseye text-base text-primary" />
             </div>
-            <h4 className="text-lg md:text-xl font-bold text-ink mb-3">
+            <h4 className="text-sm md:text-base font-bold text-ink mb-2">
               Strategic Question Seeding
             </h4>
-            <p className="text-neutral-600 leading-relaxed text-sm">
+            <p className="text-neutral-600 leading-relaxed text-xs">
               Pre-populate thoughtful prompts to guide the conversation and ensure important topics get covered—even if the room is shy at first.
             </p>
           </div>
 
           {/* Feature 2: Privacy-First by Design */}
-          <div className="group p-6 rounded-2xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-blue-500/30 hover:shadow-lg transition-all duration-300">
-            <div className="w-14 h-14 mb-5 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <i className="fa-solid fa-user-shield text-2xl text-blue-500" />
+          <div className="group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-blue-500/30 hover:shadow-md transition-all duration-300">
+            <div className="w-10 h-10 mb-3 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <i className="fa-solid fa-user-shield text-base text-blue-500" />
             </div>
-            <h4 className="text-lg md:text-xl font-bold text-ink mb-3">
+            <h4 className="text-sm md:text-base font-bold text-ink mb-2">
               Privacy-First by Design
             </h4>
-            <p className="text-neutral-600 leading-relaxed text-sm">
+            <p className="text-neutral-600 leading-relaxed text-xs">
               Optional anonymity, robust moderation controls, and respectful boundaries. Build trust so people share what they actually think.
             </p>
           </div>
 
           {/* Feature 3: Actionable Insights & Analytics */}
-          <div className="group p-6 rounded-2xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-green-500/30 hover:shadow-lg transition-all duration-300">
-            <div className="w-14 h-14 mb-5 bg-gradient-to-br from-green-500/20 to-green-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <i className="fa-solid fa-chart-line text-2xl text-green-500" />
+          <div className="group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-green-500/30 hover:shadow-md transition-all duration-300">
+            <div className="w-10 h-10 mb-3 bg-gradient-to-br from-green-500/20 to-green-500/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <i className="fa-solid fa-chart-line text-base text-green-500" />
             </div>
-            <h4 className="text-lg md:text-xl font-bold text-ink mb-3">
+            <h4 className="text-sm md:text-base font-bold text-ink mb-2">
               Actionable Insights & Analytics
             </h4>
-            <p className="text-neutral-600 leading-relaxed text-sm">
+            <p className="text-neutral-600 leading-relaxed text-xs">
               Track participation patterns, identify trending themes, and export data to share with stakeholders. Turn feedback into action plans.
             </p>
           </div>
 
           {/* Feature 4: Complete White-Label Control */}
-          <div className="group p-6 rounded-2xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-purple-500/30 hover:shadow-lg transition-all duration-300">
-            <div className="w-14 h-14 mb-5 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <i className="fa-solid fa-sliders text-2xl text-purple-500" />
+          <div className="group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-purple-500/30 hover:shadow-md transition-all duration-300">
+            <div className="w-10 h-10 mb-3 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <i className="fa-solid fa-sliders text-base text-purple-500" />
             </div>
-            <h4 className="text-lg md:text-xl font-bold text-ink mb-3">
+            <h4 className="text-sm md:text-base font-bold text-ink mb-2">
               Complete White-Label Control
             </h4>
-            <p className="text-neutral-600 leading-relaxed text-sm">
+            <p className="text-neutral-600 leading-relaxed text-xs">
               Custom branding, personalized messaging, and your own domain. Deliver a seamless experience that reinforces your organization's identity.
             </p>
           </div>
@@ -976,31 +976,31 @@ function CTASection() {
   const navigate = useNavigate();
 
   return (
-    <section id="cta" className="py-20 md:py-28 bg-gradient-to-br from-primary/10 via-white to-primary/10" aria-labelledby="cta-heading">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-primary to-primary-dark rounded-3xl p-8 md:p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden">
+    <section id="cta" className="py-12 md:py-16 bg-gradient-to-br from-primary/10 via-white to-primary/10" aria-labelledby="cta-heading">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-6 md:p-8 lg:p-10 text-center shadow-xl relative overflow-hidden">
           {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+          <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
 
           <div className="relative z-10">
-            <h3 id="cta-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 font-['Space_Grotesk']">
+            <h3 id="cta-heading" className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-4 font-['Space_Grotesk']">
               Ready to Transform Your Next Q&amp;A Session?
             </h3>
-            <p className="text-lg md:text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-sm md:text-base text-white/90 mb-6 max-w-2xl mx-auto leading-relaxed">
               Join organizers creating safer, more engaging conversations. Set up your first event free—no credit card required.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-primary font-bold rounded-xl hover:bg-neutral-50 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 text-lg border-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-primary font-semibold rounded-lg hover:bg-neutral-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 text-sm border-0 cursor-pointer"
                 onClick={() => navigate("/signup")}
               >
                 Start Free - Create Your Event
-                <i className="fas fa-arrow-right" aria-hidden="true" />
+                <i className="fas fa-arrow-right text-xs" aria-hidden="true" />
               </button>
               <button
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent text-white font-bold rounded-xl border-2 border-white hover:bg-white hover:text-primary transition-all duration-200 text-lg cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-transparent text-white font-semibold rounded-lg border border-white hover:bg-white hover:text-primary transition-all duration-200 text-sm cursor-pointer"
                 onClick={() => navigate("/participate")}
               >
                 Try the Demo First
@@ -1017,37 +1017,37 @@ function Footer() {
   const navigate = useNavigate();
 
   return (
-    <footer className="bg-ink text-white py-16" role="contentinfo">
+    <footer className="bg-ink text-white py-10" role="contentinfo">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
-        <div className="grid md:grid-cols-4 gap-12 mb-12">
+        <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div className="md:col-span-1">
             <button
-              className="inline-flex items-center gap-2.5 font-bold text-xl text-white hover:opacity-80 transition-opacity bg-transparent border-0 cursor-pointer p-0 mb-4"
+              className="inline-flex items-center gap-2 font-bold text-base text-white hover:opacity-80 transition-opacity bg-transparent border-0 cursor-pointer p-0 mb-3"
               onClick={() => navigate("/")}
             >
-              <i className="fas fa-comments text-primary text-2xl" aria-hidden="true" />
+              <i className="fas fa-comments text-primary text-lg" aria-hidden="true" />
               <span className="font-['Space_Grotesk']">Ask Freely</span>
             </button>
-            <p className="text-neutral-400 leading-relaxed">
+            <p className="text-neutral-400 leading-relaxed text-xs">
               Built with communities. Powered by your stories.
             </p>
           </div>
 
           {/* Footer Links */}
-          <div className="md:col-span-3 grid sm:grid-cols-3 gap-8">
+          <div className="md:col-span-3 grid sm:grid-cols-3 gap-6">
             {/* Product Column */}
             <div>
-              <h4 className="text-white font-bold mb-4 text-lg">Product</h4>
-              <div className="flex flex-col gap-3">
-                <a href="#features" className="text-neutral-400 hover:text-primary transition-colors">
+              <h4 className="text-white font-semibold mb-3 text-sm">Product</h4>
+              <div className="flex flex-col gap-2">
+                <a href="#features" className="text-neutral-400 hover:text-primary transition-colors text-xs">
                   Features
                 </a>
-                <a href="#pricing" className="text-neutral-400 hover:text-primary transition-colors">
+                <a href="#pricing" className="text-neutral-400 hover:text-primary transition-colors text-xs">
                   Pricing
                 </a>
-                <a href="#demo" className="text-neutral-400 hover:text-primary transition-colors">
+                <a href="#demo" className="text-neutral-400 hover:text-primary transition-colors text-xs">
                   Demo
                 </a>
               </div>
@@ -1055,15 +1055,15 @@ function Footer() {
 
             {/* Community Column */}
             <div>
-              <h4 className="text-white font-bold mb-4 text-lg">Community</h4>
-              <div className="flex flex-col gap-3">
-                <a href="#stories" className="text-neutral-400 hover:text-primary transition-colors">
+              <h4 className="text-white font-semibold mb-3 text-sm">Community</h4>
+              <div className="flex flex-col gap-2">
+                <a href="#stories" className="text-neutral-400 hover:text-primary transition-colors text-xs">
                   Stories
                 </a>
-                <a href="#events" className="text-neutral-400 hover:text-primary transition-colors">
+                <a href="#events" className="text-neutral-400 hover:text-primary transition-colors text-xs">
                   Events
                 </a>
-                <a href="#guide" className="text-neutral-400 hover:text-primary transition-colors">
+                <a href="#guide" className="text-neutral-400 hover:text-primary transition-colors text-xs">
                   Community Guide
                 </a>
               </div>
@@ -1071,15 +1071,15 @@ function Footer() {
 
             {/* Support Column */}
             <div>
-              <h4 className="text-white font-bold mb-4 text-lg">Support</h4>
-              <div className="flex flex-col gap-3">
-                <a href="#help" className="text-neutral-400 hover:text-primary transition-colors">
+              <h4 className="text-white font-semibold mb-3 text-sm">Support</h4>
+              <div className="flex flex-col gap-2">
+                <a href="#help" className="text-neutral-400 hover:text-primary transition-colors text-xs">
                   Help Center
                 </a>
-                <a href="#docs" className="text-neutral-400 hover:text-primary transition-colors">
+                <a href="#docs" className="text-neutral-400 hover:text-primary transition-colors text-xs">
                   Documentation
                 </a>
-                <a href="#status" className="text-neutral-400 hover:text-primary transition-colors">
+                <a href="#status" className="text-neutral-400 hover:text-primary transition-colors text-xs">
                   Status
                 </a>
               </div>
@@ -1088,12 +1088,12 @@ function Footer() {
         </div>
 
         {/* Footer Bottom */}
-        <div className="pt-8 border-t border-neutral-700 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-neutral-400 text-sm">
+        <div className="pt-6 border-t border-neutral-700 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <p className="text-neutral-400 text-xs">
             © {new Date().getFullYear()} Ask Freely
           </p>
 
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-2 text-xs">
             <button
               onClick={() => navigate("/help")}
               className="text-neutral-400 hover:text-primary transition-colors bg-transparent border-0 cursor-pointer p-0"

@@ -1,101 +1,115 @@
 // src/Components/TermsOfService.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './LegalPages.css';
 
 function TermsOfService() {
   const lastUpdated = "December 16, 2024";
 
   return (
-    <div className="legal-page">
-      <nav className="navbar">
-        <div className="nav-container">
-          <Link to="/" className="logo">
-            <span className="logo-icon"><i className="fas fa-comments"></i></span>
-            <span className="logo-text">Ask Freely</span>
-          </Link>
-          <Link to="/" className="nav-link">Back to Home</Link>
+    <div className="min-h-screen bg-neutral-50">
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/98 backdrop-blur-lg border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-12 md:h-14">
+            <Link to="/" className="inline-flex items-center gap-2 font-bold text-sm md:text-base text-ink hover:opacity-80 transition-opacity">
+              <i className="fas fa-comments text-primary text-base md:text-lg"></i>
+              <span className="font-['Space_Grotesk']">Ask Freely</span>
+            </Link>
+            <Link
+              to="/"
+              className="text-xs md:text-sm text-neutral-600 hover:text-primary transition-colors"
+            >
+              Back to Home
+            </Link>
+          </div>
         </div>
       </nav>
 
-      <div className="legal-container">
-        <header className="legal-header">
-          <h1>Terms of Service</h1>
-          <p className="last-updated">Last Updated: {lastUpdated}</p>
+      {/* Content */}
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+        <header className="text-center mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-ink mb-2 font-['Space_Grotesk']">Terms of Service</h1>
+          <p className="text-sm text-neutral-500">Last Updated: {lastUpdated}</p>
         </header>
 
-        <div className="legal-content">
+        <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 md:p-8 space-y-6">
+          {/* Section 1 */}
           <section>
-            <h2>1. Acceptance of Terms</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">1. Acceptance of Terms</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               By accessing or using Ask Freely ("the Service"), you agree to be bound by these Terms of Service ("Terms").
               If you do not agree to these Terms, please do not use the Service.
             </p>
-            <p>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               These Terms apply to all users of the Service, including event organizers, hosts/MCs, and participants
               who submit questions.
             </p>
           </section>
 
+          {/* Section 2 */}
           <section>
-            <h2>2. Description of Service</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">2. Description of Service</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               Ask Freely is a real-time Q&A platform that enables event organizers to:
             </p>
-            <ul>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 mb-2 ml-2">
               <li>Create and manage live events</li>
               <li>Collect questions from event participants</li>
               <li>Moderate and respond to audience questions</li>
               <li>Customize event branding and experience</li>
               <li>Build and track event programs/agendas</li>
             </ul>
-            <p>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               The Service facilitates communication between event organizers and participants but does not
               endorse, support, represent, or guarantee the completeness, truthfulness, accuracy, or reliability
               of any content submitted through the platform.
             </p>
           </section>
 
+          {/* Section 3 */}
           <section>
-            <h2>3. User Accounts</h2>
-            <h3>3.1 Registration</h3>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">3. User Accounts</h2>
+
+            <h3 className="text-sm font-semibold text-ink mb-2">3.1 Registration</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               To use certain features of the Service (such as creating events), you must register for an account.
               You may register using:
             </p>
-            <ul>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 mb-3 ml-2">
               <li>Email address and password</li>
               <li>Google OAuth authentication</li>
             </ul>
-            <p>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-3">
               You agree to provide accurate, current, and complete information during registration and to update
               such information to keep it accurate, current, and complete.
             </p>
 
-            <h3>3.2 Account Security</h3>
-            <p>
+            <h3 className="text-sm font-semibold text-ink mb-2">3.2 Account Security</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               You are responsible for safeguarding your account credentials and for all activities that occur
               under your account. You agree to:
             </p>
-            <ul>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 mb-3 ml-2">
               <li>Use a strong, unique password</li>
               <li>Not share your account credentials with others</li>
               <li>Notify us immediately of any unauthorized use of your account</li>
               <li>Log out from your account at the end of each session</li>
             </ul>
 
-            <h3>3.3 Email Verification</h3>
-            <p>
+            <h3 className="text-sm font-semibold text-ink mb-2">3.3 Email Verification</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               You must verify your email address before accessing full features of the Service. We reserve the
               right to suspend or terminate unverified accounts.
             </p>
           </section>
 
+          {/* Section 4 */}
           <section>
-            <h2>4. User Conduct</h2>
-            <h3>4.1 Acceptable Use</h3>
-            <p>You agree not to use the Service to:</p>
-            <ul>
+            <h2 className="text-lg font-bold text-ink mb-3">4. User Conduct</h2>
+
+            <h3 className="text-sm font-semibold text-ink mb-2">4.1 Acceptable Use</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">You agree not to use the Service to:</p>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 mb-3 ml-2">
               <li>Submit false, misleading, or fraudulent content</li>
               <li>Impersonate any person or entity, or falsely state or misrepresent your affiliation</li>
               <li>Harass, abuse, threaten, or intimidate other users</li>
@@ -107,9 +121,9 @@ function TermsOfService() {
               <li>Interfere with or disrupt the Service or servers</li>
             </ul>
 
-            <h3>4.2 Content Standards</h3>
-            <p>All content submitted through the Service (questions, event descriptions, etc.) must:</p>
-            <ul>
+            <h3 className="text-sm font-semibold text-ink mb-2">4.2 Content Standards</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">All content submitted through the Service (questions, event descriptions, etc.) must:</p>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 mb-3 ml-2">
               <li>Be respectful and professional</li>
               <li>Not contain hate speech, discrimination, or offensive material</li>
               <li>Not contain explicit sexual content or violence</li>
@@ -117,29 +131,29 @@ function TermsOfService() {
               <li>Be relevant to the event or discussion</li>
             </ul>
 
-            <h3>4.3 Rate Limiting</h3>
-            <p>
+            <h3 className="text-sm font-semibold text-ink mb-2">4.3 Rate Limiting</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               To prevent spam and ensure fair use, the Service implements rate limiting on question submissions.
               Users may be required to wait 30 seconds between submissions. Attempts to circumvent rate limiting
               may result in account suspension.
             </p>
           </section>
 
+          {/* Section 5 */}
           <section>
-            <h2>5. Content Ownership and Rights</h2>
-            <h3>5.1 Your Content</h3>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">5. Content Ownership and Rights</h2>
+
+            <h3 className="text-sm font-semibold text-ink mb-2">5.1 Your Content</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-3">
               You retain all ownership rights to content you submit to the Service ("User Content"). By submitting
               User Content, you grant Ask Freely a worldwide, non-exclusive, royalty-free license to use, copy,
               reproduce, process, adapt, modify, publish, transmit, display, and distribute such content for the
               purpose of providing and improving the Service.
             </p>
 
-            <h3>5.2 Event Organizer Rights</h3>
-            <p>
-              Event organizers have the right to:
-            </p>
-            <ul>
+            <h3 className="text-sm font-semibold text-ink mb-2">5.2 Event Organizer Rights</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">Event organizers have the right to:</p>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 mb-3 ml-2">
               <li>Moderate and delete questions submitted to their events</li>
               <li>Mark questions as answered or unanswered</li>
               <li>Export questions and analytics data</li>
@@ -147,65 +161,67 @@ function TermsOfService() {
               <li>Remove their events and associated data at any time</li>
             </ul>
 
-            <h3>5.3 Anonymous Submissions</h3>
-            <p>
+            <h3 className="text-sm font-semibold text-ink mb-2">5.3 Anonymous Submissions</h3>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               Participants may submit questions anonymously. While we respect anonymity, we reserve the right to
               disclose user information if required by law or to protect the rights, property, or safety of Ask Freely,
               our users, or the public.
             </p>
           </section>
 
+          {/* Section 6 */}
           <section>
-            <h2>6. Privacy and Data</h2>
-            <p>
-              Your use of the Service is also governed by our <Link to="/privacy-policy">Privacy Policy</Link>,
+            <h2 className="text-lg font-bold text-ink mb-3">6. Privacy and Data</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
+              Your use of the Service is also governed by our <Link to="/privacy-policy" className="text-primary hover:underline">Privacy Policy</Link>,
               which describes how we collect, use, and protect your personal information.
             </p>
-            <p>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               By using the Service, you consent to the collection and use of your data as described in the Privacy Policy.
             </p>
           </section>
 
+          {/* Section 7 */}
           <section>
-            <h2>7. Intellectual Property</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">7. Intellectual Property</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               The Service and its original content (excluding User Content), features, and functionality are owned by
               Ask Freely and are protected by international copyright, trademark, patent, trade secret, and other
               intellectual property laws.
             </p>
-            <p>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               Our trademarks, logos, and service marks ("Marks") may not be used without our prior written consent.
               Other trademarks, service marks, and logos used on the Service are the property of their respective owners.
             </p>
           </section>
 
+          {/* Section 8 */}
           <section>
-            <h2>8. Third-Party Services</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">8. Third-Party Services</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               The Service integrates with third-party services, including but not limited to:
             </p>
-            <ul>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 mb-2 ml-2">
               <li>Firebase (Google Cloud) for authentication and data storage</li>
               <li>Google reCAPTCHA for spam protection</li>
               <li>Google OAuth for authentication</li>
             </ul>
-            <p>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               Your use of these third-party services is subject to their respective terms of service and privacy policies.
               We are not responsible for the practices of third-party services.
             </p>
           </section>
 
+          {/* Section 9 */}
           <section>
-            <h2>9. Disclaimer of Warranties</h2>
-            <p>
-              THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-              INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
-              NON-INFRINGEMENT, OR COURSE OF PERFORMANCE.
+            <h2 className="text-lg font-bold text-ink mb-3">9. Disclaimer of Warranties</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2 uppercase font-medium">
+              The Service is provided "as is" and "as available" without warranties of any kind, either express or implied,
+              including but not limited to implied warranties of merchantability, fitness for a particular purpose,
+              non-infringement, or course of performance.
             </p>
-            <p>
-              Ask Freely does not warrant that:
-            </p>
-            <ul>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">Ask Freely does not warrant that:</p>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 ml-2">
               <li>The Service will function uninterrupted, secure, or available at any particular time or location</li>
               <li>Any errors or defects will be corrected</li>
               <li>The Service is free of viruses or other harmful components</li>
@@ -213,34 +229,36 @@ function TermsOfService() {
             </ul>
           </section>
 
+          {/* Section 10 */}
           <section>
-            <h2>10. Limitation of Liability</h2>
-            <p>
-              TO THE FULLEST EXTENT PERMITTED BY LAW, ASK FREELY SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL,
-              CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY,
-              OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM:
+            <h2 className="text-lg font-bold text-ink mb-3">10. Limitation of Liability</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2 uppercase font-medium">
+              To the fullest extent permitted by law, Ask Freely shall not be liable for any indirect, incidental, special,
+              consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly,
+              or any loss of data, use, goodwill, or other intangible losses, resulting from:
             </p>
-            <ul>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 mb-2 ml-2">
               <li>Your use or inability to use the Service</li>
               <li>Any unauthorized access to or use of our servers and/or any personal information stored therein</li>
               <li>Any interruption or cessation of transmission to or from the Service</li>
               <li>Any bugs, viruses, or the like that may be transmitted to or through the Service by any third party</li>
               <li>Any errors or omissions in any content or for any loss or damage incurred as a result of the use of any content posted, emailed, transmitted, or otherwise made available through the Service</li>
             </ul>
-            <p>
-              IN NO EVENT SHALL ASK FREELY'S TOTAL LIABILITY TO YOU FOR ALL DAMAGES EXCEED THE AMOUNT PAID BY YOU TO
-              ASK FREELY IN THE PAST SIX (6) MONTHS, OR ONE HUNDRED DOLLARS ($100), WHICHEVER IS GREATER.
+            <p className="text-sm text-neutral-600 leading-relaxed uppercase font-medium">
+              In no event shall Ask Freely's total liability to you for all damages exceed the amount paid by you to
+              Ask Freely in the past six (6) months, or one hundred dollars ($100), whichever is greater.
             </p>
           </section>
 
+          {/* Section 11 */}
           <section>
-            <h2>11. Indemnification</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">11. Indemnification</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               You agree to indemnify, defend, and hold harmless Ask Freely, its officers, directors, employees, agents,
               and affiliates from and against any claims, liabilities, damages, losses, and expenses, including reasonable
               attorney's fees, arising out of or in any way connected with:
             </p>
-            <ul>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 ml-2">
               <li>Your access to or use of the Service</li>
               <li>Your violation of these Terms</li>
               <li>Your User Content</li>
@@ -248,13 +266,14 @@ function TermsOfService() {
             </ul>
           </section>
 
+          {/* Section 12 */}
           <section>
-            <h2>12. Termination</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">12. Termination</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               We may terminate or suspend your account and access to the Service immediately, without prior notice or
               liability, for any reason, including but not limited to:
             </p>
-            <ul>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 mb-2 ml-2">
               <li>Breach of these Terms</li>
               <li>At your request</li>
               <li>Discontinuation or material modification of the Service</li>
@@ -262,68 +281,73 @@ function TermsOfService() {
               <li>Extended periods of inactivity</li>
               <li>Engagement in fraudulent or illegal activities</li>
             </ul>
-            <p>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               Upon termination, your right to use the Service will cease immediately. You may delete your account at
               any time by contacting us. We will make reasonable efforts to delete your data, subject to legal
               and operational requirements.
             </p>
           </section>
 
+          {/* Section 13 */}
           <section>
-            <h2>13. Changes to Terms</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">13. Changes to Terms</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               We reserve the right to modify or replace these Terms at any time. If a revision is material, we will
               provide at least 30 days' notice prior to any new terms taking effect. Material changes will be
               communicated via:
             </p>
-            <ul>
+            <ul className="list-disc list-inside text-sm text-neutral-600 space-y-1 mb-2 ml-2">
               <li>Email notification to registered users</li>
               <li>Prominent notice on the Service</li>
               <li>Updated "Last Updated" date at the top of this page</li>
             </ul>
-            <p>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               Your continued use of the Service after changes become effective constitutes acceptance of the revised Terms.
               If you do not agree to the new Terms, you must stop using the Service.
             </p>
           </section>
 
+          {/* Section 14 */}
           <section>
-            <h2>14. Governing Law</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">14. Governing Law</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction],
               without regard to its conflict of law provisions.
             </p>
-            <p>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               You agree to submit to the personal and exclusive jurisdiction of the courts located in [Your Jurisdiction]
               for the resolution of any disputes arising from or related to these Terms or the Service.
             </p>
           </section>
 
+          {/* Section 15 */}
           <section>
-            <h2>15. Dispute Resolution</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">15. Dispute Resolution</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-2">
               If you have any concerns or disputes about the Service, you agree to first try to resolve the dispute
               informally by contacting us at [Your Support Email].
             </p>
-            <p>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               For disputes that cannot be resolved informally, you and Ask Freely agree to resolve any disputes arising
               out of or relating to these Terms or the Service through binding arbitration, except that each party
               retains the right to seek injunctive or other equitable relief in a court of competent jurisdiction.
             </p>
           </section>
 
+          {/* Section 16 */}
           <section>
-            <h2>16. Severability</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">16. Severability</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               If any provision of these Terms is held to be unenforceable or invalid, such provision will be changed
               and interpreted to accomplish the objectives of such provision to the greatest extent possible under
               applicable law, and the remaining provisions will continue in full force and effect.
             </p>
           </section>
 
+          {/* Section 17 */}
           <section>
-            <h2>17. Waiver</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">17. Waiver</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               No waiver by Ask Freely of any term or condition set forth in these Terms shall be deemed a further or
               continuing waiver of such term or condition or a waiver of any other term or condition, and any failure
               of Ask Freely to assert a right or provision under these Terms shall not constitute a waiver of such
@@ -331,40 +355,44 @@ function TermsOfService() {
             </p>
           </section>
 
+          {/* Section 18 */}
           <section>
-            <h2>18. Entire Agreement</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">18. Entire Agreement</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed">
               These Terms, together with our Privacy Policy, constitute the entire agreement between you and Ask Freely
               regarding the use of the Service, superseding any prior agreements between you and Ask Freely relating to
               your use of the Service.
             </p>
           </section>
 
+          {/* Section 19 */}
           <section>
-            <h2>19. Contact Information</h2>
-            <p>
+            <h2 className="text-lg font-bold text-ink mb-3">19. Contact Information</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed mb-3">
               If you have any questions about these Terms, please contact us at:
             </p>
-            <div className="contact-info">
-              <p><strong>Ask Freely Support</strong></p>
-              <p>Email: [Your Support Email]</p>
-              <p>Website: <Link to="/">ask-freely.com</Link></p>
+            <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
+              <p className="text-sm font-semibold text-ink">Ask Freely Support</p>
+              <p className="text-sm text-neutral-600">Email: [Your Support Email]</p>
+              <p className="text-sm text-neutral-600">Website: <Link to="/" className="text-primary hover:underline">ask-freely.com</Link></p>
             </div>
           </section>
 
+          {/* Section 20 */}
           <section>
-            <h2>20. Acknowledgment</h2>
-            <p>
-              BY USING THE SERVICE, YOU ACKNOWLEDGE THAT YOU HAVE READ THESE TERMS OF SERVICE AND AGREE TO BE BOUND BY THEM.
+            <h2 className="text-lg font-bold text-ink mb-3">20. Acknowledgment</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed uppercase font-medium">
+              By using the Service, you acknowledge that you have read these Terms of Service and agree to be bound by them.
             </p>
           </section>
         </div>
 
-        <footer className="legal-footer">
+        {/* Footer */}
+        <footer className="text-center mt-8 text-sm text-neutral-500">
           <p>
-            <Link to="/privacy-policy">Privacy Policy</Link>
+            <Link to="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
             {' · '}
-            <Link to="/">Home</Link>
+            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
           </p>
         </footer>
       </div>
