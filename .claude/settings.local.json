@@ -12,7 +12,8 @@
       "Bash(npm start)",
       "Bash(firebase --version:*)",
       "Bash(firebase deploy:*)",
-      "Bash(npx tailwindcss:*)"
+      "Bash(npx tailwindcss:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []
