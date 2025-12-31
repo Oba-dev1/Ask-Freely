@@ -2,9 +2,10 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import useRecaptcha from '../hooks/useRecaptcha';
-import { RECAPTCHA_SITE_KEY } from '../Firebase/config';
-import { getFriendlyErrorMessage, retryWithBackoff } from '../utils/errorHandler';
+// reCAPTCHA temporarily disabled - will be implemented later
+// import useRecaptcha from '../hooks/useRecaptcha';
+// import { RECAPTCHA_SITE_KEY } from '../Firebase/config';
+import { getFriendlyErrorMessage } from '../utils/errorHandler';
 import OfflineBanner from './OfflineBanner';
 
 function Signup() {
@@ -21,7 +22,8 @@ function Signup() {
   const [signupSuccess, setSignupSuccess] = useState(false);
   const { signup, signInWithGoogle, currentUser, userProfile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const { executeRecaptcha } = useRecaptcha(RECAPTCHA_SITE_KEY);
+  // reCAPTCHA temporarily disabled
+  // const { executeRecaptcha } = useRecaptcha(RECAPTCHA_SITE_KEY);
 
   // Handle already logged in users
   useEffect(() => {
@@ -78,18 +80,19 @@ function Signup() {
       setError('');
       setLoading(true);
 
-      const recaptchaToken = await retryWithBackoff(
-        () => executeRecaptcha('google_signup'),
-        2
-      );
+      // reCAPTCHA temporarily disabled - will be implemented later
+      // const recaptchaToken = await retryWithBackoff(
+      //   () => executeRecaptcha('google_signup'),
+      //   2
+      // );
 
-      if (!recaptchaToken) {
-        setError('reCAPTCHA verification failed. Please try again.');
-        setLoading(false);
-        return;
-      }
+      // if (!recaptchaToken) {
+      //   setError('reCAPTCHA verification failed. Please try again.');
+      //   setLoading(false);
+      //   return;
+      // }
 
-      console.log('✅ reCAPTCHA verified for Google sign-up');
+      // console.log('✅ reCAPTCHA verified for Google sign-up');
       console.log('🔵 Starting Google Sign-Up (redirect)...');
       await signInWithGoogle();
     } catch (err) {
@@ -108,15 +111,16 @@ function Signup() {
       setError('');
       setLoading(true);
 
-      const recaptchaToken = await executeRecaptcha('signup');
+      // reCAPTCHA temporarily disabled - will be implemented later
+      // const recaptchaToken = await executeRecaptcha('signup');
 
-      if (!recaptchaToken) {
-        setError('reCAPTCHA verification failed. Please try again.');
-        setLoading(false);
-        return;
-      }
+      // if (!recaptchaToken) {
+      //   setError('reCAPTCHA verification failed. Please try again.');
+      //   setLoading(false);
+      //   return;
+      // }
 
-      console.log('✅ reCAPTCHA verified for signup');
+      // console.log('✅ reCAPTCHA verified for signup');
 
       await signup(formData.email, formData.password, '');
       setSignupSuccess(true);
