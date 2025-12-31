@@ -146,9 +146,16 @@ export default function ParticipantForm() {
   // Rate limiting constants
   const RATE_LIMIT_COOLDOWN = 30000; // 30 seconds between submissions
 
-  // Computed guards
+  // Computed guards - check both field names for compatibility
   const acceptingQuestions = useMemo(
-    () => (event ? event.acceptingQuestions !== false : true),
+    () => {
+      if (!event) return true;
+      // Check enableQuestionSubmission (newer) or acceptingQuestions (legacy)
+      if (event.enableQuestionSubmission !== undefined) {
+        return event.enableQuestionSubmission === true;
+      }
+      return event.acceptingQuestions !== false;
+    },
     [event]
   );
 
