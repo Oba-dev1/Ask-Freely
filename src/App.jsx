@@ -41,6 +41,43 @@ const SentryRoutes = Sentry.withSentryRouting(Routes);
 
 // ==================== HOOKS ====================
 
+// Hook for scroll-triggered animations using Intersection Observer
+function useScrollAnimation(options = {}) {
+  const ref = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          // Once visible, stop observing (animation plays once)
+          if (options.once !== false) {
+            observer.unobserve(element);
+          }
+        } else if (options.once === false) {
+          setIsVisible(false);
+        }
+      },
+      {
+        threshold: options.threshold || 0.1,
+        rootMargin: options.rootMargin || '0px 0px -50px 0px',
+      }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      if (element) observer.unobserve(element);
+    };
+  }, [options.threshold, options.rootMargin, options.once]);
+
+  return [ref, isVisible];
+}
+
 function useCountUp(target, duration = 700) {
   const [val, setVal] = useState(0);
   const fromRef = useRef(0);
@@ -322,6 +359,7 @@ function TopBar() {
 function HeroSection() {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = React.useState(0);
+  const [heroRef, heroVisible] = useScrollAnimation({ threshold: 0.2 });
 
   const slides = [
     {
@@ -372,13 +410,13 @@ function HeroSection() {
   };
 
   return (
-    <section id="hero" className="pt-20 md:pt-24 pb-12 md:pb-16 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="hero-heading">
+    <section id="hero" className="pt-20 md:pt-24 pb-12 md:pb-16 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="hero-heading" ref={heroRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-8">
           {/* Hero Copy - Centered */}
           <div className="text-center flex flex-col items-center max-w-3xl">
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4 animate-fade-in">
+            <div className={`inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4 transition-all duration-700 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
               <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
               Trusted by organizers worldwide
             </div>
@@ -386,20 +424,20 @@ function HeroSection() {
             {/* Headline */}
             <h1
               id="hero-heading"
-              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ink leading-tight mb-4 font-['Space_Grotesk'] animate-slide-up"
+              className={`text-2xl sm:text-3xl lg:text-4xl font-bold text-ink leading-tight mb-4 font-['Space_Grotesk'] transition-all duration-700 delay-100 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
             >
               Turn Tough Questions Into Breakthrough Conversations
             </h1>
 
             {/* Description */}
-            <p className="text-sm sm:text-base text-neutral-600 leading-relaxed mb-6 max-w-2xl">
+            <p className={`text-sm sm:text-base text-neutral-600 leading-relaxed mb-6 max-w-2xl transition-all duration-700 delay-200 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
               The anonymous Q&amp;A platform that helps event organizers create psychologically safe spaces where every voice matters. Collect, prioritize, and address questions with confidence—no awkward silences, just honest dialogue.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className={`flex flex-col sm:flex-row gap-3 justify-center transition-all duration-700 delay-300 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
               <button
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white font-semibold text-sm rounded-lg hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white font-semibold text-sm rounded-lg hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border-0 cursor-pointer animate-pulse-glow"
                 onClick={() => navigate("/signup")}
               >
                 Start Free - Create Your Event
@@ -415,7 +453,7 @@ function HeroSection() {
           </div>
 
           {/* Hero Carousel - Below content */}
-          <aside className="relative w-full max-w-4xl" aria-hidden="true">
+          <aside className={`relative w-full max-w-4xl transition-all duration-1000 delay-500 ${heroVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95'}`} aria-hidden="true">
             <div className="relative rounded-xl overflow-hidden shadow-xl aspect-[16/9] bg-neutral-100">
               <div
                 className="flex transition-transform duration-700 ease-in-out h-full"
@@ -457,12 +495,13 @@ function HeroSection() {
 
 function LiveStatsSection({ liveStats }) {
   const { liveEvents, liveQuestions, liveParticipants } = liveStats;
+  const [statsRef, statsVisible] = useScrollAnimation({ threshold: 0.2 });
 
   return (
-    <section className="py-12 md:py-16 bg-white" aria-labelledby="stats-heading">
+    <section className="py-12 md:py-16 bg-white" aria-labelledby="stats-heading" ref={statsRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Stats Header */}
-        <div className="text-center mb-8 sm:mb-10">
+        <div className={`text-center mb-8 sm:mb-10 transition-all duration-700 ${statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h3 id="stats-heading" className="text-xl sm:text-2xl md:text-3xl font-bold text-ink mb-2 font-['Space_Grotesk']">
             Join Thousands Making Every Voice Count
           </h3>
@@ -473,21 +512,27 @@ function LiveStatsSection({ liveStats }) {
 
         {/* Stats Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto">
-          <StatItem
-            icon="fa-solid fa-circle-question"
-            num={formatNumber(liveQuestions)}
-            label="Questions Answered"
-          />
-          <StatItem
-            icon="fa-solid fa-calendar-days"
-            num={formatNumber(liveEvents)}
-            label="Events Hosted"
-          />
-          <StatItem
-            icon="fa-solid fa-user-group"
-            num={formatNumber(liveParticipants)}
-            label="People Heard"
-          />
+          <div className={`transition-all duration-700 delay-100 ${statsVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
+            <StatItem
+              icon="fa-solid fa-circle-question"
+              num={formatNumber(liveQuestions)}
+              label="Questions Answered"
+            />
+          </div>
+          <div className={`transition-all duration-700 delay-200 ${statsVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
+            <StatItem
+              icon="fa-solid fa-calendar-days"
+              num={formatNumber(liveEvents)}
+              label="Events Hosted"
+            />
+          </div>
+          <div className={`transition-all duration-700 delay-300 ${statsVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
+            <StatItem
+              icon="fa-solid fa-user-group"
+              num={formatNumber(liveParticipants)}
+              label="People Heard"
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -689,19 +734,21 @@ function ActivityTicker({ recentEvents }) {
 }
 
 function ValuesSection() {
+  const [valuesRef, valuesVisible] = useScrollAnimation({ threshold: 0.15 });
+
   return (
-    <section id="values" className="py-12 md:py-16 bg-white">
+    <section id="values" className="py-12 md:py-16 bg-white" ref={valuesRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-ink mb-10 font-['Space_Grotesk']">
+        <h2 className={`text-xl md:text-2xl lg:text-3xl font-bold text-center text-ink mb-10 font-['Space_Grotesk'] transition-all duration-700 ${valuesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           Built on Values That Matter
         </h2>
 
         {/* Values Grid */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {/* Value 1: Safety */}
-          <div className="group text-center">
-            <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+          <div className={`group text-center transition-all duration-700 delay-100 ${valuesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300 animate-float" style={{ animationDelay: '0s' }}>
               <i className="fa-solid fa-hand-holding-heart text-xl text-primary" aria-hidden="true" />
             </div>
             <h3 className="text-base md:text-lg font-bold text-ink mb-2">
@@ -713,8 +760,8 @@ function ValuesSection() {
           </div>
 
           {/* Value 2: Community-Driven */}
-          <div className="group text-center">
-            <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+          <div className={`group text-center transition-all duration-700 delay-200 ${valuesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300 animate-float" style={{ animationDelay: '0.5s' }}>
               <i className="fa-solid fa-people-arrows text-xl text-blue-500" aria-hidden="true" />
             </div>
             <h3 className="text-base md:text-lg font-bold text-ink mb-2">
@@ -726,8 +773,8 @@ function ValuesSection() {
           </div>
 
           {/* Value 3: Customization */}
-          <div className="group text-center">
-            <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+          <div className={`group text-center transition-all duration-700 delay-300 ${valuesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className="w-14 h-14 mx-auto mb-4 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300 animate-float" style={{ animationDelay: '1s' }}>
               <i className="fa-solid fa-palette text-xl text-purple-500" aria-hidden="true" />
             </div>
             <h3 className="text-base md:text-lg font-bold text-ink mb-2">
@@ -744,34 +791,42 @@ function ValuesSection() {
 }
 
 function StoriesSection() {
+  const [storiesRef, storiesVisible] = useScrollAnimation({ threshold: 0.15 });
+
   return (
-    <section id="stories" className="py-12 md:py-16 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="stories-heading">
+    <section id="stories" className="py-12 md:py-16 bg-gradient-to-b from-white to-neutral-50" aria-labelledby="stories-heading" ref={storiesRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <h3 id="stories-heading" className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-ink mb-10 font-['Space_Grotesk']">
+        <h3 id="stories-heading" className={`text-xl md:text-2xl lg:text-3xl font-bold text-center text-ink mb-10 font-['Space_Grotesk'] transition-all duration-700 ${storiesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           Hear From Organizers Like You
         </h3>
 
         {/* Testimonials Grid */}
         <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-          <Story
-            quote="Ask Freely transformed our Q&A from an awkward silence to the most engaging part of our event. For the first time, people actually felt heard."
-            avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1718105160/pexels-emmy-e-1252107-2381069_ncpcqb.jpg"
-            name="Ada"
-            role="Youth Leader, Wuye"
-          />
-          <Story
-            quote="We used it at our campus town hall and finally got the tough questions we needed. Anonymity changed everything—highest participation we've ever seen."
-            avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1706346802/AjoVault%20App/pexels-christina-morillo-1181686_irzuti.jpg"
-            name="Seyi"
-            role="Campus Coordinator"
-          />
-          <Story
-            quote="The facilitator dashboard is incredibly clean and intuitive. But what impressed me most is how well it respects our cultural context and community values."
-            avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1719833077/IMG_2571_wsh2ef.jpg"
-            name="Chidi"
-            role="Community Organizer"
-          />
+          <div className={`transition-all duration-700 delay-100 ${storiesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <Story
+              quote="Ask Freely transformed our Q&A from an awkward silence to the most engaging part of our event. For the first time, people actually felt heard."
+              avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1718105160/pexels-emmy-e-1252107-2381069_ncpcqb.jpg"
+              name="Ada"
+              role="Youth Leader, Wuye"
+            />
+          </div>
+          <div className={`transition-all duration-700 delay-200 ${storiesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <Story
+              quote="We used it at our campus town hall and finally got the tough questions we needed. Anonymity changed everything—highest participation we've ever seen."
+              avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1706346802/AjoVault%20App/pexels-christina-morillo-1181686_irzuti.jpg"
+              name="Seyi"
+              role="Campus Coordinator"
+            />
+          </div>
+          <div className={`transition-all duration-700 delay-300 ${storiesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <Story
+              quote="The facilitator dashboard is incredibly clean and intuitive. But what impressed me most is how well it respects our cultural context and community values."
+              avatar="https://res.cloudinary.com/dws3lnn4d/image/upload/v1719833077/IMG_2571_wsh2ef.jpg"
+              name="Chidi"
+              role="Community Organizer"
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -779,11 +834,13 @@ function StoriesSection() {
 }
 
 function HowItWorksSection() {
+  const [howRef, howVisible] = useScrollAnimation({ threshold: 0.1 });
+
   return (
-    <section id="how-it-works" className="py-12 md:py-16 bg-white overflow-hidden">
+    <section id="how-it-works" className="py-12 md:py-16 bg-white overflow-hidden" ref={howRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12 md:mb-16">
+        <div className={`text-center mb-12 md:mb-16 transition-all duration-700 ${howVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-ink mb-2 font-['Space_Grotesk']">
             Simple to Start, Powerful in Practice
           </h3>
@@ -815,7 +872,7 @@ function HowItWorksSection() {
 
           <div className="relative" style={{ zIndex: 1 }}>
             {/* Step 1 - Card on Left */}
-            <div className="relative mb-10 lg:mb-16 pt-0 lg:pt-0">
+            <div className={`relative mb-10 lg:mb-16 pt-0 lg:pt-0 transition-all duration-700 delay-100 ${howVisible ? 'opacity-100 translate-x-0' : 'opacity-0 lg:-translate-x-10'}`}>
               {/* Mobile Badge */}
               <div className="lg:hidden flex justify-center mb-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md transition-all duration-300 hover:scale-110 hover:shadow-lg">
@@ -825,7 +882,7 @@ function HowItWorksSection() {
 
               {/* Card */}
               <div className="lg:w-1/2 lg:pr-10">
-                <div className="group bg-white rounded-xl shadow-md border border-neutral-100 p-5 md:p-6 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-xs lg:ml-auto w-full cursor-pointer">
+                <div className="group bg-white rounded-xl shadow-md border border-neutral-100 p-5 md:p-6 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-xs lg:ml-auto w-full cursor-pointer card-hover-lift">
                   {/* Icon */}
                   <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-full mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300">
                     <i className="fa-solid fa-calendar-plus text-lg text-white" />
@@ -843,7 +900,7 @@ function HowItWorksSection() {
             </div>
 
             {/* Step 2 - Card on Right */}
-            <div className="relative mb-10 lg:mb-16">
+            <div className={`relative mb-10 lg:mb-16 transition-all duration-700 delay-300 ${howVisible ? 'opacity-100 translate-x-0' : 'opacity-0 lg:translate-x-10'}`}>
               {/* Mobile Badge */}
               <div className="lg:hidden flex justify-center mb-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md transition-all duration-300 hover:scale-110 hover:shadow-lg">
@@ -853,7 +910,7 @@ function HowItWorksSection() {
 
               {/* Card */}
               <div className="lg:w-1/2 lg:ml-auto lg:pl-10">
-                <div className="group bg-white rounded-xl shadow-md border border-neutral-100 p-5 md:p-6 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-xs w-full cursor-pointer">
+                <div className="group bg-white rounded-xl shadow-md border border-neutral-100 p-5 md:p-6 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-xs w-full cursor-pointer card-hover-lift">
                   {/* Icon */}
                   <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-full mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300">
                     <i className="fa-solid fa-comments text-lg text-white" />
@@ -871,7 +928,7 @@ function HowItWorksSection() {
             </div>
 
             {/* Step 3 - Card on Left */}
-            <div className="relative">
+            <div className={`relative transition-all duration-700 delay-500 ${howVisible ? 'opacity-100 translate-x-0' : 'opacity-0 lg:-translate-x-10'}`}>
               {/* Mobile Badge */}
               <div className="lg:hidden flex justify-center mb-4">
                 <div className="w-10 h-10 md:w-12 md:h-12 bg-primary text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md transition-all duration-300 hover:scale-110 hover:shadow-lg">
@@ -881,7 +938,7 @@ function HowItWorksSection() {
 
               {/* Card */}
               <div className="lg:w-1/2 lg:pr-10">
-                <div className="group bg-white rounded-xl shadow-md border border-neutral-100 p-5 md:p-6 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-xs lg:ml-auto w-full cursor-pointer">
+                <div className="group bg-white rounded-xl shadow-md border border-neutral-100 p-5 md:p-6 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 max-w-xs lg:ml-auto w-full cursor-pointer card-hover-lift">
                   {/* Icon */}
                   <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-full mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300">
                     <i className="fa-solid fa-microphone text-lg text-white" />
@@ -905,18 +962,20 @@ function HowItWorksSection() {
 }
 
 function WhySection() {
+  const [whyRef, whyVisible] = useScrollAnimation({ threshold: 0.1 });
+
   return (
-    <section id="why" className="py-12 md:py-16 bg-white">
+    <section id="why" className="py-12 md:py-16 bg-white" ref={whyRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-center text-ink mb-10 font-['Space_Grotesk'] max-w-3xl mx-auto">
+        <h3 className={`text-xl md:text-2xl lg:text-3xl font-bold text-center text-ink mb-10 font-['Space_Grotesk'] max-w-3xl mx-auto transition-all duration-700 ${whyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           Everything You Need to Host Meaningful Conversations
         </h3>
 
         {/* Features Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
           {/* Feature 1: Strategic Question Seeding */}
-          <div className="group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-primary/30 hover:shadow-md transition-all duration-300">
+          <div className={`group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-primary/30 hover:shadow-md transition-all duration-500 delay-100 card-hover-lift ${whyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="w-10 h-10 mb-3 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <i className="fa-solid fa-bullseye text-base text-primary" />
             </div>
@@ -929,7 +988,7 @@ function WhySection() {
           </div>
 
           {/* Feature 2: Privacy-First by Design */}
-          <div className="group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-blue-500/30 hover:shadow-md transition-all duration-300">
+          <div className={`group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-blue-500/30 hover:shadow-md transition-all duration-500 delay-200 card-hover-lift ${whyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="w-10 h-10 mb-3 bg-gradient-to-br from-blue-500/20 to-blue-500/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <i className="fa-solid fa-user-shield text-base text-blue-500" />
             </div>
@@ -942,7 +1001,7 @@ function WhySection() {
           </div>
 
           {/* Feature 3: Actionable Insights & Analytics */}
-          <div className="group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-green-500/30 hover:shadow-md transition-all duration-300">
+          <div className={`group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-green-500/30 hover:shadow-md transition-all duration-500 delay-300 card-hover-lift ${whyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="w-10 h-10 mb-3 bg-gradient-to-br from-green-500/20 to-green-500/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <i className="fa-solid fa-chart-line text-base text-green-500" />
             </div>
@@ -955,7 +1014,7 @@ function WhySection() {
           </div>
 
           {/* Feature 4: Complete White-Label Control */}
-          <div className="group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-purple-500/30 hover:shadow-md transition-all duration-300">
+          <div className={`group p-4 rounded-xl bg-gradient-to-br from-neutral-50 to-white border border-neutral-200 hover:border-purple-500/30 hover:shadow-md transition-all duration-500 delay-[400ms] card-hover-lift ${whyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="w-10 h-10 mb-3 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <i className="fa-solid fa-sliders text-base text-purple-500" />
             </div>
@@ -974,26 +1033,27 @@ function WhySection() {
 
 function CTASection() {
   const navigate = useNavigate();
+  const [ctaRef, ctaVisible] = useScrollAnimation({ threshold: 0.2 });
 
   return (
-    <section id="cta" className="py-12 md:py-16 bg-gradient-to-br from-primary/10 via-white to-primary/10" aria-labelledby="cta-heading">
+    <section id="cta" className="py-12 md:py-16 bg-gradient-to-br from-primary/10 via-white to-primary/10" aria-labelledby="cta-heading" ref={ctaRef}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-6 md:p-8 lg:p-10 text-center shadow-xl relative overflow-hidden">
+        <div className={`bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-6 md:p-8 lg:p-10 text-center shadow-xl relative overflow-hidden transition-all duration-1000 ${ctaVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95'}`}>
           {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+          <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 animate-float" style={{ animationDelay: '0s' }} />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2 animate-float" style={{ animationDelay: '1.5s' }} />
 
           <div className="relative z-10">
-            <h3 id="cta-heading" className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-4 font-['Space_Grotesk']">
+            <h3 id="cta-heading" className={`text-xl md:text-2xl lg:text-3xl font-bold text-white mb-4 font-['Space_Grotesk'] transition-all duration-700 delay-200 ${ctaVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
               Ready to Transform Your Next Q&amp;A Session?
             </h3>
-            <p className="text-sm md:text-base text-white/90 mb-6 max-w-2xl mx-auto leading-relaxed">
+            <p className={`text-sm md:text-base text-white/90 mb-6 max-w-2xl mx-auto leading-relaxed transition-all duration-700 delay-300 ${ctaVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
               Join organizers creating safer, more engaging conversations. Set up your first event free—no credit card required.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div className={`flex flex-col sm:flex-row gap-3 justify-center items-center transition-all duration-700 delay-[400ms] ${ctaVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
               <button
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-primary font-semibold rounded-lg hover:bg-neutral-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 text-sm border-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-primary font-semibold rounded-lg hover:bg-neutral-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 text-sm border-0 cursor-pointer animate-pulse-glow"
                 onClick={() => navigate("/signup")}
               >
                 Start Free - Create Your Event

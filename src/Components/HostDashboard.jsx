@@ -208,16 +208,16 @@ export default function HostDashboard() {
           </div>
         )}
 
-        <header className="mb-8">
-          <h1 className="text-[clamp(1.5rem,2.5vw,2.5rem)] text-neutral-900 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 m-0 font-bold">
+        <header className="mb-8 text-center">
+          <h1 className="text-[clamp(1.5rem,2.5vw,2.5rem)] text-neutral-900 flex flex-col items-center gap-3 m-0 font-bold">
             <span>Host Dashboard</span>
             {eventId ? (
-              <span className="inline-flex items-center px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-primary/10 text-primary border border-primary/20 max-w-full overflow-hidden">
-                <span className="truncate">Event: {eventId}</span>
+              <span className="inline-flex items-center px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-primary/10 text-primary border border-primary/20 max-w-[90%] overflow-hidden">
+                <span className="truncate">{eventId}</span>
               </span>
             ) : null}
           </h1>
-          <p className="text-neutral-500 mt-2">Manage questions in real-time</p>
+          <p className="text-neutral-500 mt-3">Manage questions in real-time</p>
         </header>
 
         {/* Program View */}

@@ -20,7 +20,7 @@ function DashboardLayout() {
       <DashboardSidebar isOpen={sidebarOpen} onClose={closeSidebar} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-screen ml-0 lg:ml-[260px] transition-[margin-left] duration-300 ease-out">
+      <div className="flex-1 flex flex-col min-h-screen ml-0 lg:ml-[260px] transition-[margin-left] duration-300 ease-out min-w-0 max-w-full overflow-x-hidden">
         {/* Top Header */}
         <header className="sticky top-0 z-[100] flex items-center gap-3 px-4 py-3 md:px-6 md:py-3 lg:px-8 bg-white/[0.98] backdrop-blur-md border-b border-neutral-200 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
           <button
@@ -40,8 +40,10 @@ function DashboardLayout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-[1600px] w-full mx-auto overflow-x-hidden box-border">
-          <Outlet />
+        <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-[1600px] w-full mx-auto overflow-x-hidden box-border min-w-0">
+          <div className="w-full max-w-full overflow-x-hidden">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

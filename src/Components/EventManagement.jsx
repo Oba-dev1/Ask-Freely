@@ -32,18 +32,6 @@ function compactTimeLabel(first, last) {
   }
 }
 
-// Shorten URL for mobile display
-function shortenUrl(url) {
-  if (!url) return "";
-  try {
-    const urlObj = new URL(url);
-    // Return just the path + search (e.g., /p/event-slug or /host/123)
-    return urlObj.pathname + urlObj.search;
-  } catch {
-    return url;
-  }
-}
-
 function EventManagement() {
   // ---- Router & Auth ----
   const { eventId } = useParams();
@@ -307,7 +295,7 @@ function EventManagement() {
   // ---- Early loading state (after all hooks) ----
   if (!event) {
     return (
-      <div className="max-w-[1160px] mx-auto px-6 py-8">
+      <div className="max-w-[1160px] mx-auto px-4 md:px-6 py-4 md:py-8 overflow-x-hidden w-full">
         <p>Loading event…</p>
       </div>
     );
@@ -331,122 +319,125 @@ function EventManagement() {
 
   // ---- UI ----
   return (
-    <div className="max-w-[1160px] mx-auto px-6 py-8">
+    <div className="max-w-[1160px] mx-auto px-4 md:px-6 py-4 md:py-8 overflow-x-hidden w-full">
       {/* Back Button */}
       <button
         onClick={handleBackNavigation}
-        className="bg-white border border-black/10 text-neutral-600 px-3.5 py-2.5 rounded-[10px] font-semibold text-sm cursor-pointer transition-all inline-flex items-center gap-2 mb-6 hover:bg-primary/5 hover:border-primary/30 hover:-translate-x-0.5"
+        className="bg-white border border-black/10 text-neutral-600 px-3 md:px-3.5 py-2 md:py-2.5 rounded-[10px] font-semibold text-xs md:text-sm cursor-pointer transition-all inline-flex items-center gap-1.5 md:gap-2 mb-4 md:mb-6 hover:bg-primary/5 hover:border-primary/30 hover:-translate-x-0.5"
       >
-        <i className="fas fa-arrow-left text-sm"></i> {getBackButtonText()}
+        <i className="fas fa-arrow-left text-xs md:text-sm"></i> <span className="md:hidden">Back</span><span className="hidden md:inline">{getBackButtonText()}</span>
       </button>
 
-      <header className="mb-6">
-        <h1 className="text-[2.1rem] m-0 mb-1 flex items-center gap-2.5 text-black font-bold">
-          {event.title}{" "}
-          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[0.85rem] rounded-full border ${isActive ? 'border-emerald-500/35 bg-emerald-500/10 text-emerald-500' : 'border-black/10 bg-primary/10 text-neutral-500'}`}>
+      <header className="mb-4 md:mb-6">
+        <h1 className="text-xl md:text-[2.1rem] m-0 mb-1 flex flex-wrap items-center gap-2 md:gap-2.5 text-black font-bold">
+          <span className="break-words min-w-0">{event.title}</span>
+          <span className={`inline-flex items-center gap-1.5 px-2 md:px-2.5 py-0.5 md:py-1 text-xs md:text-[0.85rem] rounded-full border flex-shrink-0 ${isActive ? 'border-emerald-500/35 bg-emerald-500/10 text-emerald-500' : 'border-black/10 bg-primary/10 text-neutral-500'}`}>
             {isActive ? "Published" : "Draft"}
           </span>
         </h1>
-        <p className="text-neutral-500">
+        <p className="text-neutral-500 text-sm">
           {event.date ? new Date(event.date).toLocaleDateString() : "Date TBA"}
           {event.time ? ` • ${event.time}` : ""}
         </p>
       </header>
 
       {/* Event Control Cards Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6 my-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 my-4 md:my-6">
         {/* Publish Status Card */}
-        <div className={`bg-white border-2 rounded-2xl p-7 flex flex-col gap-5 transition-all shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 ${isActive ? 'border-emerald-500/30 bg-gradient-to-br from-emerald-500/[0.03] to-emerald-500/[0.01]' : 'border-amber-500/30 bg-gradient-to-br from-amber-500/[0.03] to-amber-500/[0.01]'}`}>
-          <div className={`w-[60px] h-[60px] rounded-xl flex items-center justify-center text-[1.75rem] text-white shadow-lg ${isActive ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-emerald-500/25' : 'bg-gradient-to-br from-amber-500 to-amber-600 shadow-amber-500/25'}`}>
+        <div className={`bg-white border-2 rounded-xl md:rounded-2xl p-4 md:p-7 flex flex-col gap-3 md:gap-5 transition-all shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 min-w-0 overflow-hidden ${isActive ? 'border-emerald-500/30 bg-gradient-to-br from-emerald-500/[0.03] to-emerald-500/[0.01]' : 'border-amber-500/30 bg-gradient-to-br from-amber-500/[0.03] to-amber-500/[0.01]'}`}>
+          <div className={`w-10 h-10 md:w-[60px] md:h-[60px] rounded-lg md:rounded-xl flex items-center justify-center text-lg md:text-[1.75rem] text-white shadow-lg ${isActive ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-emerald-500/25' : 'bg-gradient-to-br from-amber-500 to-amber-600 shadow-amber-500/25'}`}>
             <i className={`fas ${isActive ? 'fa-check-circle' : 'fa-circle'}`}></i>
           </div>
           <div className="flex-1">
-            <h3 className="text-base font-bold text-neutral-700 m-0 mb-2 tracking-tight">Event Status</h3>
-            <p className="text-[1.75rem] font-bold text-neutral-900 m-0 mb-2 tracking-tight">{isActive ? 'Published' : 'Draft'}</p>
-            <p className="text-sm text-neutral-500 leading-relaxed m-0">
+            <h3 className="text-sm md:text-base font-bold text-neutral-700 m-0 mb-1 md:mb-2 tracking-tight">Event Status</h3>
+            <p className="text-xl md:text-[1.75rem] font-bold text-neutral-900 m-0 mb-1 md:mb-2 tracking-tight">{isActive ? 'Published' : 'Draft'}</p>
+            <p className="text-xs md:text-sm text-neutral-500 leading-relaxed m-0">
               {isActive
                 ? 'Your event is live and accessible to participants'
                 : 'Event is hidden from participants'}
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2 md:gap-3">
             {isActive ? (
               <button
-                className="flex-1 px-5 py-3.5 rounded-[10px] text-[0.9375rem] font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all border-[1.5px] bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-100 hover:border-neutral-300 hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-3 md:px-5 py-2.5 md:py-3.5 rounded-[10px] text-xs md:text-[0.9375rem] font-semibold flex items-center justify-center gap-1.5 md:gap-2 cursor-pointer transition-all border-[1.5px] bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-100 hover:border-neutral-300 hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleUnpublish}
                 disabled={saving}
               >
                 <i className="fas fa-eye-slash"></i>
-                {saving ? 'Hiding...' : 'Hide Event'}
+                <span className="md:hidden">{saving ? 'Hiding...' : 'Hide'}</span>
+                <span className="hidden md:inline">{saving ? 'Hiding...' : 'Hide Event'}</span>
               </button>
             ) : (
               <button
-                className="flex-1 px-5 py-3.5 rounded-[10px] text-[0.9375rem] font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all border-[1.5px] border-transparent bg-gradient-to-br from-primary to-orange-500 text-white shadow-[0_2px_8px_rgba(255,107,53,0.25)] hover:from-orange-500 hover:to-orange-600 hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(255,107,53,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-3 md:px-5 py-2.5 md:py-3.5 rounded-[10px] text-xs md:text-[0.9375rem] font-semibold flex items-center justify-center gap-1.5 md:gap-2 cursor-pointer transition-all border-[1.5px] border-transparent bg-gradient-to-br from-primary to-orange-500 text-white shadow-[0_2px_8px_rgba(255,107,53,0.25)] hover:from-orange-500 hover:to-orange-600 hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(255,107,53,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handlePublish}
                 disabled={saving || !hasSlug}
               >
                 <i className="fas fa-rocket"></i>
-                {saving ? 'Publishing...' : 'Publish Event'}
+                <span className="md:hidden">{saving ? '...' : 'Publish'}</span>
+                <span className="hidden md:inline">{saving ? 'Publishing...' : 'Publish Event'}</span>
               </button>
             )}
           </div>
         </div>
 
         {/* Questions Status Card */}
-        <div className={`bg-white border-2 rounded-2xl p-7 flex flex-col gap-5 transition-all shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 ${accepting ? 'border-emerald-500/30 bg-gradient-to-br from-emerald-500/[0.03] to-emerald-500/[0.01]' : 'border-neutral-400/20 bg-gradient-to-br from-neutral-400/[0.02] to-neutral-400/[0.01]'}`}>
-          <div className={`w-[60px] h-[60px] rounded-xl flex items-center justify-center text-[1.75rem] text-white shadow-lg ${accepting ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-emerald-500/25' : 'bg-gradient-to-br from-neutral-400 to-neutral-500 shadow-neutral-400/20'}`}>
+        <div className={`bg-white border-2 rounded-xl md:rounded-2xl p-4 md:p-7 flex flex-col gap-3 md:gap-5 transition-all shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 min-w-0 overflow-hidden ${accepting ? 'border-emerald-500/30 bg-gradient-to-br from-emerald-500/[0.03] to-emerald-500/[0.01]' : 'border-neutral-400/20 bg-gradient-to-br from-neutral-400/[0.02] to-neutral-400/[0.01]'}`}>
+          <div className={`w-10 h-10 md:w-[60px] md:h-[60px] rounded-lg md:rounded-xl flex items-center justify-center text-lg md:text-[1.75rem] text-white shadow-lg ${accepting ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-emerald-500/25' : 'bg-gradient-to-br from-neutral-400 to-neutral-500 shadow-neutral-400/20'}`}>
             <i className={`fas ${accepting ? 'fa-inbox' : 'fa-pause-circle'}`}></i>
           </div>
           <div className="flex-1">
-            <h3 className="text-base font-bold text-neutral-700 m-0 mb-2 tracking-tight">Question Submissions</h3>
-            <p className="text-[1.75rem] font-bold text-neutral-900 m-0 mb-2 tracking-tight">{accepting ? 'Accepting' : 'Paused'}</p>
-            <p className="text-sm text-neutral-500 leading-relaxed m-0">
+            <h3 className="text-sm md:text-base font-bold text-neutral-700 m-0 mb-1 md:mb-2 tracking-tight">Question Submissions</h3>
+            <p className="text-xl md:text-[1.75rem] font-bold text-neutral-900 m-0 mb-1 md:mb-2 tracking-tight">{accepting ? 'Accepting' : 'Paused'}</p>
+            <p className="text-xs md:text-sm text-neutral-500 leading-relaxed m-0">
               {accepting
                 ? 'Participants can submit questions'
                 : 'New questions are temporarily paused'}
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2 md:gap-3">
             <button
-              className="flex-1 px-5 py-3.5 rounded-[10px] text-[0.9375rem] font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all border-[1.5px] bg-white text-primary border-primary hover:bg-primary/5 hover:border-orange-500 hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-3 md:px-5 py-2.5 md:py-3.5 rounded-[10px] text-xs md:text-[0.9375rem] font-semibold flex items-center justify-center gap-1.5 md:gap-2 cursor-pointer transition-all border-[1.5px] bg-white text-primary border-primary hover:bg-primary/5 hover:border-orange-500 hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={toggleAccepting}
               disabled={saving}
             >
               <i className={`fas ${accepting ? 'fa-pause' : 'fa-play'}`}></i>
-              {accepting ? 'Pause Questions' : 'Resume Questions'}
+              <span className="md:hidden">{accepting ? 'Pause' : 'Resume'}</span>
+              <span className="hidden md:inline">{accepting ? 'Pause Questions' : 'Resume Questions'}</span>
             </button>
           </div>
         </div>
       </div>
 
       {/* Event Links Section */}
-      <div className="mt-10 mb-6">
-        <h2 className="text-2xl font-bold text-neutral-900 m-0 mb-2 flex items-center gap-3 tracking-tight">
-          <i className="fas fa-share-nodes text-primary text-xl"></i> Event Links
+      <div className="mt-6 md:mt-10 mb-4 md:mb-6">
+        <h2 className="text-lg md:text-2xl font-bold text-neutral-900 m-0 mb-1 md:mb-2 flex items-center gap-2 md:gap-3 tracking-tight">
+          <i className="fas fa-share-nodes text-primary text-base md:text-xl"></i> Event Links
         </h2>
-        <p className="text-[0.9375rem] text-neutral-500 m-0 leading-relaxed">Share these links to give access to participants and hosts</p>
+        <p className="text-xs md:text-[0.9375rem] text-neutral-500 m-0 leading-relaxed">Share these links to give access to participants and hosts</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 mb-6 md:mb-10">
         {/* Participant Link Card */}
-        <div className={`bg-white border-[1.5px] border-neutral-200 rounded-2xl p-7 flex flex-col gap-5 transition-all shadow-[0_2px_8px_rgba(0,0,0,0.04)] ${!canShareParticipant ? 'opacity-60 cursor-not-allowed bg-neutral-50' : 'hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:border-primary'}`}>
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-[10px] flex items-center justify-center text-2xl flex-shrink-0 bg-gradient-to-br from-primary to-orange-500 text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]">
+        <div className={`bg-white border-[1.5px] border-neutral-200 rounded-xl md:rounded-2xl p-4 md:p-7 flex flex-col gap-3 md:gap-5 transition-all shadow-[0_2px_8px_rgba(0,0,0,0.04)] min-w-0 overflow-hidden ${!canShareParticipant ? 'opacity-60 cursor-not-allowed bg-neutral-50' : 'hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:border-primary'}`}>
+          <div className="flex items-start gap-3 md:gap-4">
+            <div className="w-9 h-9 md:w-12 md:h-12 rounded-lg md:rounded-[10px] flex items-center justify-center text-base md:text-2xl flex-shrink-0 bg-gradient-to-br from-primary to-orange-500 text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]">
               <i className="fas fa-users"></i>
             </div>
-            <div>
-              <h3 className="text-lg font-bold text-neutral-900 m-0 mb-1 tracking-tight">Participant Link</h3>
-              <p className="text-sm text-neutral-500 m-0 leading-normal">For attendees to submit questions</p>
+            <div className="min-w-0">
+              <h3 className="text-sm md:text-lg font-bold text-neutral-900 m-0 mb-1 tracking-tight">Participant Link</h3>
+              <p className="text-xs md:text-sm text-neutral-500 m-0 leading-normal">For attendees to submit questions</p>
             </div>
           </div>
-          <div className="flex-1">
+          <div className="flex-1 overflow-hidden">
             {canShareParticipant ? (
-              <div className="bg-neutral-50 border border-neutral-200 rounded-lg px-4 py-3.5">
-                <code className="font-mono text-[0.8125rem] text-neutral-700 break-all leading-relaxed">{participantLink}</code>
+              <div className="bg-neutral-50 border border-neutral-200 rounded-lg px-3 md:px-4 py-2.5 md:py-3.5 overflow-hidden">
+                <code className="font-mono text-[0.7rem] md:text-[0.8125rem] text-neutral-700 break-all leading-relaxed block">{participantLink}</code>
               </div>
             ) : (
-              <div className="flex items-center gap-3 px-4 py-3.5 bg-amber-500/5 border border-amber-500/20 rounded-lg text-amber-800 text-sm leading-relaxed">
-                <i className="fas fa-info-circle text-amber-500 text-base flex-shrink-0"></i>
+              <div className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-3.5 bg-amber-500/5 border border-amber-500/20 rounded-lg text-amber-800 text-xs md:text-sm leading-relaxed">
+                <i className="fas fa-info-circle text-amber-500 text-sm md:text-base flex-shrink-0"></i>
                 <span>
                   {hasSlug
                     ? "Publish your event to enable this link"
@@ -455,10 +446,10 @@ function EventManagement() {
               </div>
             )}
           </div>
-          <div className="flex gap-3 pt-2 border-t border-neutral-200">
+          <div className="flex gap-2 md:gap-3 pt-2 border-t border-neutral-200">
             <button
               onClick={() => copyToClipboard(participantLink, "participant")}
-              className="flex-1 px-4 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all bg-primary text-white border-[1.5px] border-primary hover:bg-orange-500 hover:border-orange-500 hover:-translate-y-px hover:shadow-[0_2px_8px_rgba(255,107,53,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-3 md:px-4 py-2.5 md:py-3 rounded-lg text-xs md:text-sm font-semibold flex items-center justify-center gap-1.5 md:gap-2 cursor-pointer transition-all bg-primary text-white border-[1.5px] border-primary hover:bg-orange-500 hover:border-orange-500 hover:-translate-y-px hover:shadow-[0_2px_8px_rgba(255,107,53,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={!canShareParticipant}
             >
               {copiedLink === "participant" ? (
@@ -475,25 +466,25 @@ function EventManagement() {
         </div>
 
         {/* MC/Host Link Card */}
-        <div className="bg-white border-[1.5px] border-neutral-200 rounded-2xl p-7 flex flex-col gap-5 transition-all shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:border-primary">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-[10px] flex items-center justify-center text-2xl flex-shrink-0 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-[0_4px_12px_rgba(16,185,129,0.25)]">
+        <div className="bg-white border-[1.5px] border-neutral-200 rounded-xl md:rounded-2xl p-4 md:p-7 flex flex-col gap-3 md:gap-5 transition-all shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:border-primary overflow-hidden min-w-0">
+          <div className="flex items-start gap-3 md:gap-4">
+            <div className="w-9 h-9 md:w-12 md:h-12 rounded-lg md:rounded-[10px] flex items-center justify-center text-base md:text-2xl flex-shrink-0 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-[0_4px_12px_rgba(16,185,129,0.25)]">
               <i className="fas fa-microphone"></i>
             </div>
-            <div>
-              <h3 className="text-lg font-bold text-neutral-900 m-0 mb-1 tracking-tight">MC/Host Link</h3>
-              <p className="text-sm text-neutral-500 m-0 leading-normal">For event moderators and hosts</p>
+            <div className="min-w-0">
+              <h3 className="text-sm md:text-lg font-bold text-neutral-900 m-0 mb-1 tracking-tight">MC/Host Link</h3>
+              <p className="text-xs md:text-sm text-neutral-500 m-0 leading-normal">For event moderators and hosts</p>
             </div>
           </div>
-          <div className="flex-1">
-            <div className="bg-neutral-50 border border-neutral-200 rounded-lg px-4 py-3.5">
-              <code className="font-mono text-[0.8125rem] text-neutral-700 break-all leading-relaxed">{mcLink}</code>
+          <div className="flex-1 overflow-hidden">
+            <div className="bg-neutral-50 border border-neutral-200 rounded-lg px-3 md:px-4 py-2.5 md:py-3.5 overflow-hidden">
+              <code className="font-mono text-[0.7rem] md:text-[0.8125rem] text-neutral-700 break-all leading-relaxed block">{mcLink}</code>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-neutral-200">
+          <div className="flex flex-row gap-2 md:gap-3 pt-2 border-t border-neutral-200">
             <button
               onClick={() => copyToClipboard(mcLink, "mc")}
-              className="flex-1 px-4 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all bg-primary text-white border-[1.5px] border-primary hover:bg-orange-500 hover:border-orange-500 hover:-translate-y-px hover:shadow-[0_2px_8px_rgba(255,107,53,0.3)]"
+              className="flex-1 px-3 md:px-4 py-2.5 md:py-3 rounded-lg text-xs md:text-sm font-semibold flex items-center justify-center gap-1.5 md:gap-2 cursor-pointer transition-all bg-primary text-white border-[1.5px] border-primary hover:bg-orange-500 hover:border-orange-500 hover:-translate-y-px hover:shadow-[0_2px_8px_rgba(255,107,53,0.3)]"
             >
               {copiedLink === "mc" ? (
                 <>
@@ -501,15 +492,15 @@ function EventManagement() {
                 </>
               ) : (
                 <>
-                  <i className="far fa-copy"></i> Copy Link
+                  <i className="far fa-copy"></i> Copy
                 </>
               )}
             </button>
             <button
               onClick={() => setShowInviteModal(true)}
-              className="flex-1 px-4 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all bg-white text-neutral-700 border-[1.5px] border-neutral-200 hover:bg-neutral-100 hover:border-neutral-300 hover:text-neutral-900"
+              className="flex-1 px-3 md:px-4 py-2.5 md:py-3 rounded-lg text-xs md:text-sm font-semibold flex items-center justify-center gap-1.5 md:gap-2 cursor-pointer transition-all bg-white text-neutral-700 border-[1.5px] border-neutral-200 hover:bg-neutral-100 hover:border-neutral-300 hover:text-neutral-900"
             >
-              <i className="fas fa-envelope"></i> Send Invite
+              <i className="fas fa-envelope"></i> Invite
             </button>
           </div>
         </div>
@@ -517,21 +508,21 @@ function EventManagement() {
 
       {/* Archive/Restore Section */}
       {isArchived ? (
-        <div className="my-8">
-          <div className="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border-2 border-amber-500/30 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-6 shadow-[0_4px_12px_rgba(245,158,11,0.08)]">
-            <div className="w-16 h-16 bg-amber-500/15 rounded-full flex items-center justify-center text-[2rem] text-amber-500 flex-shrink-0">
+        <div className="my-4 md:my-8">
+          <div className="bg-gradient-to-br from-amber-500/10 to-amber-500/5 border-2 border-amber-500/30 rounded-xl md:rounded-2xl p-4 md:p-8 flex flex-col md:flex-row items-center gap-4 md:gap-6 shadow-[0_4px_12px_rgba(245,158,11,0.08)]">
+            <div className="w-12 h-12 md:w-16 md:h-16 bg-amber-500/15 rounded-full flex items-center justify-center text-xl md:text-[2rem] text-amber-500 flex-shrink-0">
               <i className="fas fa-archive"></i>
             </div>
             <div className="flex-1 text-center md:text-left">
-              <h3 className="text-xl font-bold m-0 mb-2 text-amber-600 flex items-center justify-center md:justify-start gap-2">
-                <i className="fas fa-info-circle"></i> This Event is Archived
+              <h3 className="text-base md:text-xl font-bold m-0 mb-1 md:mb-2 text-amber-600 flex items-center justify-center md:justify-start gap-1.5 md:gap-2">
+                <i className="fas fa-info-circle text-sm md:text-base"></i> This Event is Archived
               </h3>
-              <p className="m-0 text-amber-800 text-[0.95rem]">
+              <p className="m-0 text-amber-800 text-xs md:text-[0.95rem]">
                 This event is hidden from participants and your active lists. All questions and data are preserved.
               </p>
             </div>
             <button
-              className="w-full md:w-auto px-6 py-3 rounded-[10px] font-semibold text-[0.95rem] cursor-pointer transition-all inline-flex items-center justify-center gap-2 bg-primary text-white shadow-[0_2px_8px_rgba(255,107,53,0.2)] hover:bg-orange-600 hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(255,107,53,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full md:w-auto px-4 md:px-6 py-2.5 md:py-3 rounded-[10px] font-semibold text-xs md:text-[0.95rem] cursor-pointer transition-all inline-flex items-center justify-center gap-1.5 md:gap-2 bg-primary text-white shadow-[0_2px_8px_rgba(255,107,53,0.2)] hover:bg-orange-600 hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(255,107,53,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
               onClick={handleRestore}
               disabled={saving}
             >
@@ -541,25 +532,25 @@ function EventManagement() {
           </div>
         </div>
       ) : (
-        <div className="my-8">
-          <div className="mt-10 mb-6">
-            <h2 className="text-2xl font-bold text-neutral-900 m-0 mb-2 flex items-center gap-3 tracking-tight">
-              <i className="fas fa-exclamation-triangle text-primary text-xl"></i> Archive Event
+        <div className="my-4 md:my-8">
+          <div className="mt-6 md:mt-10 mb-4 md:mb-6">
+            <h2 className="text-lg md:text-2xl font-bold text-neutral-900 m-0 mb-1 md:mb-2 flex items-center gap-2 md:gap-3 tracking-tight">
+              <i className="fas fa-exclamation-triangle text-primary text-base md:text-xl"></i> Archive Event
             </h2>
-            <p className="text-[0.9375rem] text-neutral-500 m-0 leading-relaxed">
+            <p className="text-xs md:text-[0.9375rem] text-neutral-500 m-0 leading-relaxed">
               Archive this event to remove it from your active lists while preserving all data
             </p>
           </div>
-          <div className="bg-gradient-to-br from-red-500/[0.03] to-red-500/[0.01] border border-red-500/20 rounded-xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="bg-gradient-to-br from-red-500/[0.03] to-red-500/[0.01] border border-red-500/20 rounded-lg md:rounded-xl p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-6">
             <div className="flex-1">
-              <h3 className="text-lg font-bold m-0 mb-2 text-red-600">Archive this event</h3>
-              <p className="m-0 text-red-800 text-sm leading-normal">
+              <h3 className="text-sm md:text-lg font-bold m-0 mb-1 md:mb-2 text-red-600">Archive this event</h3>
+              <p className="m-0 text-red-800 text-xs md:text-sm leading-normal">
                 Archiving will hide this event from participants and move it to your archived events.
                 You can restore it anytime. All questions and analytics will be preserved.
               </p>
             </div>
             <button
-              className="w-full md:w-auto bg-red-500 text-white border-none px-6 py-3 rounded-[10px] font-semibold text-[0.95rem] cursor-pointer transition-all inline-flex items-center justify-center gap-2 whitespace-nowrap hover:bg-red-600 hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(239,68,68,0.3)] active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full md:w-auto bg-red-500 text-white border-none px-4 md:px-6 py-2.5 md:py-3 rounded-[10px] font-semibold text-xs md:text-[0.95rem] cursor-pointer transition-all inline-flex items-center justify-center gap-1.5 md:gap-2 whitespace-nowrap hover:bg-red-600 hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(239,68,68,0.3)] active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed"
               onClick={handleArchive}
               disabled={saving}
             >
@@ -574,36 +565,36 @@ function EventManagement() {
       <BrandingPreview event={event} />
 
       {/* Questions */}
-      <div className="bg-white border border-black/10 rounded-[18px] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.06)] mt-5">
-        <div className="flex justify-between items-center gap-4 pb-4 border-b border-black/10 mb-4 flex-col md:flex-row">
-          <h2 className="text-xl font-bold text-neutral-900 m-0">Questions</h2>
+      <div className="bg-white border border-black/10 rounded-xl md:rounded-[18px] p-4 md:p-7 shadow-[0_1px_3px_rgba(0,0,0,0.06)] mt-4 md:mt-5 overflow-hidden min-w-0">
+        <div className="flex justify-between items-center gap-3 md:gap-4 pb-3 md:pb-4 border-b border-black/10 mb-3 md:mb-4 flex-col md:flex-row">
+          <h2 className="text-base md:text-xl font-bold text-neutral-900 m-0">Questions</h2>
           <div className="relative">
             <button
-              className="px-7 py-3.5 bg-primary/10 border border-primary/20 text-primary rounded-xl font-semibold cursor-pointer transition-all font-sans inline-flex items-center gap-2 text-[0.95rem] whitespace-nowrap hover:bg-primary/15 hover:-translate-y-0.5 hover:shadow-[0_4px_15px_rgba(255,107,53,0.2)]"
+              className="px-4 md:px-7 py-2.5 md:py-3.5 bg-primary/10 border border-primary/20 text-primary rounded-lg md:rounded-xl font-semibold cursor-pointer transition-all font-sans inline-flex items-center gap-1.5 md:gap-2 text-xs md:text-[0.95rem] whitespace-nowrap hover:bg-primary/15 hover:-translate-y-0.5 hover:shadow-[0_4px_15px_rgba(255,107,53,0.2)]"
               onClick={() => setShowExportMenu((v) => !v)}
             >
               <i className="fas fa-download" aria-hidden="true" />
               Export
             </button>
             {showExportMenu && (
-              <div className="absolute top-[calc(100%+0.75rem)] right-0 bg-white border border-black/10 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] z-[100] min-w-[220px] max-w-[90vw] overflow-hidden animate-slideDown">
+              <div className="absolute top-[calc(100%+0.75rem)] right-0 bg-white border border-black/10 rounded-xl md:rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] z-[100] min-w-[180px] md:min-w-[220px] max-w-[90vw] overflow-hidden animate-slideDown">
                 <button
                   onClick={() => handleExport("csv")}
-                  className="flex items-center gap-3 w-full px-5 py-4 border-0 bg-transparent text-neutral-600 text-left cursor-pointer text-[0.95em] font-medium transition-all font-sans hover:bg-primary/10 hover:text-neutral-900 border-b border-black/5"
+                  className="flex items-center gap-2 md:gap-3 w-full px-4 md:px-5 py-3 md:py-4 border-0 bg-transparent text-neutral-600 text-left cursor-pointer text-xs md:text-[0.95em] font-medium transition-all font-sans hover:bg-primary/10 hover:text-neutral-900 border-b border-black/5"
                 >
                   <i className="fas fa-file-csv" aria-hidden="true" />
                   Export as CSV
                 </button>
                 <button
                   onClick={() => handleExport("json")}
-                  className="flex items-center gap-3 w-full px-5 py-4 border-0 bg-transparent text-neutral-600 text-left cursor-pointer text-[0.95em] font-medium transition-all font-sans hover:bg-primary/10 hover:text-neutral-900 border-b border-black/5"
+                  className="flex items-center gap-2 md:gap-3 w-full px-4 md:px-5 py-3 md:py-4 border-0 bg-transparent text-neutral-600 text-left cursor-pointer text-xs md:text-[0.95em] font-medium transition-all font-sans hover:bg-primary/10 hover:text-neutral-900 border-b border-black/5"
                 >
                   <i className="fas fa-code" aria-hidden="true" />
                   Export as JSON
                 </button>
                 <button
                   onClick={() => handleExport("txt")}
-                  className="flex items-center gap-3 w-full px-5 py-4 border-0 bg-transparent text-neutral-600 text-left cursor-pointer text-[0.95em] font-medium transition-all font-sans hover:bg-primary/10 hover:text-neutral-900"
+                  className="flex items-center gap-2 md:gap-3 w-full px-4 md:px-5 py-3 md:py-4 border-0 bg-transparent text-neutral-600 text-left cursor-pointer text-xs md:text-[0.95em] font-medium transition-all font-sans hover:bg-primary/10 hover:text-neutral-900"
                 >
                   <i className="fas fa-file-lines" aria-hidden="true" />
                   Export as Text
@@ -615,81 +606,81 @@ function EventManagement() {
 
         {/* Analytics Cards */}
         {analytics && (
-          <section className="grid grid-cols-[repeat(auto-fit,minmax(min(200px,100%),1fr))] gap-[clamp(0.75rem,2vw,1.5rem)] mb-8">
+          <section className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-4 md:mb-8 w-full">
             {/* Answered */}
-            <div className="bg-white border border-black/10 rounded-2xl p-[clamp(1rem,2.5vw,1.75rem)] shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all relative overflow-hidden group hover:bg-primary/[0.02] hover:border-primary/20 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,107,53,0.12)]">
+            <div className="bg-white border border-black/10 rounded-xl md:rounded-2xl p-2.5 md:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all relative group hover:bg-primary/[0.02] hover:border-primary/20 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,107,53,0.12)] min-w-0">
               <div className="absolute inset-x-0 top-0 h-[3px] bg-primary opacity-0 transition-opacity group-hover:opacity-100"></div>
-              <div className="flex justify-between items-center gap-3 mb-4">
-                <span className="text-neutral-500 text-sm font-semibold uppercase tracking-wide flex-1">Answered</span>
-                <div className="w-10 h-10 rounded-[10px] flex items-center justify-center text-xl flex-shrink-0 bg-emerald-500/10 text-emerald-500">
+              <div className="flex items-center gap-1.5 md:gap-3 mb-1.5 md:mb-4">
+                <div className="w-6 h-6 md:w-10 md:h-10 rounded-md md:rounded-[10px] flex items-center justify-center text-xs md:text-xl flex-shrink-0 bg-emerald-500/10 text-emerald-500">
                   <i className="fas fa-check-circle" aria-hidden="true"></i>
                 </div>
+                <span className="text-neutral-500 text-[9px] md:text-sm font-semibold uppercase tracking-wide truncate">Answered</span>
               </div>
-              <div className="text-[clamp(1.75rem,3.2vw,2.5rem)] font-bold text-neutral-900 font-['Poppins',sans-serif] leading-none mb-1">
+              <div className="text-lg md:text-3xl font-bold text-neutral-900 font-['Poppins',sans-serif] leading-none mb-0.5 md:mb-1">
                 {analytics.summary?.answered ?? 0}
               </div>
-              <div className="text-neutral-500 text-sm min-h-[1.35rem]">
+              <div className="text-neutral-500 text-[9px] md:text-sm truncate">
                 <span className="text-emerald-500 font-semibold">
                   {fmtPct(analytics.summary?.percentAnswered)}
                 </span>{" "}
-                of total
+                <span className="hidden md:inline">of total</span>
               </div>
             </div>
 
             {/* Unanswered */}
-            <div className="bg-white border border-black/10 rounded-2xl p-[clamp(1rem,2.5vw,1.75rem)] shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all relative overflow-hidden group hover:bg-primary/[0.02] hover:border-primary/20 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,107,53,0.12)]">
+            <div className="bg-white border border-black/10 rounded-xl md:rounded-2xl p-2.5 md:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all relative group hover:bg-primary/[0.02] hover:border-primary/20 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,107,53,0.12)] min-w-0">
               <div className="absolute inset-x-0 top-0 h-[3px] bg-primary opacity-0 transition-opacity group-hover:opacity-100"></div>
-              <div className="flex justify-between items-center gap-3 mb-4">
-                <span className="text-neutral-500 text-sm font-semibold uppercase tracking-wide flex-1">Unanswered</span>
-                <div className="w-10 h-10 rounded-[10px] flex items-center justify-center text-xl flex-shrink-0 bg-amber-500/10 text-amber-500">
+              <div className="flex items-center gap-1.5 md:gap-3 mb-1.5 md:mb-4">
+                <div className="w-6 h-6 md:w-10 md:h-10 rounded-md md:rounded-[10px] flex items-center justify-center text-xs md:text-xl flex-shrink-0 bg-amber-500/10 text-amber-500">
                   <i className="fas fa-question-circle" aria-hidden="true"></i>
                 </div>
+                <span className="text-neutral-500 text-[9px] md:text-sm font-semibold uppercase tracking-wide truncate">Pending</span>
               </div>
-              <div className="text-[clamp(1.75rem,3.2vw,2.5rem)] font-bold text-neutral-900 font-['Poppins',sans-serif] leading-none mb-1">
+              <div className="text-lg md:text-3xl font-bold text-neutral-900 font-['Poppins',sans-serif] leading-none mb-0.5 md:mb-1">
                 {analytics.summary?.unanswered ?? 0}
               </div>
-              <div className="text-neutral-500 text-sm min-h-[1.35rem]">
-                <span className="text-neutral-500">Remaining in queue</span>
+              <div className="text-neutral-500 text-[9px] md:text-sm truncate">
+                <span className="md:hidden">In queue</span><span className="hidden md:inline">Remaining in queue</span>
               </div>
             </div>
 
             {/* Anonymous */}
-            <div className="bg-white border border-black/10 rounded-2xl p-[clamp(1rem,2.5vw,1.75rem)] shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all relative overflow-hidden group hover:bg-primary/[0.02] hover:border-primary/20 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,107,53,0.12)]">
+            <div className="bg-white border border-black/10 rounded-xl md:rounded-2xl p-2.5 md:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all relative group hover:bg-primary/[0.02] hover:border-primary/20 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,107,53,0.12)] min-w-0">
               <div className="absolute inset-x-0 top-0 h-[3px] bg-primary opacity-0 transition-opacity group-hover:opacity-100"></div>
-              <div className="flex justify-between items-center gap-3 mb-4">
-                <span className="text-neutral-500 text-sm font-semibold uppercase tracking-wide flex-1">Anonymous</span>
-                <div className="w-10 h-10 rounded-[10px] flex items-center justify-center text-xl flex-shrink-0 bg-blue-500/10 text-blue-500">
+              <div className="flex items-center gap-1.5 md:gap-3 mb-1.5 md:mb-4">
+                <div className="w-6 h-6 md:w-10 md:h-10 rounded-md md:rounded-[10px] flex items-center justify-center text-xs md:text-xl flex-shrink-0 bg-blue-500/10 text-blue-500">
                   <i className="fas fa-user-secret" aria-hidden="true"></i>
                 </div>
+                <span className="text-neutral-500 text-[9px] md:text-sm font-semibold uppercase tracking-wide truncate">Anon</span>
               </div>
-              <div className="text-[clamp(1.75rem,3.2vw,2.5rem)] font-bold text-neutral-900 font-['Poppins',sans-serif] leading-none mb-1">
+              <div className="text-lg md:text-3xl font-bold text-neutral-900 font-['Poppins',sans-serif] leading-none mb-0.5 md:mb-1">
                 {analytics.summary?.anonymous ?? 0}
               </div>
-              <div className="text-neutral-500 text-sm min-h-[1.35rem]">
+              <div className="text-neutral-500 text-[9px] md:text-sm truncate">
                 <span className="text-emerald-500 font-semibold">
                   {fmtPct(analytics.summary?.percentAnonymous)}
-                </span>{" "}
-                of submissions
+                </span>
+                <span className="hidden md:inline"> of submissions</span>
               </div>
             </div>
 
             {/* Session Duration */}
-            <div className="bg-white border border-black/10 rounded-2xl p-[clamp(1rem,2.5vw,1.75rem)] shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all relative overflow-hidden group hover:bg-primary/[0.02] hover:border-primary/20 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,107,53,0.12)]">
+            <div className="bg-white border border-black/10 rounded-xl md:rounded-2xl p-2.5 md:p-5 shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all relative group hover:bg-primary/[0.02] hover:border-primary/20 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,107,53,0.12)] min-w-0">
               <div className="absolute inset-x-0 top-0 h-[3px] bg-primary opacity-0 transition-opacity group-hover:opacity-100"></div>
-              <div className="flex justify-between items-center gap-3 mb-4">
-                <span className="text-neutral-500 text-sm font-semibold uppercase tracking-wide flex-1">Session Duration</span>
-                <div className="w-10 h-10 rounded-[10px] flex items-center justify-center text-xl flex-shrink-0 bg-primary/10 text-primary">
+              <div className="flex items-center gap-1.5 md:gap-3 mb-1.5 md:mb-4">
+                <div className="w-6 h-6 md:w-10 md:h-10 rounded-md md:rounded-[10px] flex items-center justify-center text-xs md:text-xl flex-shrink-0 bg-primary/10 text-primary">
                   <i className="fas fa-clock" aria-hidden="true"></i>
                 </div>
+                <span className="text-neutral-500 text-[9px] md:text-sm font-semibold uppercase tracking-wide truncate">Duration</span>
               </div>
-              <div className="text-[2rem] font-bold text-neutral-900 font-['Poppins',sans-serif] leading-none mb-1">
+              <div className="text-lg md:text-2xl font-bold text-neutral-900 font-['Poppins',sans-serif] leading-none mb-0.5 md:mb-1">
                 {analytics.timeline?.duration || "N/A"}
               </div>
               {compactTimeLabel(
                 analytics.timeline?.firstQuestion,
                 analytics.timeline?.lastQuestion
               ) && (
-                <div className="text-neutral-500 text-sm min-h-[1.35rem]">
+                <div className="text-neutral-500 text-[9px] md:text-sm hidden md:block truncate">
                   {compactTimeLabel(
                     analytics.timeline?.firstQuestion,
                     analytics.timeline?.lastQuestion
@@ -700,42 +691,42 @@ function EventManagement() {
           </section>
         )}
 
-        <div className="flex gap-2 flex-wrap my-4 mb-5">
+        <div className="flex gap-1.5 md:gap-2 flex-wrap my-3 md:my-4 mb-3 md:mb-5">
           <button
-            className={`px-4 py-2.5 rounded-[10px] border font-bold cursor-pointer transition-all inline-flex gap-2 items-center ${filter === "all" ? "bg-primary border-transparent text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]" : "border-black/10 bg-black/[0.02] text-neutral-600 hover:bg-primary/10 hover:border-primary/20"}`}
+            className={`px-2.5 md:px-4 py-1.5 md:py-2.5 rounded-lg md:rounded-[10px] border font-bold text-xs md:text-sm cursor-pointer transition-all inline-flex gap-1 md:gap-2 items-center ${filter === "all" ? "bg-primary border-transparent text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]" : "border-black/10 bg-black/[0.02] text-neutral-600 hover:bg-primary/10 hover:border-primary/20"}`}
             onClick={() => setFilter("all")}
           >
             All
           </button>
           <button
-            className={`px-4 py-2.5 rounded-[10px] border font-bold cursor-pointer transition-all inline-flex gap-2 items-center ${filter === "organizer" ? "bg-primary border-transparent text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]" : "border-black/10 bg-black/[0.02] text-neutral-600 hover:bg-primary/10 hover:border-primary/20"}`}
+            className={`px-2.5 md:px-4 py-1.5 md:py-2.5 rounded-lg md:rounded-[10px] border font-bold text-xs md:text-sm cursor-pointer transition-all inline-flex gap-1 md:gap-2 items-center ${filter === "organizer" ? "bg-primary border-transparent text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]" : "border-black/10 bg-black/[0.02] text-neutral-600 hover:bg-primary/10 hover:border-primary/20"}`}
             onClick={() => setFilter("organizer")}
           >
-            <i className="fas fa-star" aria-hidden="true"></i> Strategic
+            <i className="fas fa-star" aria-hidden="true"></i> <span className="md:hidden">Strat</span><span className="hidden md:inline">Strategic</span>
           </button>
           <button
-            className={`px-4 py-2.5 rounded-[10px] border font-bold cursor-pointer transition-all inline-flex gap-2 items-center ${filter === "audience" ? "bg-primary border-transparent text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]" : "border-black/10 bg-black/[0.02] text-neutral-600 hover:bg-primary/10 hover:border-primary/20"}`}
+            className={`px-2.5 md:px-4 py-1.5 md:py-2.5 rounded-lg md:rounded-[10px] border font-bold text-xs md:text-sm cursor-pointer transition-all inline-flex gap-1 md:gap-2 items-center ${filter === "audience" ? "bg-primary border-transparent text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]" : "border-black/10 bg-black/[0.02] text-neutral-600 hover:bg-primary/10 hover:border-primary/20"}`}
             onClick={() => setFilter("audience")}
           >
-            <i className="fas fa-users" aria-hidden="true"></i> Audience
+            <i className="fas fa-users" aria-hidden="true"></i> <span className="md:hidden">Aud</span><span className="hidden md:inline">Audience</span>
           </button>
           <button
-            className={`px-4 py-2.5 rounded-[10px] border font-bold cursor-pointer transition-all inline-flex gap-2 items-center ${filter === "answered" ? "bg-primary border-transparent text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]" : "border-black/10 bg-black/[0.02] text-neutral-600 hover:bg-primary/10 hover:border-primary/20"}`}
+            className={`px-2.5 md:px-4 py-1.5 md:py-2.5 rounded-lg md:rounded-[10px] border font-bold text-xs md:text-sm cursor-pointer transition-all inline-flex gap-1 md:gap-2 items-center ${filter === "answered" ? "bg-primary border-transparent text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]" : "border-black/10 bg-black/[0.02] text-neutral-600 hover:bg-primary/10 hover:border-primary/20"}`}
             onClick={() => setFilter("answered")}
           >
-            Answered
+            <span className="md:hidden"><i className="fas fa-check"></i></span><span className="hidden md:inline">Answered</span>
           </button>
           <button
-            className={`px-4 py-2.5 rounded-[10px] border font-bold cursor-pointer transition-all inline-flex gap-2 items-center ${filter === "unanswered" ? "bg-primary border-transparent text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]" : "border-black/10 bg-black/[0.02] text-neutral-600 hover:bg-primary/10 hover:border-primary/20"}`}
+            className={`px-2.5 md:px-4 py-1.5 md:py-2.5 rounded-lg md:rounded-[10px] border font-bold text-xs md:text-sm cursor-pointer transition-all inline-flex gap-1 md:gap-2 items-center ${filter === "unanswered" ? "bg-primary border-transparent text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)]" : "border-black/10 bg-black/[0.02] text-neutral-600 hover:bg-primary/10 hover:border-primary/20"}`}
             onClick={() => setFilter("unanswered")}
           >
-            Unanswered
+            <span className="md:hidden"><i className="fas fa-clock"></i></span><span className="hidden md:inline">Unanswered</span>
           </button>
         </div>
 
-        <div className="grid gap-3">
+        <div className="grid gap-2 md:gap-3 w-full min-w-0">
           {filteredQuestions.length === 0 ? (
-            <p className="text-center text-neutral-500 py-10 px-4">No questions to display.</p>
+            <p className="text-center text-neutral-500 py-6 md:py-10 px-4 text-sm">No questions to display.</p>
           ) : (
             filteredQuestions.map((q) => (
               <QuestionItem
@@ -752,23 +743,23 @@ function EventManagement() {
       {/* Invite modal */}
       {showInviteModal && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-[4px] flex items-center justify-center z-[1000] animate-fadeIn"
+          className="fixed inset-0 bg-black/50 backdrop-blur-[4px] flex items-center justify-center z-[1000] animate-fadeIn p-4"
           onClick={() => setShowInviteModal(false)}
         >
           <div
-            className="bg-white border border-black/10 rounded-[18px] p-7 w-[min(520px,92vw)] shadow-[0_20px_60px_rgba(0,0,0,0.2)] animate-slideUp"
+            className="bg-white border border-black/10 rounded-xl md:rounded-[18px] p-4 md:p-7 w-[min(520px,100%)] shadow-[0_20px_60px_rgba(0,0,0,0.2)] animate-slideUp"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
             aria-labelledby="invite-title"
           >
-            <h3 id="invite-title" className="m-0 mb-2 flex items-center gap-2.5 text-xl font-bold">
-              <i className="fas fa-paper-plane text-primary" aria-hidden="true"></i> Invite MC/Host
+            <h3 id="invite-title" className="m-0 mb-1.5 md:mb-2 flex items-center gap-2 md:gap-2.5 text-base md:text-xl font-bold">
+              <i className="fas fa-paper-plane text-primary text-sm md:text-base" aria-hidden="true"></i> Invite MC/Host
             </h3>
-            <p className="text-neutral-500 m-0 mb-4">We'll open your email client with a pre-filled message containing the MC link.</p>
+            <p className="text-neutral-500 m-0 mb-3 md:mb-4 text-xs md:text-sm">We'll open your email client with a pre-filled message containing the MC link.</p>
 
-            <div className="my-2.5 mb-4">
-              <label htmlFor="mcEmail" className="block font-bold mb-2 text-neutral-900">MC Email Address</label>
+            <div className="my-2.5 mb-3 md:mb-4">
+              <label htmlFor="mcEmail" className="block font-bold mb-1.5 md:mb-2 text-neutral-900 text-xs md:text-sm">MC Email Address</label>
               <input
                 type="email"
                 id="mcEmail"
@@ -776,20 +767,20 @@ function EventManagement() {
                 onChange={(e) => setMcEmail(e.target.value)}
                 placeholder="mc@example.com"
                 autoFocus
-                className="w-full px-3.5 py-3 rounded-[10px] border border-black/15 bg-white text-neutral-900 outline-none transition-all focus:border-primary focus:shadow-[0_0_0_3px_rgba(255,107,53,0.15)] focus:bg-primary/[0.02]"
+                className="w-full px-3 md:px-3.5 py-2.5 md:py-3 rounded-lg md:rounded-[10px] border border-black/15 bg-white text-neutral-900 text-xs md:text-sm outline-none transition-all focus:border-primary focus:shadow-[0_0_0_3px_rgba(255,107,53,0.15)] focus:bg-primary/[0.02]"
               />
             </div>
 
-            <div className="flex gap-2.5 justify-end mt-4">
+            <div className="flex gap-2 md:gap-2.5 justify-end mt-3 md:mt-4">
               <button
                 onClick={() => setShowInviteModal(false)}
-                className="inline-flex items-center justify-center gap-2 rounded-[10px] font-bold px-5 py-3 cursor-pointer transition-all border bg-transparent border-black/15 text-neutral-600 hover:bg-black/[0.03] hover:border-black/25"
+                className="inline-flex items-center justify-center gap-2 rounded-lg md:rounded-[10px] font-bold px-4 md:px-5 py-2.5 md:py-3 text-xs md:text-sm cursor-pointer transition-all border bg-transparent border-black/15 text-neutral-600 hover:bg-black/[0.03] hover:border-black/25"
               >
                 Cancel
               </button>
               <button
                 onClick={sendMCInvite}
-                className="inline-flex items-center justify-center gap-2 rounded-[10px] font-bold px-5 py-3 cursor-pointer transition-all border border-transparent bg-primary text-white shadow-[0_2px_8px_rgba(255,107,53,0.2)] hover:bg-orange-600 hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(255,107,53,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
+                className="inline-flex items-center justify-center gap-2 rounded-lg md:rounded-[10px] font-bold px-4 md:px-5 py-2.5 md:py-3 text-xs md:text-sm cursor-pointer transition-all border border-transparent bg-primary text-white shadow-[0_2px_8px_rgba(255,107,53,0.2)] hover:bg-orange-600 hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(255,107,53,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={!mcEmail.trim()}
               >
                 Send Invite

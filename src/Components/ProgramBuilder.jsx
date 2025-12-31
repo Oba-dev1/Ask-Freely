@@ -192,16 +192,16 @@ function ProgramBuilder({ eventId, eventTitle }) {
   };
 
   const getTotalDuration = () => {
-    return programItems.reduce((total, item) => total + (item.duration || 0), 0);
+    return programItems.reduce((total, item) => total + (parseInt(item.duration, 10) || 0), 0);
   };
 
   const getTypeIcon = (type) => {
     switch (type) {
-      case 'segment': return '📋';
-      case 'qa': return '❓';
-      case 'break': return '☕';
-      case 'performance': return '🎤';
-      default: return '📌';
+      case 'segment': return <i className="fas fa-clipboard-list text-primary"></i>;
+      case 'qa': return <i className="fas fa-question-circle text-blue-500"></i>;
+      case 'break': return <i className="fas fa-mug-hot text-amber-500"></i>;
+      case 'performance': return <i className="fas fa-microphone text-purple-500"></i>;
+      default: return <i className="fas fa-thumbtack text-neutral-400"></i>;
     }
   };
 
@@ -352,7 +352,7 @@ function ProgramBuilder({ eventId, eventTitle }) {
                     <span className="py-1 px-3 bg-primary/[0.12] border border-primary/25 rounded-xl text-primary text-[0.75rem] font-semibold uppercase tracking-wide whitespace-nowrap flex-shrink-0">{getTypeLabel(item.type)}</span>
                   </div>
                   <span className="inline-flex items-center gap-1.5 text-neutral-500 text-[0.9rem] font-medium whitespace-nowrap flex-shrink-0">
-                    <i className="fas fa-clock text-[0.85rem]"></i> {item.duration} min
+                    <i className="fas fa-clock text-[0.85rem]"></i> {parseInt(item.duration, 10) || 0} min
                   </span>
                 </div>
 
