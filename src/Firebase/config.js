@@ -12,8 +12,8 @@ const firebaseConfig = {
   databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL || "https://ask-freely-default-rtdb.firebaseio.com/",
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "ask-freely",
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "ask-freely.firebasestorage.app",
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "691045377331",
-  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:691045377331:web:36aborc8a7b9f5c8a8b8a8"
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "457495551077",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:457495551077:web:29401003fa26c9102c3a8c"
 };
 
 // Initialize Firebase

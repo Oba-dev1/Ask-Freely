@@ -3,9 +3,10 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { sendEmailVerification } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
-import useRecaptcha from '../hooks/useRecaptcha';
-import { RECAPTCHA_SITE_KEY } from '../Firebase/config';
-import { getFriendlyErrorMessage, retryWithBackoff } from '../utils/errorHandler';
+// reCAPTCHA temporarily disabled - will be implemented later
+// import useRecaptcha from '../hooks/useRecaptcha';
+// import { RECAPTCHA_SITE_KEY } from '../Firebase/config';
+import { getFriendlyErrorMessage } from '../utils/errorHandler';
 import OfflineBanner from './OfflineBanner';
 
 function Login() {
@@ -22,7 +23,8 @@ function Login() {
 
   const { login, signInWithGoogle, currentUser, userProfile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const { executeRecaptcha } = useRecaptcha(RECAPTCHA_SITE_KEY);
+  // reCAPTCHA temporarily disabled
+  // const { executeRecaptcha } = useRecaptcha(RECAPTCHA_SITE_KEY);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -82,18 +84,19 @@ function Login() {
       setError('');
       setLoading(true);
 
-      const recaptchaToken = await retryWithBackoff(
-        () => executeRecaptcha('google_login'),
-        2
-      );
+      // reCAPTCHA temporarily disabled - will be implemented later
+      // const recaptchaToken = await retryWithBackoff(
+      //   () => executeRecaptcha('google_login'),
+      //   2
+      // );
 
-      if (!recaptchaToken) {
-        setError('reCAPTCHA verification failed. Please try again.');
-        setLoading(false);
-        return;
-      }
+      // if (!recaptchaToken) {
+      //   setError('reCAPTCHA verification failed. Please try again.');
+      //   setLoading(false);
+      //   return;
+      // }
 
-      console.log('✅ reCAPTCHA verified for Google login');
+      // console.log('✅ reCAPTCHA verified for Google login');
       console.log('🔵 Starting Google Sign-In (redirect)...');
       await signInWithGoogle();
     } catch (err) {
@@ -112,15 +115,16 @@ function Login() {
       setError('');
       setLoading(true);
 
-      const recaptchaToken = await executeRecaptcha('login');
+      // reCAPTCHA temporarily disabled - will be implemented later
+      // const recaptchaToken = await executeRecaptcha('login');
 
-      if (!recaptchaToken) {
-        setError('reCAPTCHA verification failed. Please try again.');
-        setLoading(false);
-        return;
-      }
+      // if (!recaptchaToken) {
+      //   setError('reCAPTCHA verification failed. Please try again.');
+      //   setLoading(false);
+      //   return;
+      // }
 
-      console.log('✅ reCAPTCHA verified for login');
+      // console.log('✅ reCAPTCHA verified for login');
 
       if (rememberMe) {
         localStorage.setItem('rememberedEmail', email);
