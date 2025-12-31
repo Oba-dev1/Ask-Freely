@@ -118,8 +118,10 @@ function OrganizerAnalytics() {
 
       totalQuestions += questions.length;
       totalAnswered += questions.filter(q => q.answered).length;
-      totalAnonymous += questions.filter(q => q.source === 'anonymous').length;
-      totalAudience += questions.filter(q => q.source === 'audience').length;
+      // Count anonymous: either source is 'anonymous' OR anonymous field is true
+      totalAnonymous += questions.filter(q => q.source === 'anonymous' || q.anonymous === true).length;
+      // Count audience: source is 'audience' AND not anonymous
+      totalAudience += questions.filter(q => q.source === 'audience' && q.anonymous !== true).length;
       totalOrganizer += questions.filter(q => q.source === 'organizer').length;
     });
 
@@ -152,8 +154,10 @@ function OrganizerAnalytics() {
 
       const totalQuestions = questions.length;
       const answered = questions.filter(q => q.answered).length;
-      const anonymous = questions.filter(q => q.source === 'anonymous').length;
-      const audience = questions.filter(q => q.source === 'audience').length;
+      // Count anonymous: either source is 'anonymous' OR anonymous field is true
+      const anonymous = questions.filter(q => q.source === 'anonymous' || q.anonymous === true).length;
+      // Count audience: source is 'audience' AND not anonymous
+      const audience = questions.filter(q => q.source === 'audience' && q.anonymous !== true).length;
       const organizer = questions.filter(q => q.source === 'organizer').length;
 
       const answerRate = totalQuestions > 0 ? (answered / totalQuestions) * 100 : 0;
