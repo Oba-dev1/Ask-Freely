@@ -1,8 +1,13 @@
 [
   {
-    "origin": ["*"],
-    "method": ["GET", "POST", "PUT", "DELETE", "HEAD"],
+    "origin": [
+      "https://askfreely.live",
+      "https://www.askfreely.live",
+      "https://ask-freely.netlify.app",
+      "http://localhost:3000"
+    ],
+    "method": ["GET", "HEAD"],
     "maxAgeSeconds": 3600,
-    "responseHeader": ["Content-Type", "Authorization", "Content-Length", "User-Agent", "X-Requested-With"]
+    "responseHeader": ["Content-Type", "Content-Length"]
   }
 ]

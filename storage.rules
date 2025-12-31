@@ -50,14 +50,16 @@ service firebase.storage {
       // Anyone can read organization logos (public)
       allow read: if true;
 
-      // Authenticated users can upload their own logos
-      // File name should start with their userId
+      // SECURITY: Users can only upload logos prefixed with their userId
+      // This prevents overwriting other users' logos
       allow write: if isAuthenticated()
+                   && imageName.matches(request.auth.uid + '_.*')
                    && isImage()
                    && isValidImageSize();
 
-      // Users can delete their own logos (filename starts with userId)
-      allow delete: if isAuthenticated();
+      // SECURITY: Users can only delete their own logos
+      allow delete: if isAuthenticated()
+                    && imageName.matches(request.auth.uid + '_.*');
     }
 
     // ============================================
@@ -67,13 +69,16 @@ service firebase.storage {
       // Anyone can read published event logos
       allow read: if true;
 
-      // Only event organizer can upload logos
+      // SECURITY: Only event organizer can upload logos
+      // File must be prefixed with userId for ownership tracking
       allow write: if isAuthenticated()
+                   && imageName.matches(request.auth.uid + '_.*')
                    && isImage()
                    && isValidImageSize();
 
-      // Only event organizer can delete
-      allow delete: if isAuthenticated();
+      // SECURITY: Only the uploader can delete
+      allow delete: if isAuthenticated()
+                    && imageName.matches(request.auth.uid + '_.*');
     }
 
     // ============================================
@@ -83,13 +88,16 @@ service firebase.storage {
       // Anyone can read published event flyers
       allow read: if true;
 
-      // Only event organizer can upload flyers (auth required)
+      // SECURITY: Only event organizer can upload flyers
+      // File must be prefixed with userId for ownership tracking
       allow write: if isAuthenticated()
+                   && imageName.matches(request.auth.uid + '_.*')
                    && isImage()
                    && isValidImageSize();
 
-      // Only authenticated users can delete
-      allow delete: if isAuthenticated();
+      // SECURITY: Only the uploader can delete
+      allow delete: if isAuthenticated()
+                    && imageName.matches(request.auth.uid + '_.*');
     }
 
     // ============================================
