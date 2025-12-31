@@ -123,17 +123,19 @@
           root.child('events/' + $eventId + '/status').val() === 'unlisted' ||
           (auth != null && root.child('events/' + $eventId + '/organizerId').val() === auth.uid)
         ",
+        // Organizer can write at collection level (for batch operations)
         ".write": "auth != null && root.child('events/' + $eventId + '/organizerId').val() === auth.uid",
 
         "$questionId": {
-          // SECURITY: Proper parentheses to prevent logic bypass
-          // New questions: requires submission enabled AND respects anonymity settings
+          // SECURITY: Allow anonymous question submissions for published/unlisted events
+          // New questions: event must be published/unlisted AND have question submission enabled
           // Updates: only organizer can modify existing questions
           ".write": "
-            auth != null && (
-              (!data.exists() && root.child('events/' + $eventId + '/enableQuestionSubmission').val() === true) ||
-              (data.exists() && root.child('events/' + $eventId + '/organizerId').val() === auth.uid)
-            )
+            (!data.exists() && (
+              (root.child('events/' + $eventId + '/status').val() === 'published' || root.child('events/' + $eventId + '/status').val() === 'unlisted') &&
+              root.child('events/' + $eventId + '/enableQuestionSubmission').val() === true
+            )) ||
+            (data.exists() && auth != null && root.child('events/' + $eventId + '/organizerId').val() === auth.uid)
           ",
 
           "question": {
@@ -152,7 +154,7 @@
             ".validate": "newData.isString()"
           },
           "createdAt": {
-            ".validate": "newData.isString()"
+            ".validate": "newData.isString() || newData.isNumber()"
           },
           "upvotes": {
             ".validate": "newData.isNumber() && newData.val() >= 0"

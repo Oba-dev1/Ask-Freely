@@ -1,7 +1,7 @@
 // src/Components/DashboardOverview.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, get } from 'firebase/database';
 import { database } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
 import CreateEventModal from './CreateEventModal';
@@ -24,6 +24,25 @@ function DashboardOverview() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
+  // Function to fetch questions for a specific event
+  const fetchEventQuestions = useCallback(async (eventId) => {
+    try {
+      const questionsRef = ref(database, `questions/${eventId}`);
+      const snapshot = await get(questionsRef);
+      if (snapshot.exists()) {
+        const questionsData = snapshot.val();
+        const questionsArray = Object.values(questionsData);
+        const total = questionsArray.length;
+        const answered = questionsArray.filter(q => q.answered === true || q.status === 'answered').length;
+        return { total, answered };
+      }
+      return { total: 0, answered: 0 };
+    } catch (error) {
+      console.error(`Error fetching questions for event ${eventId}:`, error);
+      return { total: 0, answered: 0 };
+    }
+  }, []);
+
   useEffect(() => {
     if (!currentUser) {
       setLoading(false);
@@ -33,7 +52,7 @@ function DashboardOverview() {
     const eventsRef = ref(database, 'events');
     const unsubscribeEvents = onValue(
       eventsRef,
-      (snapshot) => {
+      async (snapshot) => {
         const data = snapshot.val();
 
         if (data) {
@@ -41,25 +60,42 @@ function DashboardOverview() {
             .filter((key) => data[key]?.organizerId === currentUser.uid)
             .map((key) => ({ id: key, ...data[key] }));
 
-          setEvents(userEvents);
-
           const totalEvents = userEvents.length;
           const activeEvents = userEvents.filter(e => e.status === 'published').length;
           const draftEvents = userEvents.filter(e => e.status === 'draft').length;
 
+          // Fetch questions for all user events
           let totalQuestions = 0;
           let answeredQuestions = 0;
-          let pendingQuestions = 0;
           const recentActivity = [];
 
-          userEvents.forEach(event => {
-            const eventQuestions = event.questionCount || 0;
-            const eventAnswered = event.answeredCount || 0;
+          // Fetch questions for each event in parallel
+          const questionPromises = userEvents.map(async (event) => {
+            const { total, answered } = await fetchEventQuestions(event.id);
+            return { eventId: event.id, total, answered };
+          });
 
-            totalQuestions += eventQuestions;
-            answeredQuestions += eventAnswered;
-            pendingQuestions += (eventQuestions - eventAnswered);
+          const questionsResults = await Promise.all(questionPromises);
 
+          // Create a map of event questions for easy lookup
+          const eventQuestionsMap = {};
+          questionsResults.forEach(result => {
+            eventQuestionsMap[result.eventId] = result;
+            totalQuestions += result.total;
+            answeredQuestions += result.answered;
+          });
+
+          // Update events with question counts for display
+          const eventsWithQuestions = userEvents.map(event => ({
+            ...event,
+            questionCount: eventQuestionsMap[event.id]?.total || 0,
+            answeredCount: eventQuestionsMap[event.id]?.answered || 0
+          }));
+
+          setEvents(eventsWithQuestions);
+
+          // Build recent activity
+          eventsWithQuestions.forEach(event => {
             recentActivity.push({
               type: 'event',
               title: event.title,
@@ -71,6 +107,7 @@ function DashboardOverview() {
 
           recentActivity.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+          const pendingQuestions = totalQuestions - answeredQuestions;
           const totalEngagement = totalQuestions > 0
             ? Math.round((answeredQuestions / totalQuestions) * 100)
             : 0;
@@ -101,6 +138,7 @@ function DashboardOverview() {
         setLoading(false);
       },
       (error) => {
+        console.error('Error fetching events:', error);
         setLoading(false);
         setEvents([]);
         setStats({
@@ -117,7 +155,7 @@ function DashboardOverview() {
     );
 
     return () => unsubscribeEvents();
-  }, [currentUser]);
+  }, [currentUser, fetchEventQuestions]);
 
   const getRecentEvents = () => {
     return events
