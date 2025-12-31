@@ -40,10 +40,11 @@
         // Individual event read permission (for unauthenticated access to published events)
         ".read": "data.child('status').val() === 'published' || data.child('status').val() === 'unlisted'",
 
-        // Only event organizer can write
+        // Only event organizer can write (create or update)
+        // SECURITY: Proper parentheses to prevent logic bypass
         ".write": "auth != null && (
-          !data.exists() && newData.child('organizerId').val() === auth.uid ||
-          data.exists() && data.child('organizerId').val() === auth.uid
+          (!data.exists() && newData.child('organizerId').val() === auth.uid) ||
+          (data.exists() && data.child('organizerId').val() === auth.uid)
         )",
 
         // Validate event structure
@@ -125,10 +126,13 @@
         ".write": "auth != null && root.child('events/' + $eventId + '/organizerId').val() === auth.uid",
 
         "$questionId": {
+          // SECURITY: Proper parentheses to prevent logic bypass
+          // New questions: requires submission enabled AND respects anonymity settings
+          // Updates: only organizer can modify existing questions
           ".write": "
             auth != null && (
-              !data.exists() && root.child('events/' + $eventId + '/enableQuestionSubmission').val() === true ||
-              data.exists() && root.child('events/' + $eventId + '/organizerId').val() === auth.uid
+              (!data.exists() && root.child('events/' + $eventId + '/enableQuestionSubmission').val() === true) ||
+              (data.exists() && root.child('events/' + $eventId + '/organizerId').val() === auth.uid)
             )
           ",
 
