@@ -298,35 +298,37 @@ export default function ParticipantForm() {
 
   return (
     <div className="min-h-screen bg-white" style={{ '--brand-color': brandColor }}>
-      <div className="max-w-[760px] mx-auto pt-24 px-6 pb-12 md:pt-24 md:px-6 sm:pt-20 sm:px-4 sm:pb-10">
-        <Link
-          to="/"
-          className="inline-block mb-4 text-neutral-500 no-underline border border-black/[0.08] bg-transparent px-3.5 py-2 rounded-[10px] transition-all hover:text-neutral-700 hover:border-primary/40"
-        >
-          ← Back to Home
-        </Link>
+      <div className="max-w-[760px] mx-auto pt-24 px-6 pb-12 md:pt-20 md:px-5 sm:pt-16 sm:px-4 sm:pb-8">
+        <div className="flex justify-center mb-5 sm:mb-4">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-neutral-500 no-underline border border-black/[0.08] bg-transparent px-3.5 py-2 sm:px-3 sm:py-1.5 rounded-[10px] text-[0.9rem] sm:text-[0.85rem] transition-all hover:text-neutral-700 hover:border-primary/40"
+          >
+            <i className="fas fa-arrow-left text-[0.75rem]"></i> Back to Home
+          </Link>
+        </div>
 
         {/* Branded Header */}
         {event ? (
           <BrandedEventHeader event={event} />
         ) : (
-          <header className="text-center mb-7">
-            <h1 className="text-neutral-900 text-[clamp(1.6rem,2.5vw,2.2rem)] m-0 mb-2 font-bold">
+          <header className="text-center mb-7 sm:mb-5">
+            <h1 className="text-neutral-900 text-[clamp(1.4rem,2.5vw,2rem)] m-0 mb-2 font-bold">
               {resolving ? "Loading…" : title}
             </h1>
-            <p className="text-neutral-500 my-0.5">{subtitle}</p>
-            <p className="text-neutral-500 my-0.5">{tagline}</p>
+            <p className="text-neutral-500 my-0.5 text-[0.95rem] sm:text-[0.9rem]">{subtitle}</p>
+            <p className="text-neutral-500 my-0.5 text-[0.95rem] sm:text-[0.9rem]">{tagline}</p>
           </header>
         )}
 
         {/* Event Program */}
         {eventId && <ParticipantProgramView eventId={eventId} />}
 
-        <div className="bg-white border border-black/[0.08] rounded-[18px] p-7 shadow-[0_4px_16px_rgba(0,0,0,0.08)] md:p-7 sm:p-5">
+        <div className="bg-white border border-black/[0.08] rounded-[18px] sm:rounded-xl p-7 md:p-6 sm:p-5 shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
           {/* Status banners */}
           {event && !eventIsLive && (
             <div
-              className="mb-4 p-3 py-3.5 rounded-xl text-center font-bold animate-slideDown border bg-primary/10 border-primary/25 text-primary"
+              className="mb-4 p-3 py-3 sm:py-2.5 rounded-xl sm:rounded-lg text-center text-[0.9rem] sm:text-[0.85rem] font-bold animate-slideDown border bg-primary/10 border-primary/25 text-primary"
               role="status"
             >
               ⏳ This event isn't live yet.
@@ -334,20 +336,20 @@ export default function ParticipantForm() {
           )}
           {event && !acceptingQuestions && (
             <div
-              className="mb-4 p-3 py-3.5 rounded-xl text-center font-bold animate-slideDown border bg-primary/10 border-primary/25 text-primary"
+              className="mb-4 p-3 py-3 sm:py-2.5 rounded-xl sm:rounded-lg text-center text-[0.9rem] sm:text-[0.85rem] font-bold animate-slideDown border bg-primary/10 border-primary/25 text-primary"
               role="status"
             >
-              🔒 This event is currently not accepting questions. Please check back later.
+              🔒 Not accepting questions right now.
             </div>
           )}
 
-          <p className="text-center text-[1.05rem] text-neutral-500 mb-5 leading-relaxed">
-            Got questions for this session? Submit them here and the panel will address them during the event.
+          <p className="text-center text-[0.95rem] sm:text-[0.9rem] text-neutral-500 mb-5 sm:mb-4 leading-relaxed">
+            Got questions? Submit them here and the panel will address them during the event.
           </p>
 
           <form onSubmit={handleSubmit} aria-busy={isSubmitting}>
-            <div className="mb-4">
-              <label htmlFor="name" className="block font-semibold mb-2 text-neutral-600 text-[0.98rem]">
+            <div className="mb-4 sm:mb-3">
+              <label htmlFor="name" className="block font-semibold mb-2 sm:mb-1.5 text-neutral-600 text-[0.95rem] sm:text-[0.9rem]">
                 Your Name (Optional)
               </label>
               <input
@@ -356,15 +358,15 @@ export default function ParticipantForm() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Leave blank to remain anonymous"
+                placeholder="Leave blank for anonymous"
                 autoComplete="off"
                 disabled={formData.anonymous || isSubmitting || !acceptingQuestions || !eventIsLive}
-                className="w-full px-3.5 py-3 border border-black/15 rounded-xl text-base font-sans text-neutral-600 bg-white transition-all placeholder:text-neutral-400 focus:outline-none focus:border-primary/40 focus:shadow-[0_0_0_3px_rgba(255,107,53,0.15)] disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full px-3.5 py-3 sm:px-3 sm:py-2.5 border border-black/15 rounded-xl sm:rounded-lg text-base sm:text-[0.95rem] font-sans text-neutral-600 bg-white transition-all placeholder:text-neutral-400 focus:outline-none focus:border-primary/40 focus:shadow-[0_0_0_3px_rgba(255,107,53,0.15)] disabled:opacity-70 disabled:cursor-not-allowed"
               />
             </div>
 
-            <div className="mb-4">
-              <label htmlFor="question" className="block font-semibold mb-2 text-neutral-600 text-[0.98rem]">
+            <div className="mb-4 sm:mb-3">
+              <label htmlFor="question" className="block font-semibold mb-2 sm:mb-1.5 text-neutral-600 text-[0.95rem] sm:text-[0.9rem]">
                 Your Question *
               </label>
               <textarea
@@ -372,19 +374,19 @@ export default function ParticipantForm() {
                 name="question"
                 value={formData.question}
                 onChange={handleChange}
-                rows="5"
+                rows="4"
                 placeholder={
                   acceptingQuestions && eventIsLive
                     ? "Type your question here..."
-                    : "Event is not accepting questions right now."
+                    : "Not accepting questions right now."
                 }
                 required
                 disabled={isSubmitting || !acceptingQuestions || !eventIsLive}
-                className="w-full px-3.5 py-3 border border-black/15 rounded-xl text-base font-sans text-neutral-600 bg-white transition-all placeholder:text-neutral-400 focus:outline-none focus:border-primary/40 focus:shadow-[0_0_0_3px_rgba(255,107,53,0.15)] disabled:opacity-70 disabled:cursor-not-allowed resize-y min-h-[120px]"
+                className="w-full px-3.5 py-3 sm:px-3 sm:py-2.5 border border-black/15 rounded-xl sm:rounded-lg text-base sm:text-[0.95rem] font-sans text-neutral-600 bg-white transition-all placeholder:text-neutral-400 focus:outline-none focus:border-primary/40 focus:shadow-[0_0_0_3px_rgba(255,107,53,0.15)] disabled:opacity-70 disabled:cursor-not-allowed resize-y min-h-[100px] sm:min-h-[90px]"
               />
             </div>
 
-            <div className="flex items-center gap-2.5 my-3 mb-5 text-neutral-500">
+            <div className="flex items-center gap-2.5 my-3 mb-5 sm:mb-4 text-neutral-500 text-[0.95rem] sm:text-[0.9rem]">
               <input
                 type="checkbox"
                 id="anonymous"
@@ -392,7 +394,7 @@ export default function ParticipantForm() {
                 checked={formData.anonymous}
                 onChange={handleChange}
                 disabled={isSubmitting || !acceptingQuestions || !eventIsLive}
-                className="w-[18px] h-[18px] cursor-pointer accent-primary"
+                className="w-[18px] h-[18px] sm:w-4 sm:h-4 cursor-pointer accent-primary"
               />
               <label htmlFor="anonymous" className="cursor-pointer">Submit anonymously</label>
             </div>
@@ -400,7 +402,7 @@ export default function ParticipantForm() {
             <button
               type="submit"
               disabled={isSubmitting || !acceptingQuestions || !eventIsLive}
-              className="w-full px-4 py-3.5 border-none rounded-xl text-[1.05rem] font-bold cursor-pointer transition-all bg-primary text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)] hover:-translate-y-px hover:bg-orange-600 hover:shadow-[0_6px_16px_rgba(255,107,53,0.3)] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:transform-none"
+              className="w-full px-4 py-3.5 sm:py-3 border-none rounded-xl sm:rounded-lg text-[1rem] sm:text-[0.95rem] font-bold cursor-pointer transition-all bg-primary text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)] hover:-translate-y-px hover:bg-orange-600 hover:shadow-[0_6px_16px_rgba(255,107,53,0.3)] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:transform-none"
             >
               {isSubmitting ? "Submitting..." : "Submit Question"}
             </button>
@@ -408,7 +410,7 @@ export default function ParticipantForm() {
 
           {notice.text && (
             <div
-              className={`mt-4 p-3 py-3.5 rounded-xl text-center font-bold animate-slideDown border ${
+              className={`mt-4 sm:mt-3 p-3 py-3 sm:py-2.5 rounded-xl sm:rounded-lg text-center text-[0.9rem] sm:text-[0.85rem] font-bold animate-slideDown border ${
                 notice.type === 'success'
                   ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-600'
                   : notice.type === 'error'
