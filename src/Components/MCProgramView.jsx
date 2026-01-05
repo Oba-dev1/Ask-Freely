@@ -88,6 +88,7 @@ function MCProgramView({ eventId, eventTitle }) {
       .reduce((total, item) => total + (parseInt(item.duration, 10) || 0), 0);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const getTotalDuration = () => {
     return programItems.reduce((total, item) => total + (parseInt(item.duration, 10) || 0), 0);
   };

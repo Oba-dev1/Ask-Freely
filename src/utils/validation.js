@@ -124,6 +124,7 @@ export function sanitizeUrl(url) {
   const trimmed = url.trim();
 
   // Check for dangerous protocols
+  // eslint-disable-next-line no-script-url
   const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:'];
   const lowerUrl = trimmed.toLowerCase();
 
@@ -203,7 +204,7 @@ export function sanitizeOrganizationName(name, maxLength = 200) {
   let cleaned = name.replace(/<[^>]*>/g, '');
 
   // Remove special characters that could be used for injection
-  cleaned = cleaned.replace(/[<>\"\']/g, '');
+  cleaned = cleaned.replace(/[<>"']/g, '');
 
   // Trim whitespace
   cleaned = cleaned.trim();
