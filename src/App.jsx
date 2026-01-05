@@ -11,6 +11,7 @@ import { ref, onValue } from "firebase/database";
 import { database } from "./Firebase/config";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import AdminProtectedRoute from "./Components/AdminProtectedRoute";
 import ParticipantForm from "./Components/ParticipantForm";
 import HostDashboard from "./Components/HostDashboard";
 import Login from "./Components/Login";
@@ -30,6 +31,11 @@ import EventsActiveView from "./Components/EventsActiveView";
 import EventsDraftView from "./Components/EventsDraftView";
 import EventsArchivedView from "./Components/EventsArchivedView";
 import OrganizerSettings from "./Components/OrganizerSettings";
+import AdminLayout from "./Components/AdminLayout";
+import AdminDashboard from "./Components/AdminDashboard";
+import AdminUsers from "./Components/AdminUsers";
+import AdminEvents from "./Components/AdminEvents";
+import AdminActivity from "./Components/AdminActivity";
 import usePageTracking from "./hooks/usePageTracking";
 import { initializeSecurity } from "./utils/security";
 
@@ -1301,6 +1307,19 @@ function App() {
               <Route path="event/:eventId" element={<EventManagement />} />
               {/* Redirect /organizer to /organizer/dashboard */}
               <Route index element={<Navigate to="/organizer/dashboard" replace />} />
+            </Route>
+            {/* Super Admin Panel - Protected Routes */}
+            <Route path="/admin" element={
+              <AdminProtectedRoute>
+                <AdminLayout />
+              </AdminProtectedRoute>
+            }>
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="events" element={<AdminEvents />} />
+              <Route path="activity" element={<AdminActivity />} />
+              {/* Redirect /admin to /admin/dashboard */}
+              <Route index element={<Navigate to="/admin/dashboard" replace />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </SentryRoutes>
