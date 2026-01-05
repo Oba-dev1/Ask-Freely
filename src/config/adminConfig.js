@@ -5,6 +5,7 @@
 // Whitelisted admin emails - these users can access the admin panel
 // SECURITY: Both email AND database flag (superAdmin: true) are required
 export const ADMIN_EMAILS = [
+  'bandechop01@gmail.com',
   'anthonyoladele@yahoo.com'
 ];
 

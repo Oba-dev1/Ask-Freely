@@ -56,8 +56,8 @@ function AdminLayout() {
                 <i className="fas fa-shield-halved text-white"></i>
               </div>
               <div>
-                <h1 className="font-bold text-lg">Super Admin</h1>
-                <p className="text-xs text-neutral-400">Ask Freely</p>
+                <h1 className="font-bold text-lg text-white">Super Admin</h1>
+                <p className="text-xs text-white/70">Ask Freely</p>
               </div>
             </div>
           </div>

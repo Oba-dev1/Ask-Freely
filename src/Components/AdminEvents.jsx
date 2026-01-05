@@ -330,7 +330,7 @@ function AdminEvents() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:border-primary"
+            className="px-4 pr-8 py-2.5 border border-neutral-200 rounded-lg focus:outline-none focus:border-primary appearance-none bg-white bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_0.75rem_center]"
           >
             <option value="all">All Events</option>
             <option value="published">Published</option>
