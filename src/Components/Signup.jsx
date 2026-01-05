@@ -6,7 +6,12 @@ import { useAuth } from '../context/AuthContext';
 // import useRecaptcha from '../hooks/useRecaptcha';
 // import { RECAPTCHA_SITE_KEY } from '../Firebase/config';
 import { getFriendlyErrorMessage } from '../utils/errorHandler';
+import { ClientRateLimiter } from '../utils/rateLimiter';
+import { validateEmail, validatePassword } from '../utils/validation';
 import OfflineBanner from './OfflineBanner';
+
+// Rate limiter: 5 signup attempts per 15 minutes
+const signupRateLimiter = new ClientRateLimiter('signup', 5, 15 * 60 * 1000);
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -107,9 +112,33 @@ function Signup() {
     setTouched({ email: true, password: true, confirmPassword: true });
     if (!formValid) return;
 
+    // Check rate limit before attempting signup
+    const rateLimitCheck = signupRateLimiter.check();
+    if (!rateLimitCheck.allowed) {
+      setError(`Too many signup attempts. Please try again in ${rateLimitCheck.retryAfter} seconds.`);
+      return;
+    }
+
+    // Validate email format
+    const emailValidation = validateEmail(formData.email);
+    if (!emailValidation.valid) {
+      setError(emailValidation.error);
+      return;
+    }
+
+    // Validate password strength
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.valid) {
+      setError(passwordValidation.errors.join('. '));
+      return;
+    }
+
     try {
       setError('');
       setLoading(true);
+
+      // Increment rate limit counter before attempt
+      signupRateLimiter.increment();
 
       // reCAPTCHA temporarily disabled - will be implemented later
       // const recaptchaToken = await executeRecaptcha('signup');
@@ -122,7 +151,7 @@ function Signup() {
 
       // console.log('✅ reCAPTCHA verified for signup');
 
-      await signup(formData.email, formData.password, '');
+      await signup(emailValidation.sanitized, formData.password, '');
       setSignupSuccess(true);
     } catch (err) {
       console.error(err);

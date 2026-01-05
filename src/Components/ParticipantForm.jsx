@@ -13,6 +13,7 @@ import {
 import { database } from "../Firebase/config";
 import ParticipantProgramView from "./ParticipantProgramView";
 import BrandedEventHeader from "./BrandedEventHeader";
+import { validateQuestion, sanitizeText } from "../utils/validation";
 
 /**
  * Small utility: normalize strings → slug-safe form
@@ -222,12 +223,23 @@ export default function ParticipantForm() {
       setNotice({ type: "info", text: "Submitting your question…" });
 
       try {
+        // Validate and sanitize question text
+        const questionValidation = validateQuestion(formData.question, 1000);
+        if (!questionValidation.valid) {
+          setNotice({ type: "error", text: `✗ ${questionValidation.error}` });
+          setIsSubmitting(false);
+          return;
+        }
+
+        // Sanitize author name
+        const sanitizedName = formData.name ? sanitizeText(formData.name.trim(), 100) : "";
+
         const payload = {
           author:
-            formData.anonymous || !formData.name.trim()
+            formData.anonymous || !sanitizedName
               ? "Anonymous"
-              : formData.name.trim(),
-          question: formData.question.trim(),
+              : sanitizedName,
+          question: questionValidation.sanitized,
           source: "audience",           // consistent with filters
           anonymous: !!formData.anonymous,
           answered: false,

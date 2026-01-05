@@ -5,6 +5,11 @@ import { ref, push, set, get } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { database, storage } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
+import { ClientRateLimiter } from '../utils/rateLimiter';
+import { sanitizeText, validateSlug, validateFile } from '../utils/validation';
+
+// Rate limiter: 5 events per day
+const eventCreationRateLimiter = new ClientRateLimiter('eventCreation', 5, 24 * 60 * 60 * 1000);
 
 function CreateEventModal({ isOpen, onClose }) {
   const [eventData, setEventData] = useState({
@@ -122,23 +127,23 @@ function CreateEventModal({ isOpen, onClose }) {
     if (type === 'file' && files && files[0]) {
       const file = files[0];
 
-      // Validate file size (max 5MB)
-      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
-      if (file.size > maxSize) {
-        setError('Image file size must be less than 5MB');
-        return;
-      }
+      // Use validation utility for file validation
+      const fileValidation = validateFile(file, {
+        maxSize: 5 * 1024 * 1024, // 5MB
+        allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+      });
 
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        setError('Please upload a valid image file');
+      if (!fileValidation.valid) {
+        setError(fileValidation.error);
         return;
       }
 
       setBrandingData(prev => ({ ...prev, flyerFile: file }));
       setError('');
     } else {
-      setBrandingData(prev => ({ ...prev, [name]: value }));
+      // Sanitize text inputs
+      const sanitizedValue = sanitizeText(value, 300);
+      setBrandingData(prev => ({ ...prev, [name]: sanitizedValue }));
     }
   };
 
@@ -208,21 +213,43 @@ function CreateEventModal({ isOpen, onClose }) {
       return;
     }
 
+    // Check rate limit before creating event
+    const rateLimitCheck = eventCreationRateLimiter.check();
+    if (!rateLimitCheck.allowed) {
+      setError(`You've created too many events today. Please try again in ${Math.ceil(rateLimitCheck.retryAfter / 3600)} hours.`);
+      return;
+    }
+
+    // Sanitize title and description
+    const sanitizedTitle = sanitizeText(eventData.title, 200);
+    const sanitizedDescription = sanitizeText(eventData.description, 2000);
+
+    if (sanitizedTitle.length < 3) {
+      setError('Event title must be at least 3 characters');
+      return;
+    }
+
+    // Validate slug
+    const slugValidation = validateSlug(eventData.slug || eventData.title);
+    if (!slugValidation.valid) {
+      setError(slugValidation.error);
+      return;
+    }
+
     try {
       setLoading(true);
       setError('');
+
+      // Increment rate limit counter
+      eventCreationRateLimiter.increment();
 
       const organizerName =
         (userProfile?.organizationName || '').trim() ||
         currentUser.email ||
         'Organizer';
 
-      // Clean slug
-      let slug =
-        (eventData.slug || eventData.title)
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/(^-|-$)/g, '') || `event-${Date.now()}`;
+      // Use validated slug
+      let slug = slugValidation.sanitized || `event-${Date.now()}`;
 
       // Ensure slug uniqueness
       const slugRef = ref(database, `slugs/${slug}`);
@@ -260,8 +287,8 @@ function CreateEventModal({ isOpen, onClose }) {
       const dateTime = eventData.date + (eventData.time ? `T${eventData.time}` : '');
 
       const eventPayload = {
-        title: eventData.title,
-        description: eventData.description || '',
+        title: sanitizedTitle,
+        description: sanitizedDescription || '',
         date: eventData.date,
         time: eventData.time || '',
         dateTime: dateTime,
@@ -275,7 +302,7 @@ function CreateEventModal({ isOpen, onClose }) {
         createdAt: new Date().toISOString(),
         // Branding data (optional)
         ...(flyerUrl && { flyerUrl }),
-        ...(brandingData.tagline && { tagline: brandingData.tagline })
+        ...(brandingData.tagline && { tagline: sanitizeText(brandingData.tagline, 300) })
       };
 
       await set(newEventRef, eventPayload);
@@ -284,13 +311,13 @@ function CreateEventModal({ isOpen, onClose }) {
       await set(ref(database, `slugs/${slug}`), newEventRef.key);
       await set(ref(database, `eventSlugs/${newEventRef.key}`), slug);
 
-      // Seed strategic questions
+      // Seed strategic questions (sanitized)
       if (strategicQuestions.length > 0) {
         const questionsRef = ref(database, `questions/${newEventRef.key}`);
         for (const q of strategicQuestions) {
           const qRef = push(questionsRef);
           await set(qRef, {
-            question: q.text,
+            question: sanitizeText(q.text, 1000),
             author: organizerName,
             source: 'organizer',
             status: 'approved',
@@ -299,21 +326,21 @@ function CreateEventModal({ isOpen, onClose }) {
             upvotes: 0,
             answered: false,
             ...(q.priority && { priority: q.priority }),
-            ...(q.category && { category: q.category }),
-            ...(q.notes && { notes: q.notes })
+            ...(q.category && { category: sanitizeText(q.category, 100) }),
+            ...(q.notes && { notes: sanitizeText(q.notes, 500) })
           });
         }
       }
 
-      // Save program items
+      // Save program items (sanitized)
       if (programItems.length > 0) {
         const programsRef = ref(database, `programs/${newEventRef.key}`);
         for (const item of programItems) {
           const pRef = push(programsRef);
           await set(pRef, {
-            title: item.title,
-            duration: item.duration || '',
-            description: item.description || '',
+            title: sanitizeText(item.title, 200),
+            duration: sanitizeText(item.duration || '', 50),
+            description: sanitizeText(item.description || '', 500),
             order: item.order
           });
         }

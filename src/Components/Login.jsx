@@ -7,7 +7,12 @@ import { useAuth } from '../context/AuthContext';
 // import useRecaptcha from '../hooks/useRecaptcha';
 // import { RECAPTCHA_SITE_KEY } from '../Firebase/config';
 import { getFriendlyErrorMessage } from '../utils/errorHandler';
+import { ClientRateLimiter } from '../utils/rateLimiter';
+import { validateEmail } from '../utils/validation';
 import OfflineBanner from './OfflineBanner';
+
+// Rate limiter: 5 login attempts per 15 minutes
+const loginRateLimiter = new ClientRateLimiter('login', 5, 15 * 60 * 1000);
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -111,9 +116,26 @@ function Login() {
     setTouched({ email: true, password: true });
     if (!formValid) return;
 
+    // Check rate limit before attempting login
+    const rateLimitCheck = loginRateLimiter.check();
+    if (!rateLimitCheck.allowed) {
+      setError(`Too many login attempts. Please try again in ${rateLimitCheck.retryAfter} seconds.`);
+      return;
+    }
+
+    // Validate email format
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.valid) {
+      setError(emailValidation.error);
+      return;
+    }
+
     try {
       setError('');
       setLoading(true);
+
+      // Increment rate limit counter before attempt
+      loginRateLimiter.increment();
 
       // reCAPTCHA temporarily disabled - will be implemented later
       // const recaptchaToken = await executeRecaptcha('login');
@@ -132,7 +154,7 @@ function Login() {
         localStorage.removeItem('rememberedEmail');
       }
 
-      const userCredential = await login(email, password);
+      const userCredential = await login(emailValidation.sanitized, password);
 
       if (!userCredential.user.emailVerified) {
         setError('Please verify your email before logging in. Check your inbox for the verification link.');
