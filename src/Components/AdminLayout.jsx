@@ -46,7 +46,7 @@ function AdminLayout() {
       <div className="flex">
         {/* Sidebar */}
         <aside
-          className={`fixed lg:sticky top-0 left-0 z-40 h-screen bg-ink text-white transition-transform duration-300 w-64 flex flex-col ${
+          className={`fixed top-0 left-0 z-40 h-screen bg-ink text-white transition-transform duration-300 w-64 flex flex-col ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
           }`}
         >
@@ -64,7 +64,7 @@ function AdminLayout() {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 overflow-y-auto">
+          <nav className="flex-1 p-4">
             <ul className="space-y-1">
               {navItems.map((item) => (
                 <li key={item.path}>
@@ -127,7 +127,7 @@ function AdminLayout() {
         )}
 
         {/* Main Content */}
-        <main className="flex-1 min-h-screen">
+        <main className="flex-1 min-h-screen lg:ml-64">
           <Outlet />
         </main>
       </div>
