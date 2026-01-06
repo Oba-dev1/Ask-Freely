@@ -109,6 +109,12 @@
   # Use Node.js 18 for functions
   node_bundler = "esbuild"
 
+  # Mark firebase-admin as external (too large to bundle, has native deps)
+  external_node_modules = ["firebase-admin"]
+
+  # Include node_modules for external packages
+  included_files = ["node_modules/firebase-admin/**"]
+
   # Function-specific settings
   [functions."submit-question"]
     # 10 second timeout (default is 10s, max 26s on free tier)

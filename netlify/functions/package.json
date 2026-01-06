@@ -1,8 +1,0 @@
-{
-  "name": "ask-freely-functions",
-  "version": "1.0.0",
-  "description": "Netlify Functions for Ask Freely - server-side rate limiting",
-  "dependencies": {
-    "firebase-admin": "^12.0.0"
-  }
-}
