@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ref,
-  push,
   get,
   set,
   query,
@@ -14,6 +13,7 @@ import { database } from "../Firebase/config";
 import ParticipantProgramView from "./ParticipantProgramView";
 import BrandedEventHeader from "./BrandedEventHeader";
 import { validateQuestion, sanitizeText } from "../utils/validation";
+import { submitQuestion } from "../services/questionService";
 
 /**
  * Small utility: normalize strings → slug-safe form
@@ -202,13 +202,13 @@ export default function ParticipantForm() {
     return true;
   }, [formData.question, questionsRef, acceptingQuestions, eventIsLive]);
 
-  // Submit
+  // Submit - uses Netlify function for server-side rate limiting
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
       if (!validate()) return;
 
-      // Rate limiting check
+      // Client-side rate limiting (backup, server also enforces)
       const now = Date.now();
       if (lastSubmitTime && now - lastSubmitTime < RATE_LIMIT_COOLDOWN) {
         const waitSeconds = Math.ceil((RATE_LIMIT_COOLDOWN - (now - lastSubmitTime)) / 1000);
@@ -223,7 +223,7 @@ export default function ParticipantForm() {
       setNotice({ type: "info", text: "Submitting your question…" });
 
       try {
-        // Validate and sanitize question text
+        // Validate question text client-side first
         const questionValidation = validateQuestion(formData.question, 1000);
         if (!questionValidation.valid) {
           setNotice({ type: "error", text: `✗ ${questionValidation.error}` });
@@ -234,20 +234,27 @@ export default function ParticipantForm() {
         // Sanitize author name
         const sanitizedName = formData.name ? sanitizeText(formData.name.trim(), 100) : "";
 
-        const payload = {
-          author:
-            formData.anonymous || !sanitizedName
-              ? "Anonymous"
-              : sanitizedName,
+        // Submit through Netlify function (server-side rate limiting)
+        const result = await submitQuestion({
+          eventId,
           question: questionValidation.sanitized,
-          source: "audience",           // consistent with filters
+          author: sanitizedName,
           anonymous: !!formData.anonymous,
-          answered: false,
-          timestamp: new Date().toISOString(),
-          createdAt: Date.now(),        // numeric for `.indexOn` and rules
-        };
+        });
 
-        await push(questionsRef, payload);
+        if (!result.success) {
+          // Handle rate limiting from server
+          if (result.rateLimited) {
+            setNotice({
+              type: "error",
+              text: `✗ ${result.error}`
+            });
+          } else {
+            setNotice({ type: "error", text: `✗ ${result.error}` });
+          }
+          setIsSubmitting(false);
+          return;
+        }
 
         // Update last submit time after successful submission
         setLastSubmitTime(Date.now());
@@ -265,7 +272,7 @@ export default function ParticipantForm() {
         setIsSubmitting(false);
       }
     },
-    [formData, questionsRef, validate, lastSubmitTime, RATE_LIMIT_COOLDOWN]
+    [formData, eventId, validate, lastSubmitTime, RATE_LIMIT_COOLDOWN]
   );
 
   // Get brand color for dynamic styling

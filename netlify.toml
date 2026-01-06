@@ -4,6 +4,7 @@
 [build]
   command = "npm run build"
   publish = "build"
+  functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "18.19.0"
@@ -96,4 +97,29 @@
 # - REACT_APP_FIREBASE_STORAGE_BUCKET
 # - REACT_APP_FIREBASE_MESSAGING_SENDER_ID
 # - REACT_APP_FIREBASE_APP_ID
+# ============================================================================
+
+# ============================================================================
+# NETLIFY FUNCTIONS CONFIGURATION
+# ============================================================================
+# Server-side rate limiting for question submissions
+# Functions are located in netlify/functions/
+
+[functions]
+  # Use Node.js 18 for functions
+  node_bundler = "esbuild"
+
+  # Function-specific settings
+  [functions."submit-question"]
+    # 10 second timeout (default is 10s, max 26s on free tier)
+    timeout = 10
+
+# ============================================================================
+# FIREBASE ADMIN SDK ENVIRONMENT VARIABLES (Required for Functions)
+# ============================================================================
+# Set these in Netlify Dashboard > Site Settings > Environment Variables:
+# - FIREBASE_PROJECT_ID (your Firebase project ID)
+# - FIREBASE_CLIENT_EMAIL (from Firebase service account)
+# - FIREBASE_PRIVATE_KEY (from Firebase service account, with \n preserved)
+# - FIREBASE_DATABASE_URL (your Realtime Database URL)
 # ============================================================================
