@@ -421,7 +421,19 @@ export default function ParticipantForm() {
             <button
               type="submit"
               disabled={isSubmitting || !acceptingQuestions || !eventIsLive}
-              className="w-full px-4 py-3.5 sm:py-3 border-none rounded-xl sm:rounded-lg text-[1rem] sm:text-[0.95rem] font-bold cursor-pointer transition-all bg-primary text-white shadow-[0_4px_12px_rgba(255,107,53,0.25)] hover:-translate-y-px hover:bg-orange-600 hover:shadow-[0_6px_16px_rgba(255,107,53,0.3)] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:transform-none"
+              className="w-full px-4 py-3.5 sm:py-3 border-none rounded-xl sm:rounded-lg text-[1rem] sm:text-[0.95rem] font-bold cursor-pointer transition-all text-white disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:transform-none hover:-translate-y-px"
+              style={{
+                backgroundColor: brandColor,
+                boxShadow: `0 4px 12px ${brandColor}40`
+              }}
+              onMouseEnter={(e) => {
+                if (!isSubmitting && acceptingQuestions && eventIsLive) {
+                  e.currentTarget.style.boxShadow = `0 6px 16px ${brandColor}50`;
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = `0 4px 12px ${brandColor}40`;
+              }}
             >
               {isSubmitting ? "Submitting..." : "Submit Question"}
             </button>
