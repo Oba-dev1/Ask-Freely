@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import DashboardSidebar from './DashboardSidebar';
+import NotificationBell from './NotificationBell';
 
 function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -35,7 +36,7 @@ function DashboardLayout() {
 
           {/* Header Actions (notifications, profile, etc.) */}
           <div className="flex items-center gap-3">
-            {/* Future: Add notifications, search, user menu */}
+            <NotificationBell />
           </div>
         </header>
 

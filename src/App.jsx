@@ -35,7 +35,9 @@ import AdminLayout from "./Components/AdminLayout";
 import AdminDashboard from "./Components/AdminDashboard";
 import AdminUsers from "./Components/AdminUsers";
 import AdminEvents from "./Components/AdminEvents";
+import AdminMessages from "./Components/AdminMessages";
 import AdminActivity from "./Components/AdminActivity";
+import NotificationsPage from "./Components/NotificationsPage";
 import usePageTracking from "./hooks/usePageTracking";
 import { initializeSecurity } from "./utils/security";
 
@@ -1302,6 +1304,7 @@ function App() {
               <Route path="events/draft" element={<EventsDraftView />} />
               <Route path="events/archived" element={<EventsArchivedView />} />
               <Route path="analytics" element={<OrganizerAnalytics />} />
+              <Route path="notifications" element={<NotificationsPage />} />
               <Route path="settings" element={<OrganizerSettings />} />
               <Route path="event/:eventId/setup" element={<EventSetup />} />
               <Route path="event/:eventId" element={<EventManagement />} />
@@ -1317,6 +1320,7 @@ function App() {
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="events" element={<AdminEvents />} />
+              <Route path="messages" element={<AdminMessages />} />
               <Route path="activity" element={<AdminActivity />} />
               {/* Redirect /admin to /admin/dashboard */}
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
