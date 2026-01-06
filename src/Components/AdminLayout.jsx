@@ -21,6 +21,7 @@ function AdminLayout() {
     { path: '/admin/dashboard', icon: 'fa-chart-pie', label: 'Dashboard' },
     { path: '/admin/users', icon: 'fa-users', label: 'Users' },
     { path: '/admin/events', icon: 'fa-calendar', label: 'Events' },
+    { path: '/admin/messages', icon: 'fa-paper-plane', label: 'Messages' },
     { path: '/admin/activity', icon: 'fa-clock-rotate-left', label: 'Activity' },
   ];
 

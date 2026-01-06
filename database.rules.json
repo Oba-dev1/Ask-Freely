@@ -340,6 +340,54 @@
     },
 
     // ============================================
+    // NOTIFICATIONS - User notifications
+    // ============================================
+    "notifications": {
+      "$userId": {
+        // Users can read their own notifications, admins can read all
+        ".read": "$userId === auth.uid || (auth != null && root.child('users/' + auth.uid + '/superAdmin').val() === true)",
+        // Users can update their own (mark as read), admins can create for anyone
+        ".write": "$userId === auth.uid || (auth != null && root.child('users/' + auth.uid + '/superAdmin').val() === true)",
+
+        "$notificationId": {
+          "type": {
+            ".validate": "newData.isString() && (newData.val() === 'announcement' || newData.val() === 'account' || newData.val() === 'event' || newData.val() === 'question' || newData.val() === 'system')"
+          },
+          "title": {
+            ".validate": "newData.isString() && newData.val().length <= 200"
+          },
+          "message": {
+            ".validate": "newData.isString() && newData.val().length <= 1000"
+          },
+          "read": {
+            ".validate": "newData.isBoolean()"
+          },
+          "createdAt": {
+            ".validate": "newData.isString() || newData.isNumber()"
+          },
+          "link": {
+            ".validate": "newData.isString() && newData.val().length <= 500"
+          },
+          "fromAdmin": {
+            ".validate": "newData.isBoolean()"
+          },
+          "adminId": {
+            ".validate": "newData.isString()"
+          }
+        }
+      }
+    },
+
+    // ============================================
+    // EMAIL QUEUE - For async email sending
+    // ============================================
+    "emailQueue": {
+      // Only super admins can read/write email queue
+      ".read": "auth != null && root.child('users/' + auth.uid + '/superAdmin').val() === true",
+      ".write": "auth != null && root.child('users/' + auth.uid + '/superAdmin').val() === true"
+    },
+
+    // ============================================
     // ADMIN ACTIVITY LOG - Track admin actions
     // ============================================
     "adminActivityLog": {
