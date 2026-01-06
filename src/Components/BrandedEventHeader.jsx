@@ -52,22 +52,35 @@ function BrandedEventHeader({ event }) {
         </div>
       )}
 
-      {/* Event Details Card */}
-      <div className="bg-gradient-to-br from-primary/[0.15] to-orange-300/[0.12] border border-primary/25 rounded-b-2xl sm:rounded-b-xl p-8 md:p-6 sm:p-5 flex flex-col sm:flex-col gap-5 sm:gap-4 items-start backdrop-blur-[20px] shadow-[0_4px_16px_rgba(255,107,53,0.1)]">
+      {/* Event Details Card - uses brand color for gradient */}
+      <div
+        className="rounded-b-2xl sm:rounded-b-xl p-8 md:p-6 sm:p-5 flex flex-col sm:flex-col gap-5 sm:gap-4 items-start backdrop-blur-[20px]"
+        style={{
+          background: `linear-gradient(135deg, ${brandColor}20 0%, ${brandColor}15 100%)`,
+          borderColor: `${brandColor}40`,
+          borderWidth: '1px',
+          borderStyle: 'solid',
+          boxShadow: `0 4px 16px ${brandColor}15`
+        }}
+      >
         {/* Logo from organization account */}
         {organizerLogo && (
           <div className="flex-shrink-0">
             <img
               src={organizerLogo}
               alt={orgName || 'Organization logo'}
-              className="w-16 h-16 md:w-14 md:h-14 sm:w-12 sm:h-12 object-contain rounded-xl bg-white/80 p-2.5 sm:p-2 border-2 border-primary/20"
+              className="w-16 h-16 md:w-14 md:h-14 sm:w-12 sm:h-12 object-contain rounded-xl bg-white/80 p-2.5 sm:p-2 border-2"
+              style={{ borderColor: `${brandColor}30` }}
             />
           </div>
         )}
 
         <div className="flex-1 min-w-0 w-full">
           {orgName && (
-            <p className="m-0 mb-2 text-[0.85rem] sm:text-[0.8rem] font-bold text-amber-800 uppercase tracking-wide">
+            <p
+              className="m-0 mb-2 text-[0.85rem] sm:text-[0.8rem] font-bold uppercase tracking-wide"
+              style={{ color: brandColor }}
+            >
               {orgName}
             </p>
           )}
@@ -75,7 +88,15 @@ function BrandedEventHeader({ event }) {
             {title}
           </h1>
           {subtitle && (
-            <p className="m-0 mb-3 text-[0.95rem] sm:text-[0.85rem] font-bold text-amber-950 inline-flex items-center gap-2 py-2 px-3.5 sm:py-1.5 sm:px-3 bg-white/[0.92] rounded-lg border border-primary/25 shadow-[0_2px_8px_rgba(255,107,53,0.15)] backdrop-blur-[10px]">
+            <p
+              className="m-0 mb-3 text-[0.95rem] sm:text-[0.85rem] font-bold text-neutral-800 inline-flex items-center gap-2 py-2 px-3.5 sm:py-1.5 sm:px-3 bg-white/[0.92] rounded-lg backdrop-blur-[10px]"
+              style={{
+                borderColor: `${brandColor}40`,
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                boxShadow: `0 2px 8px ${brandColor}20`
+              }}
+            >
               <i className="far fa-calendar text-sm sm:text-[0.8rem]" style={{ color: brandColor }}></i>
               {subtitle}
             </p>
