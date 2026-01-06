@@ -99,7 +99,7 @@ function NotificationsPage() {
 
   if (loading) {
     return (
-      <div className="p-6 lg:p-8">
+      <div className="px-6 py-4 lg:px-8 lg:py-6">
         <div className="animate-pulse space-y-6">
           <div className="h-8 bg-neutral-200 rounded w-48"></div>
           <div className="h-12 bg-neutral-200 rounded"></div>
@@ -114,7 +114,7 @@ function NotificationsPage() {
   }
 
   return (
-    <div className="p-6 lg:p-8">
+    <div className="px-6 py-4 lg:px-8 lg:py-6">
       {/* Header */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

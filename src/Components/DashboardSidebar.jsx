@@ -206,6 +206,28 @@ function DashboardSidebar({ isOpen, onClose }) {
               </NavLink>
             </li>
 
+            {/* Notifications */}
+            <li>
+              <NavLink
+                to="/organizer/notifications"
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-2.5 mx-2 my-0.5 text-sm font-medium rounded-lg transition-all ${
+                    isActive
+                      ? 'text-white bg-primary/15 shadow-[inset_3px_0_0_#FF6B35]'
+                      : 'text-white/75 hover:text-white hover:bg-white/[0.08] hover:translate-x-0.5'
+                  }`
+                }
+                onClick={closeSidebarOnMobile}
+              >
+                {({ isActive }) => (
+                  <>
+                    <i className={`fas fa-bell w-5 text-center text-base ${isActive ? 'text-primary' : 'text-white/70'}`}></i>
+                    <span className="flex-1">Notifications</span>
+                  </>
+                )}
+              </NavLink>
+            </li>
+
             {/* Divider */}
             <li className="h-px bg-white/10 mx-4 my-3"></li>
 
