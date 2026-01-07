@@ -1,5 +1,9 @@
 // src/services/questionService.js
 // Service for submitting questions through the secure Netlify function
+// With fallback to direct Firebase for reliability
+
+import { ref, push, get, update } from 'firebase/database';
+import { database } from '../Firebase/config';
 
 /**
  * Generate a simple browser fingerprint for rate limiting
@@ -94,8 +98,74 @@ export async function submitQuestion({ eventId, question, author, anonymous }) {
   } catch (error) {
     console.error('Question submission error:', error);
 
-    // If the Netlify function is unavailable, we could fall back to direct Firebase
-    // But for security, we'll just return an error
+    // Fallback to direct Firebase submission if Netlify function fails
+    console.log('Attempting fallback to direct Firebase submission...');
+    return submitQuestionDirectly({ eventId, question, author, anonymous });
+  }
+}
+
+/**
+ * Fallback: Submit question directly to Firebase
+ * Used when Netlify function is unavailable
+ * Note: This has less protection than the server-side rate limiting
+ */
+async function submitQuestionDirectly({ eventId, question, author, anonymous }) {
+  try {
+    // Verify event exists first
+    const eventRef = ref(database, `events/${eventId}`);
+    const eventSnapshot = await get(eventRef);
+    const eventData = eventSnapshot.val();
+
+    if (!eventData) {
+      return {
+        success: false,
+        error: 'Event not found',
+      };
+    }
+
+    // Check if event is accepting questions
+    const validStatuses = ['published', 'unlisted', 'active'];
+    if (!validStatuses.includes(eventData.status)) {
+      return {
+        success: false,
+        error: 'This event is not currently active',
+      };
+    }
+
+    if (eventData.enableQuestionSubmission === false || eventData.acceptingQuestions === false) {
+      return {
+        success: false,
+        error: 'This event is not accepting questions',
+      };
+    }
+
+    // Create the question
+    const questionsRef = ref(database, `questions/${eventId}`);
+    const newQuestionRef = push(questionsRef);
+
+    const questionData = {
+      question: question,
+      author: anonymous ? 'Anonymous' : (author || 'Anonymous'),
+      source: anonymous ? 'anonymous' : 'audience',
+      timestamp: new Date().toISOString(),
+      createdAt: Date.now(),
+      answered: false,
+      status: eventData.requireApproval ? 'pending' : 'approved',
+    };
+
+    await update(newQuestionRef, questionData);
+
+    // Update question count on event
+    const currentCount = eventData.questionCount || 0;
+    await update(eventRef, { questionCount: currentCount + 1 });
+
+    return {
+      success: true,
+      message: 'Question submitted successfully',
+      questionId: newQuestionRef.key,
+    };
+  } catch (error) {
+    console.error('Direct Firebase submission error:', error);
     return {
       success: false,
       error: 'Unable to submit question. Please check your connection and try again.',
