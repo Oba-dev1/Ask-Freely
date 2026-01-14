@@ -173,6 +173,12 @@ function Login() {
         return;
       }
 
+      // Sync emailVerified status to database (for admin dashboard tracking)
+      const { ref, update } = await import('firebase/database');
+      const { database } = await import('../Firebase/config');
+      const userRef = ref(database, `users/${userCredential.user.uid}`);
+      await update(userRef, { emailVerified: true });
+
       navigate('/organizer/dashboard');
     } catch (err) {
       console.error('Login error:', err);

@@ -66,11 +66,17 @@ function AdminUsers() {
         user.organizationName?.toLowerCase().includes(searchTerm.toLowerCase());
 
       // Status filter
+      // Note: emailVerified in database is set for Google users,
+      // for email/password users we check if they've completed profile as proxy
       let matchesStatus = true;
       if (statusFilter === 'active') {
         matchesStatus = user.profileCompleted && !user.disabled;
       } else if (statusFilter === 'pending') {
-        matchesStatus = !user.profileCompleted;
+        // Pending = verified but profile not completed (emailVerified true or Google user)
+        matchesStatus = !user.profileCompleted && !user.disabled && user.emailVerified !== false;
+      } else if (statusFilter === 'unverified') {
+        // Unverified = emailVerified explicitly false (email/password users who haven't verified)
+        matchesStatus = user.emailVerified === false;
       } else if (statusFilter === 'disabled') {
         matchesStatus = user.disabled;
       } else if (statusFilter === 'admin') {
@@ -293,7 +299,8 @@ function AdminUsers() {
           >
             <option value="all">All Users</option>
             <option value="active">Active</option>
-            <option value="pending">Pending</option>
+            <option value="pending">Pending Setup</option>
+            <option value="unverified">Unverified Email</option>
             <option value="disabled">Disabled</option>
             <option value="admin">Admins</option>
           </select>
@@ -420,6 +427,8 @@ function AdminUsers() {
                             ? 'bg-red-100 text-red-700'
                             : user.disabled
                             ? 'bg-neutral-100 text-neutral-700'
+                            : user.emailVerified === false
+                            ? 'bg-orange-100 text-orange-700'
                             : user.profileCompleted
                             ? 'bg-green-100 text-green-700'
                             : 'bg-yellow-100 text-yellow-700'
@@ -431,6 +440,8 @@ function AdminUsers() {
                               ? 'bg-red-500'
                               : user.disabled
                               ? 'bg-neutral-500'
+                              : user.emailVerified === false
+                              ? 'bg-orange-500'
                               : user.profileCompleted
                               ? 'bg-green-500'
                               : 'bg-yellow-500'
@@ -440,6 +451,8 @@ function AdminUsers() {
                           ? 'Admin'
                           : user.disabled
                           ? 'Disabled'
+                          : user.emailVerified === false
+                          ? 'Unverified'
                           : user.profileCompleted
                           ? 'Active'
                           : 'Pending'}
