@@ -183,6 +183,8 @@ function generateEmailHTML(template, data) {
 // Send email via Resend
 async function sendEmailViaResend(to, subject, html) {
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  // Use custom domain if verified, otherwise use Resend's test domain
+  const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Ask Freely <onboarding@resend.dev>';
 
   if (!RESEND_API_KEY) {
     throw new Error('RESEND_API_KEY not configured');
@@ -195,7 +197,7 @@ async function sendEmailViaResend(to, subject, html) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'Ask Freely <noreply@askfreely.live>',
+      from: FROM_EMAIL,
       to: [to],
       subject: subject,
       html: html,
