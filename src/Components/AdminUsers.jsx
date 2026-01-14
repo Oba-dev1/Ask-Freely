@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { ref, get, update, remove, push } from 'firebase/database';
 import { database } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
+import { sendVerificationReminderEmail } from '../services/emailService';
 
 function AdminUsers() {
   const { currentUser } = useAuth();
@@ -66,11 +67,17 @@ function AdminUsers() {
         user.organizationName?.toLowerCase().includes(searchTerm.toLowerCase());
 
       // Status filter
+      // Note: emailVerified in database is set for Google users,
+      // for email/password users we check if they've completed profile as proxy
       let matchesStatus = true;
       if (statusFilter === 'active') {
         matchesStatus = user.profileCompleted && !user.disabled;
       } else if (statusFilter === 'pending') {
-        matchesStatus = !user.profileCompleted;
+        // Pending = verified but profile not completed (emailVerified true or Google user)
+        matchesStatus = !user.profileCompleted && !user.disabled && user.emailVerified !== false;
+      } else if (statusFilter === 'unverified') {
+        // Unverified = emailVerified explicitly false (email/password users who haven't verified)
+        matchesStatus = user.emailVerified === false;
       } else if (statusFilter === 'disabled') {
         matchesStatus = user.disabled;
       } else if (statusFilter === 'admin') {
@@ -230,6 +237,62 @@ function AdminUsers() {
     setActionLoading(false);
   };
 
+  // Send verification reminder email to a single user
+  const sendVerificationReminder = async (userId, userEmail) => {
+    setActionLoading(true);
+    try {
+      await sendVerificationReminderEmail(userEmail);
+
+      await logAdminAction(
+        'send_verification_reminder',
+        userId,
+        `Sent verification reminder to ${userEmail}`
+      );
+
+      showToast(`Verification reminder queued for ${userEmail}`);
+    } catch (error) {
+      console.error('Error sending verification reminder:', error);
+      showToast('Failed to send verification reminder', 'error');
+    }
+    setActionLoading(false);
+  };
+
+  // Bulk send verification reminders to selected unverified users
+  const bulkSendVerificationReminders = async () => {
+    const unverifiedSelected = users.filter(
+      (u) => selectedUsers.includes(u.id) && u.emailVerified === false
+    );
+
+    if (unverifiedSelected.length === 0) {
+      showToast('No unverified users selected', 'error');
+      return;
+    }
+
+    if (!window.confirm(`Send verification reminders to ${unverifiedSelected.length} unverified user(s)?`)) {
+      return;
+    }
+
+    setActionLoading(true);
+    try {
+      for (const user of unverifiedSelected) {
+        await sendVerificationReminderEmail(user.email);
+      }
+
+      await logAdminAction(
+        'bulk_send_verification_reminders',
+        unverifiedSelected.map((u) => u.id).join(','),
+        `Sent verification reminders to ${unverifiedSelected.length} users`
+      );
+
+      showToast(`Verification reminders queued for ${unverifiedSelected.length} user(s)`);
+      setSelectedUsers([]);
+    } catch (error) {
+      console.error('Error sending bulk verification reminders:', error);
+      showToast('Failed to send verification reminders', 'error');
+    }
+    setActionLoading(false);
+  };
+
   if (loading) {
     return (
       <div className="p-6 lg:p-8">
@@ -293,7 +356,8 @@ function AdminUsers() {
           >
             <option value="all">All Users</option>
             <option value="active">Active</option>
-            <option value="pending">Pending</option>
+            <option value="pending">Pending Setup</option>
+            <option value="unverified">Unverified Email</option>
             <option value="disabled">Disabled</option>
             <option value="admin">Admins</option>
           </select>
@@ -320,6 +384,14 @@ function AdminUsers() {
             >
               <i className="fas fa-trash mr-1.5"></i>
               Delete Selected
+            </button>
+            <button
+              onClick={bulkSendVerificationReminders}
+              disabled={actionLoading}
+              className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-sm font-medium hover:bg-orange-200 transition-colors disabled:opacity-50"
+            >
+              <i className="fas fa-envelope mr-1.5"></i>
+              Send Verification Reminders
             </button>
             <button
               onClick={() => setSelectedUsers([])}
@@ -420,6 +492,8 @@ function AdminUsers() {
                             ? 'bg-red-100 text-red-700'
                             : user.disabled
                             ? 'bg-neutral-100 text-neutral-700'
+                            : user.emailVerified === false
+                            ? 'bg-orange-100 text-orange-700'
                             : user.profileCompleted
                             ? 'bg-green-100 text-green-700'
                             : 'bg-yellow-100 text-yellow-700'
@@ -431,6 +505,8 @@ function AdminUsers() {
                               ? 'bg-red-500'
                               : user.disabled
                               ? 'bg-neutral-500'
+                              : user.emailVerified === false
+                              ? 'bg-orange-500'
                               : user.profileCompleted
                               ? 'bg-green-500'
                               : 'bg-yellow-500'
@@ -440,6 +516,8 @@ function AdminUsers() {
                           ? 'Admin'
                           : user.disabled
                           ? 'Disabled'
+                          : user.emailVerified === false
+                          ? 'Unverified'
                           : user.profileCompleted
                           ? 'Active'
                           : 'Pending'}
@@ -452,6 +530,17 @@ function AdminUsers() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-2">
+                        {/* Send verification reminder button - only for unverified users */}
+                        {user.emailVerified === false && (
+                          <button
+                            onClick={() => sendVerificationReminder(user.id, user.email)}
+                            disabled={actionLoading}
+                            className="p-2 bg-orange-100 text-orange-600 rounded-lg hover:bg-orange-200 transition-colors disabled:opacity-50"
+                            title="Send verification reminder"
+                          >
+                            <i className="fas fa-envelope"></i>
+                          </button>
+                        )}
                         <button
                           onClick={() => toggleUserStatus(user.id, user.disabled)}
                           disabled={actionLoading || user.superAdmin}

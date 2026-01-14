@@ -51,6 +51,7 @@ export const AuthProvider = ({ children }) => {
       organizationName: organizationName || '',
       role: 'organizer',
       profileCompleted: false,
+      emailVerified: false, // Track email verification status
       createdAt: new Date().toISOString()
     });
 

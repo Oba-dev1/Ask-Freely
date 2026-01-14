@@ -1,19 +1,32 @@
-// src/services/emailService.js
-/**
- * Email Service for Ask Freely
- *
- * NOTE: Resend requires a server-side implementation.
- * This service is designed to work with a Netlify serverless function.
- *
- * For now, email sending is queued in Firebase and can be processed
- * by a backend function. The UI will work with in-app notifications.
- */
+// netlify/functions/process-email-queue.js
+// Processes queued emails from Firebase and sends them via Resend
 
-import { ref, push } from 'firebase/database';
-import { database } from '../Firebase/config';
+const { initializeApp, cert, getApps } = require('firebase-admin/app');
+const { getDatabase } = require('firebase-admin/database');
 
-// Email templates
-export const EMAIL_TEMPLATES = {
+// Initialize Firebase Admin (only once)
+let db;
+function getFirebaseDb() {
+  if (!db) {
+    if (getApps().length === 0) {
+      const serviceAccount = {
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      };
+
+      initializeApp({
+        credential: cert(serviceAccount),
+        databaseURL: process.env.FIREBASE_DATABASE_URL,
+      });
+    }
+    db = getDatabase();
+  }
+  return db;
+}
+
+// Email templates (server-side version)
+const EMAIL_TEMPLATES = {
   WELCOME: 'welcome',
   ANNOUNCEMENT: 'announcement',
   ACCOUNT_WARNING: 'account_warning',
@@ -24,88 +37,8 @@ export const EMAIL_TEMPLATES = {
   VERIFICATION_REMINDER: 'verification_reminder',
 };
 
-/**
- * Queue an email to be sent
- * This stores the email in Firebase for processing by a serverless function
- */
-export async function queueEmail(to, subject, template, data = {}) {
-  try {
-    const emailQueueRef = ref(database, 'emailQueue');
-    await push(emailQueueRef, {
-      to,
-      subject,
-      template,
-      data,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-    });
-    return { success: true };
-  } catch (error) {
-    console.error('Error queuing email:', error);
-    return { success: false, error };
-  }
-}
-
-/**
- * Send announcement email to a user
- */
-export async function sendAnnouncementEmail(userEmail, title, message) {
-  return queueEmail(
-    userEmail,
-    `[Ask Freely] ${title}`,
-    EMAIL_TEMPLATES.ANNOUNCEMENT,
-    { title, message }
-  );
-}
-
-/**
- * Send account status email
- */
-export async function sendAccountStatusEmail(userEmail, status, reason = '') {
-  const subjects = {
-    disabled: '[Ask Freely] Your account has been disabled',
-    enabled: '[Ask Freely] Your account has been re-enabled',
-    warning: '[Ask Freely] Important notice about your account',
-  };
-
-  return queueEmail(
-    userEmail,
-    subjects[status] || '[Ask Freely] Account Update',
-    status === 'disabled' ? EMAIL_TEMPLATES.ACCOUNT_DISABLED :
-    status === 'enabled' ? EMAIL_TEMPLATES.ACCOUNT_ENABLED :
-    EMAIL_TEMPLATES.ACCOUNT_WARNING,
-    { status, reason }
-  );
-}
-
-/**
- * Send new question notification email
- */
-export async function sendNewQuestionEmail(userEmail, eventTitle, questionPreview) {
-  return queueEmail(
-    userEmail,
-    `[Ask Freely] New question on "${eventTitle}"`,
-    EMAIL_TEMPLATES.NEW_QUESTION,
-    { eventTitle, questionPreview }
-  );
-}
-
-/**
- * Send email verification reminder to unverified users
- */
-export async function sendVerificationReminderEmail(userEmail) {
-  return queueEmail(
-    userEmail,
-    '[Ask Freely] Please verify your email address',
-    EMAIL_TEMPLATES.VERIFICATION_REMINDER,
-    { email: userEmail }
-  );
-}
-
-/**
- * Generate HTML email content
- */
-export function generateEmailHTML(template, data) {
+// Generate HTML email content
+function generateEmailHTML(template, data) {
   const baseStyles = `
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background-color: #f5f5f5;
@@ -146,10 +79,10 @@ export function generateEmailHTML(template, data) {
       <div style="${baseStyles}">
         <div style="${cardStyles}">
           <div style="${headerStyles}">
-            <h1 style="color: white; margin: 0; font-size: 24px;">📢 ${data.title}</h1>
+            <h1 style="color: white; margin: 0; font-size: 24px;">📢 ${data.title || 'Announcement'}</h1>
           </div>
           <div style="${contentStyles}">
-            <p>${data.message}</p>
+            <p>${data.message || ''}</p>
           </div>
           <div style="${footerStyles}">
             <p>This message was sent by Ask Freely</p>
@@ -201,9 +134,9 @@ export function generateEmailHTML(template, data) {
             <h1 style="color: white; margin: 0; font-size: 24px;">❓ New Question</h1>
           </div>
           <div style="${contentStyles}">
-            <p>You have a new question on <strong>${data.eventTitle}</strong></p>
+            <p>You have a new question on <strong>${data.eventTitle || 'your event'}</strong></p>
             <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #FF6B35;">
-              <p style="margin: 0; font-style: italic;">"${data.questionPreview}"</p>
+              <p style="margin: 0; font-style: italic;">"${data.questionPreview || ''}"</p>
             </div>
             <p style="text-align: center; margin-top: 30px;">
               <a href="https://askfreely.live/organizer/dashboard" style="display: inline-block; background: #FF6B35; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">View Questions</a>
@@ -246,3 +179,148 @@ export function generateEmailHTML(template, data) {
 
   return templates[template] || templates[EMAIL_TEMPLATES.ANNOUNCEMENT];
 }
+
+// Send email via Resend
+async function sendEmailViaResend(to, subject, html) {
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  // Use custom domain if verified, otherwise use Resend's test domain
+  const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Ask Freely <onboarding@resend.dev>';
+
+  if (!RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY not configured');
+  }
+
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: FROM_EMAIL,
+      to: [to],
+      subject: subject,
+      html: html,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(`Resend API error: ${response.status} - ${JSON.stringify(errorData)}`);
+  }
+
+  return response.json();
+}
+
+// Main handler
+exports.handler = async (event, context) => {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json',
+  };
+
+  // Handle preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers, body: '' };
+  }
+
+  // Only allow POST (for manual trigger) or scheduled invocation
+  if (event.httpMethod !== 'POST' && !event.headers['x-netlify-event']) {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' }),
+    };
+  }
+
+  try {
+    const database = getFirebaseDb();
+
+    // Get pending emails from queue
+    const queueRef = database.ref('emailQueue');
+    const pendingSnapshot = await queueRef
+      .orderByChild('status')
+      .equalTo('pending')
+      .limitToFirst(10) // Process 10 at a time
+      .once('value');
+
+    const pendingEmails = pendingSnapshot.val();
+
+    if (!pendingEmails) {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ message: 'No pending emails', processed: 0 }),
+      };
+    }
+
+    let processed = 0;
+    let failed = 0;
+    const results = [];
+
+    for (const [emailId, emailData] of Object.entries(pendingEmails)) {
+      try {
+        // Mark as processing
+        await queueRef.child(emailId).update({
+          status: 'processing',
+          processingStartedAt: new Date().toISOString()
+        });
+
+        // Generate HTML content
+        const html = generateEmailHTML(emailData.template, emailData.data || {});
+
+        // Send via Resend
+        const sendResult = await sendEmailViaResend(
+          emailData.to,
+          emailData.subject,
+          html
+        );
+
+        // Mark as sent
+        await queueRef.child(emailId).update({
+          status: 'sent',
+          sentAt: new Date().toISOString(),
+          resendId: sendResult.id,
+        });
+
+        processed++;
+        results.push({ id: emailId, status: 'sent', to: emailData.to });
+
+      } catch (sendError) {
+        console.error(`Failed to send email ${emailId}:`, sendError);
+
+        // Mark as failed
+        await queueRef.child(emailId).update({
+          status: 'failed',
+          failedAt: new Date().toISOString(),
+          error: sendError.message,
+        });
+
+        failed++;
+        results.push({ id: emailId, status: 'failed', error: sendError.message });
+      }
+    }
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        message: `Processed ${processed} emails, ${failed} failed`,
+        processed,
+        failed,
+        results,
+      }),
+    };
+
+  } catch (error) {
+    console.error('Email queue processing error:', error);
+
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: 'Failed to process email queue' }),
+    };
+  }
+};
