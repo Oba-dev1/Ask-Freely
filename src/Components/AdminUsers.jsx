@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { ref, get, update, remove, push } from 'firebase/database';
 import { database } from '../Firebase/config';
 import { useAuth } from '../context/AuthContext';
+import { sendVerificationReminderEmail } from '../services/emailService';
 
 function AdminUsers() {
   const { currentUser } = useAuth();
@@ -236,6 +237,62 @@ function AdminUsers() {
     setActionLoading(false);
   };
 
+  // Send verification reminder email to a single user
+  const sendVerificationReminder = async (userId, userEmail) => {
+    setActionLoading(true);
+    try {
+      await sendVerificationReminderEmail(userEmail);
+
+      await logAdminAction(
+        'send_verification_reminder',
+        userId,
+        `Sent verification reminder to ${userEmail}`
+      );
+
+      showToast(`Verification reminder queued for ${userEmail}`);
+    } catch (error) {
+      console.error('Error sending verification reminder:', error);
+      showToast('Failed to send verification reminder', 'error');
+    }
+    setActionLoading(false);
+  };
+
+  // Bulk send verification reminders to selected unverified users
+  const bulkSendVerificationReminders = async () => {
+    const unverifiedSelected = users.filter(
+      (u) => selectedUsers.includes(u.id) && u.emailVerified === false
+    );
+
+    if (unverifiedSelected.length === 0) {
+      showToast('No unverified users selected', 'error');
+      return;
+    }
+
+    if (!window.confirm(`Send verification reminders to ${unverifiedSelected.length} unverified user(s)?`)) {
+      return;
+    }
+
+    setActionLoading(true);
+    try {
+      for (const user of unverifiedSelected) {
+        await sendVerificationReminderEmail(user.email);
+      }
+
+      await logAdminAction(
+        'bulk_send_verification_reminders',
+        unverifiedSelected.map((u) => u.id).join(','),
+        `Sent verification reminders to ${unverifiedSelected.length} users`
+      );
+
+      showToast(`Verification reminders queued for ${unverifiedSelected.length} user(s)`);
+      setSelectedUsers([]);
+    } catch (error) {
+      console.error('Error sending bulk verification reminders:', error);
+      showToast('Failed to send verification reminders', 'error');
+    }
+    setActionLoading(false);
+  };
+
   if (loading) {
     return (
       <div className="p-6 lg:p-8">
@@ -327,6 +384,14 @@ function AdminUsers() {
             >
               <i className="fas fa-trash mr-1.5"></i>
               Delete Selected
+            </button>
+            <button
+              onClick={bulkSendVerificationReminders}
+              disabled={actionLoading}
+              className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-sm font-medium hover:bg-orange-200 transition-colors disabled:opacity-50"
+            >
+              <i className="fas fa-envelope mr-1.5"></i>
+              Send Verification Reminders
             </button>
             <button
               onClick={() => setSelectedUsers([])}
@@ -465,6 +530,17 @@ function AdminUsers() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-2">
+                        {/* Send verification reminder button - only for unverified users */}
+                        {user.emailVerified === false && (
+                          <button
+                            onClick={() => sendVerificationReminder(user.id, user.email)}
+                            disabled={actionLoading}
+                            className="p-2 bg-orange-100 text-orange-600 rounded-lg hover:bg-orange-200 transition-colors disabled:opacity-50"
+                            title="Send verification reminder"
+                          >
+                            <i className="fas fa-envelope"></i>
+                          </button>
+                        )}
                         <button
                           onClick={() => toggleUserStatus(user.id, user.disabled)}
                           disabled={actionLoading || user.superAdmin}

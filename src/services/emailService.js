@@ -21,6 +21,7 @@ export const EMAIL_TEMPLATES = {
   ACCOUNT_ENABLED: 'account_enabled',
   NEW_QUESTION: 'new_question',
   EVENT_REMINDER: 'event_reminder',
+  VERIFICATION_REMINDER: 'verification_reminder',
 };
 
 /**
@@ -86,6 +87,18 @@ export async function sendNewQuestionEmail(userEmail, eventTitle, questionPrevie
     `[Ask Freely] New question on "${eventTitle}"`,
     EMAIL_TEMPLATES.NEW_QUESTION,
     { eventTitle, questionPreview }
+  );
+}
+
+/**
+ * Send email verification reminder to unverified users
+ */
+export async function sendVerificationReminderEmail(userEmail) {
+  return queueEmail(
+    userEmail,
+    '[Ask Freely] Please verify your email address',
+    EMAIL_TEMPLATES.VERIFICATION_REMINDER,
+    { email: userEmail }
   );
 }
 
@@ -198,6 +211,33 @@ export function generateEmailHTML(template, data) {
           </div>
           <div style="${footerStyles}">
             <p>Ask Freely - Making every voice heard</p>
+          </div>
+        </div>
+      </div>
+    `,
+    [EMAIL_TEMPLATES.VERIFICATION_REMINDER]: `
+      <div style="${baseStyles}">
+        <div style="${cardStyles}">
+          <div style="${headerStyles}">
+            <h1 style="color: white; margin: 0; font-size: 24px;">📧 Verify Your Email</h1>
+          </div>
+          <div style="${contentStyles}">
+            <p>Hi there!</p>
+            <p>We noticed you haven't verified your email address yet. To access your Ask Freely dashboard and start creating events, please verify your email.</p>
+            <p><strong>How to verify:</strong></p>
+            <ol style="padding-left: 20px;">
+              <li>Check your inbox for the original verification email from Ask Freely</li>
+              <li>Click the verification link in that email</li>
+              <li>If you can't find it, try logging in and we'll send a new verification email</li>
+            </ol>
+            <p style="text-align: center; margin-top: 30px;">
+              <a href="https://askfreely.live/login" style="display: inline-block; background: #FF6B35; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">Go to Login</a>
+            </p>
+            <p style="margin-top: 20px; color: #666; font-size: 14px;">Once logged in, you can request a new verification email if needed.</p>
+          </div>
+          <div style="${footerStyles}">
+            <p>Ask Freely - Making every voice heard</p>
+            <p style="color: #999; font-size: 11px;">If you didn't create an account, you can safely ignore this email.</p>
           </div>
         </div>
       </div>
