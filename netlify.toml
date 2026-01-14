@@ -120,6 +120,10 @@
     # 10 second timeout (default is 10s, max 26s on free tier)
     timeout = 10
 
+  [functions."process-email-queue"]
+    # Email processing may take longer
+    timeout = 26
+
 # ============================================================================
 # FIREBASE ADMIN SDK ENVIRONMENT VARIABLES (Required for Functions)
 # ============================================================================
@@ -128,4 +132,5 @@
 # - FIREBASE_CLIENT_EMAIL (from Firebase service account)
 # - FIREBASE_PRIVATE_KEY (from Firebase service account, with \n preserved)
 # - FIREBASE_DATABASE_URL (your Realtime Database URL)
+# - RESEND_API_KEY (for sending emails via Resend)
 # ============================================================================
