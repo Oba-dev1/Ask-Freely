@@ -31,15 +31,18 @@ function Login() {
   // reCAPTCHA temporarily disabled
   // const { executeRecaptcha } = useRecaptcha(RECAPTCHA_SITE_KEY);
 
-  // Redirect if already logged in
+  // Redirect if already logged in AND email is verified
   useEffect(() => {
     if (authLoading) return;
 
     if (currentUser && userProfile) {
-      if (userProfile.profileCompleted) {
-        navigate('/organizer/dashboard');
-      } else {
-        navigate('/profile-setup');
+      // Only redirect if email is verified (or Google sign-in which is always verified)
+      if (currentUser.emailVerified) {
+        if (userProfile.profileCompleted) {
+          navigate('/organizer/dashboard');
+        } else {
+          navigate('/profile-setup');
+        }
       }
     }
   }, [currentUser, userProfile, authLoading, navigate]);
@@ -65,6 +68,11 @@ function Login() {
       setSuccessMessage('Password reset successfully! You can now sign in with your new password.');
       window.history.replaceState({}, '', '/login');
       setTimeout(() => setSuccessMessage(''), 5000);
+    }
+
+    if (urlParams.get('unverified') === 'true') {
+      setError('Please verify your email before accessing the dashboard. Check your inbox for the verification link.');
+      window.history.replaceState({}, '', '/login');
     }
   }, []);
 
@@ -157,6 +165,10 @@ function Login() {
       const userCredential = await login(emailValidation.sanitized, password);
 
       if (!userCredential.user.emailVerified) {
+        // Sign out the unverified user to prevent access
+        const { signOut } = await import('firebase/auth');
+        const { auth } = await import('../Firebase/config');
+        await signOut(auth);
         setError('Please verify your email before logging in. Check your inbox for the verification link.');
         return;
       }
