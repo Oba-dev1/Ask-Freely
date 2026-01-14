@@ -13,7 +13,12 @@
       "Bash(firebase --version:*)",
       "Bash(firebase deploy:*)",
       "Bash(npx tailwindcss:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(gsutil:*)",
+      "Bash(gcloud storage buckets update:*)",
+      "Bash(firebase database:get:*)",
+      "Bash(node:*)",
+      "Bash(del \"c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\Ask-Freely\\\\netlify\\\\functions\\\\package.json\")"
     ],
     "deny": [],
     "ask": []
